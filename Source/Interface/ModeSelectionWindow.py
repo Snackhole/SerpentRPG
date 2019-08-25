@@ -7,7 +7,7 @@ class ModeSelectionWindow(Window):
     def __init__(self, ScriptName):
         super().__init__(ScriptName)
 
-        # Initialize Mode
+        # Create Mode Value
         self.Mode = None
 
     def CreateInterface(self):
