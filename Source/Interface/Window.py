@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
 
 class Window(QMainWindow):
@@ -16,6 +16,7 @@ class Window(QMainWindow):
 
         # Create Interface
         self.CreateInterface()
+        self.Center()
         self.show()
 
     def CreateInterface(self):
@@ -23,3 +24,10 @@ class Window(QMainWindow):
 
     def UpdateWindowTitle(self):
         self.setWindowTitle(self.ScriptName)
+
+    # Window Management Methods
+    def Center(self):
+        FrameGeometryRectangle = self.frameGeometry()
+        DesktopCenterPoint = QApplication.primaryScreen().availableGeometry().center()
+        FrameGeometryRectangle.moveCenter(DesktopCenterPoint)
+        self.move(FrameGeometryRectangle.topLeft())
