@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame
 
 
 class Window(QMainWindow):
@@ -14,8 +14,14 @@ class Window(QMainWindow):
         self.setWindowIcon(self.WindowIcon)
         self.UpdateWindowTitle()
 
+        # Create Central Frame
+        self.Frame = QFrame()
+
         # Create Interface
         self.CreateInterface()
+
+        # Set Central Frame
+        self.setCentralWidget(self.Frame)
         self.Center()
         self.show()
 

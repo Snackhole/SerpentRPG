@@ -11,9 +11,6 @@ class ModeSelectionWindow(Window):
         self.Mode = None
 
     def CreateInterface(self):
-        # Frame
-        self.Frame = QFrame()
-
         # Buttons Style
         self.ButtonsStyle = "QPushButton {font-size: 20pt;}"
 
@@ -26,9 +23,6 @@ class ModeSelectionWindow(Window):
         self.Layout = QGridLayout()
         self.Layout.addWidget(self.WildernessTravelManagerModeButton)
         self.Frame.setLayout(self.Layout)
-
-        # Set Frame as Central Widget
-        self.setCentralWidget(self.Frame)
 
     def UpdateWindowTitle(self):
         self.setWindowTitle(self.ScriptName + " Mode Selection")
