@@ -1,8 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5.QtGui import QIntValidator
-from PyQt5.QtWidgets import QLineEdit, QGridLayout, QLabel
+from PyQt5.QtWidgets import QLineEdit, QGridLayout, QLabel, QSpinBox
 
-from Components.WildernessTravelManager import WildernessTravelManager
+from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
 
 
@@ -14,29 +14,21 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessTravelManager = WildernessTravelManager()
 
     def CreateInterface(self):
-        # Validator
-        self.Validator = QIntValidator()
-        self.Validator.setBottom(0)
-
         # Current Supply Points Label
         self.CurrentSupplyPointsLabel = QLabel("Supply Points")
         self.CurrentSupplyPointsLabel.setMaximumWidth(70)
 
         # Current Supply Points Line Edit
-        self.CurrentSupplyPointsLineEdit = QLineEdit()
-        self.CurrentSupplyPointsLineEdit.setValidator(self.Validator)
+        self.CurrentSupplyPointsLineEdit = QSpinBox()
         self.CurrentSupplyPointsLineEdit.setMaximumWidth(40)
-        self.CurrentSupplyPointsLineEdit.setAlignment(QtCore.Qt.AlignCenter)
 
         # Supply Pool Label
         self.SupplyPoolLabel = QLabel("Supply Pool")
         self.SupplyPoolLabel.setMaximumWidth(70)
 
         # Supply Pool Line Edit
-        self.SupplyPoolLineEdit = QLineEdit()
-        self.SupplyPoolLineEdit.setValidator(self.Validator)
+        self.SupplyPoolLineEdit = QSpinBox()
         self.SupplyPoolLineEdit.setMaximumWidth(40)
-        self.SupplyPoolLineEdit.setAlignment(QtCore.Qt.AlignCenter)
 
         # Create Layout
         self.Layout = QGridLayout()

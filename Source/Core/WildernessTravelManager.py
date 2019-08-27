@@ -1,4 +1,4 @@
-from Components.DieClock import DieClock
+from Core.DieClock import DieClock
 
 
 class WildernessTravelManager:

@@ -1,4 +1,4 @@
-from Components.DiceRoller import DiceRoller
+from Core.DiceRoller import DiceRoller
 
 
 class DieClock:

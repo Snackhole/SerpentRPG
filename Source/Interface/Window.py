@@ -22,8 +22,8 @@ class Window(QMainWindow):
 
         # Set Central Frame
         self.setCentralWidget(self.Frame)
-        self.Center()
         self.show()
+        self.Center()
 
     def CreateInterface(self):
         pass
