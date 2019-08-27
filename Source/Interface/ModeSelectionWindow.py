@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QGridLayout, QFrame
+from PyQt5.QtWidgets import QPushButton, QGridLayout
 
 from Interface.Window import Window
 
