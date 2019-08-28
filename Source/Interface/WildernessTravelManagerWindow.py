@@ -34,9 +34,9 @@ class WildernessTravelManagerWindow(Window):
 
         # Current Supply Points Buttons
         self.CurrentSupplyPointsIncreaseButton = QPushButton("+")
-        self.CurrentSupplyPointsIncreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(1, "CurrentSupplyPoints"))
+        self.CurrentSupplyPointsIncreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(1))
         self.CurrentSupplyPointsDecreaseButton = QPushButton("-")
-        self.CurrentSupplyPointsDecreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(-1, "CurrentSupplyPoints"))
+        self.CurrentSupplyPointsDecreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(-1))
 
         # Supply Pool Divider Label
         self.SupplyPoolDividerLabel = QLabel("/")
@@ -52,9 +52,9 @@ class WildernessTravelManagerWindow(Window):
 
         # Supply Pool Buttons
         self.SupplyPoolIncreaseButton = QPushButton("+")
-        self.SupplyPoolIncreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(1, "SupplyPool"))
+        self.SupplyPoolIncreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(1))
         self.SupplyPoolDecreaseButton = QPushButton("-")
-        self.SupplyPoolDecreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(-1, "SupplyPool"))
+        self.SupplyPoolDecreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(-1))
 
         # Create Layout
         self.Layout = QGridLayout()
@@ -68,8 +68,12 @@ class WildernessTravelManagerWindow(Window):
         self.Layout.addWidget(self.SupplyPoolDecreaseButton, 3, 2)
         self.Frame.setLayout(self.Layout)
 
-    def ModifySupplyPoolValue(self, Delta, ValueToModify):
-        setattr(self.WildernessTravelManager, ValueToModify, getattr(self.WildernessTravelManager, ValueToModify) + Delta)
+    def ModifySupplyPoolValue(self, Delta):
+        self.WildernessTravelManager.ModifySupplyPoolValue(Delta)
+        self.UpdateDisplay()
+
+    def ModifyCurrentSupplyPointsValue(self, Delta):
+        self.WildernessTravelManager.ModifyCurrentSupplyPointsValue(Delta)
         self.UpdateDisplay()
 
     def UpdateDisplay(self):

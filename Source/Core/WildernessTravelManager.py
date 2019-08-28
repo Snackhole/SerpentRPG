@@ -19,3 +19,9 @@ class WildernessTravelManager:
     def SpendSuppliesAndDays(self, SupplyPointsAndDaysSpent):
         self.SpendSupplies(SupplyPointsAndDaysSpent)
         return self.SpendDays(SupplyPointsAndDaysSpent)
+
+    def ModifySupplyPoolValue(self, Delta):
+        self.SupplyPool += Delta
+
+    def ModifyCurrentSupplyPointsValue(self, Delta):
+        self.CurrentSupplyPoints += Delta
