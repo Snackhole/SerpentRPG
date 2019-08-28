@@ -10,16 +10,38 @@ class WildernessTravelManager:
         # Create Wilderness Clock
         self.WildernessClock = DieClock(5)
 
-    def SpendSupplies(self, SupplyPointsSpent):
-        self.CurrentSupplyPoints -= SupplyPointsSpent
+        # Variables
+        self.WildernessLog = []
 
-    def SpendDays(self, DaysSpent):
-        return self.WildernessClock.IncreaseClock(DaysSpent)
+    # Log Method
+    def Log(self, TextToLog):
+        self.WildernessLog.append(TextToLog)
 
-    def SpendSuppliesAndDays(self, SupplyPointsAndDaysSpent):
+    # Logged Methods
+    def SpendSupplies(self, SupplyPointsSpent, Log=False):
+        self.ModifyCurrentSupplyPointsValue(-SupplyPointsSpent)
+        if Log:
+            self.Log("Spent " + str(SupplyPointsSpent) + " Supply points.")
+
+    def GainSupplies(self, SupplyPointsGained, Log=False):
+        self.ModifyCurrentSupplyPointsValue(SupplyPointsGained)
+        if Log:
+            self.Log("Gained " + str(SupplyPointsGained) + " Supply points.")
+
+    def SpendDays(self, DaysSpent, Log=False):
+        ClockGoesOff = self.WildernessClock.IncreaseClock(DaysSpent)
+        if Log:
+            self.Log("Spent " + str(DaysSpent) + " days." + ("  The Wilderness Clock went off!" if ClockGoesOff else ""))
+        return ClockGoesOff
+
+    def SpendSuppliesAndDays(self, SupplyPointsAndDaysSpent, Log=False):
         self.SpendSupplies(SupplyPointsAndDaysSpent)
-        return self.SpendDays(SupplyPointsAndDaysSpent)
+        ClockGoesOff = self.SpendDays(SupplyPointsAndDaysSpent)
+        if Log:
+            self.Log("Spent " + str(SupplyPointsAndDaysSpent) + " days and Supply points." + ("  The Wilderness Clock went off!" if ClockGoesOff else ""))
+        return ClockGoesOff
 
+    # Unlogged Methods
     def ModifySupplyPoolValue(self, Delta):
         self.SupplyPool += Delta
 
