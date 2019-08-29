@@ -21,6 +21,33 @@ class WildernessTravelManagerWindow(Window):
         self.LineEditStyle = "QLineEdit {font-size: 20pt;}"
         self.LineEditStyleRed = "QLineEdit {font-size: 20pt; color: red;}"
 
+        # Travel Actions Label
+        self.TravelActionsLabel = QLabel("Travel Actions")
+        self.TravelActionsLabel.setStyleSheet(self.LabelStyle)
+        self.TravelActionsLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Travel Action Buttons
+        self.MoveButton = QPushButton("Move")
+        self.MoveButton.clicked.connect(self.Move)
+        self.ForageButton = QPushButton("Forage")
+        self.ForageButton.clicked.connect(self.Forage)
+        self.ShortRestButton = QPushButton("Short Rest")
+        self.ShortRestButton.clicked.connect(self.ShortRest)
+        self.LongRestButton = QPushButton("Long Rest")
+        self.LongRestButton.clicked.connect(self.LongRest)
+        self.PurchaseSuppliesButton = QPushButton("Purchase Supplies")
+        self.PurchaseSuppliesButton.clicked.connect(self.PurchaseSupplies)
+        self.SeekShortTermLodgingButton = QPushButton("Seek Short-Term Lodging")
+        self.SeekShortTermLodgingButton.clicked.connect(self.SeekShortTermLodging)
+        self.SeekLongTermLodgingButton = QPushButton("Seek Long-Term Lodging")
+        self.SeekLongTermLodgingButton.clicked.connect(self.SeekLongTermLodging)
+        self.SpendSuppliesButton = QPushButton("Spend Supplies")
+        self.SpendSuppliesButton.clicked.connect(self.SpendSupplies)
+        self.SpendDaysButton = QPushButton("Spend Days")
+        self.SpendDaysButton.clicked.connect(self.SpendDays)
+        self.SpendSuppliesAndDaysButton = QPushButton("Spend Supplies and Days")
+        self.SpendSuppliesAndDaysButton.clicked.connect(self.SpendSuppliesAndDays)
+
         # Supply Pool Label
         self.SupplyPoolLabel = QLabel("Supply Pool")
         self.SupplyPoolLabel.setStyleSheet(self.LabelStyle)
@@ -105,6 +132,24 @@ class WildernessTravelManagerWindow(Window):
         # Create Layout
         self.Layout = QGridLayout()
 
+        # Travel Action Widgets in Layout
+        self.TravelActionsFrame = QFrame()
+        self.TravelActionsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.TravelActionsLayout = QGridLayout()
+        self.TravelActionsLayout.addWidget(self.TravelActionsLabel, 0, 0)
+        self.TravelActionsLayout.addWidget(self.MoveButton, 1, 0)
+        self.TravelActionsLayout.addWidget(self.ForageButton, 2, 0)
+        self.TravelActionsLayout.addWidget(self.ShortRestButton, 3, 0)
+        self.TravelActionsLayout.addWidget(self.LongRestButton, 4, 0)
+        self.TravelActionsLayout.addWidget(self.PurchaseSuppliesButton, 5, 0)
+        self.TravelActionsLayout.addWidget(self.SeekShortTermLodgingButton, 6, 0)
+        self.TravelActionsLayout.addWidget(self.SeekLongTermLodgingButton, 7, 0)
+        self.TravelActionsLayout.addWidget(self.SpendSuppliesButton, 8, 0)
+        self.TravelActionsLayout.addWidget(self.SpendDaysButton, 9, 0)
+        self.TravelActionsLayout.addWidget(self.SpendSuppliesAndDaysButton, 10, 0)
+        self.TravelActionsFrame.setLayout(self.TravelActionsLayout)
+        self.Layout.addWidget(self.TravelActionsFrame, 0, 0, 2, 1)
+
         # Supply Pool Widgets in Layout
         self.SupplyPoolFrame = QFrame()
         self.SupplyPoolFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
@@ -118,7 +163,7 @@ class WildernessTravelManagerWindow(Window):
         self.SupplyPoolLayout.addWidget(self.CurrentSupplyPointsDecreaseButton, 3, 0)
         self.SupplyPoolLayout.addWidget(self.SupplyPoolDecreaseButton, 3, 2)
         self.SupplyPoolFrame.setLayout(self.SupplyPoolLayout)
-        self.Layout.addWidget(self.SupplyPoolFrame, 0, 0)
+        self.Layout.addWidget(self.SupplyPoolFrame, 0, 1)
 
         # Add Wilderness Clock Widgets to Layout
         self.WildernessClockFrame = QFrame()
@@ -133,7 +178,7 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueLineEdit, 2, 2)
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueDecreaseButton, 3, 2)
         self.WildernessClockFrame.setLayout(self.WildernessClockLayout)
-        self.Layout.addWidget(self.WildernessClockFrame)
+        self.Layout.addWidget(self.WildernessClockFrame, 1, 1)
 
         # Add Wilderness Log Widgets to Layout
         self.WildernessLogFrame = QFrame()
@@ -142,7 +187,7 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessLogLayout.addWidget(self.WildernessLogLabel, 0, 0)
         self.WildernessLogLayout.addWidget(self.WildernessLogTextEdit, 1, 0)
         self.WildernessLogFrame.setLayout(self.WildernessLogLayout)
-        self.Layout.addWidget(self.WildernessLogFrame, 0, 1, 2, 1)
+        self.Layout.addWidget(self.WildernessLogFrame, 0, 2, 2, 1)
 
         # Set Layout
         self.Frame.setLayout(self.Layout)
@@ -163,6 +208,46 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessTravelManager.ModifyWildernessClockMaximumValue(Delta)
         self.UpdateDisplay()
 
+    def Move(self):
+        self.WildernessTravelManager.Move()
+        self.UpdateDisplay()
+
+    def Forage(self):
+        self.WildernessTravelManager.Forage()
+        self.UpdateDisplay()
+
+    def ShortRest(self):
+        self.WildernessTravelManager.ShortRest()
+        self.UpdateDisplay()
+
+    def LongRest(self):
+        self.WildernessTravelManager.LongRest()
+        self.UpdateDisplay()
+
+    def PurchaseSupplies(self):
+        self.WildernessTravelManager.PurchaseSupplies()
+        self.UpdateDisplay()
+
+    def SeekShortTermLodging(self):
+        self.WildernessTravelManager.SeekShortTermLodging()
+        self.UpdateDisplay()
+
+    def SeekLongTermLodging(self):
+        self.WildernessTravelManager.SeekLongTermLodging()
+        self.UpdateDisplay()
+
+    def SpendSupplies(self):
+        self.WildernessTravelManager.SpendSupplies(1, Log=True)
+        self.UpdateDisplay()
+
+    def SpendDays(self):
+        self.WildernessTravelManager.SpendDays(1, Log=True)
+        self.UpdateDisplay()
+
+    def SpendSuppliesAndDays(self):
+        self.WildernessTravelManager.SpendSuppliesAndDays(1, Log=True)
+        self.UpdateDisplay()
+
     def UpdateDisplay(self):
         # Supply Pool Display
         self.CurrentSupplyPointsLineEdit.setText(str(self.WildernessTravelManager.CurrentSupplyPoints))
@@ -180,5 +265,5 @@ class WildernessTravelManagerWindow(Window):
         # Wilderness Log Display
         WildernessLogString = ""
         for LogEntry in reversed(self.WildernessTravelManager.WildernessLog):
-            WildernessLogString += LogEntry + "\n\n"
-        self.WildernessLogTextEdit.setPlainText(WildernessLogString[:-2])
+            WildernessLogString += LogEntry + "\n\n---\n\n"
+        self.WildernessLogTextEdit.setPlainText(WildernessLogString[:-7])
