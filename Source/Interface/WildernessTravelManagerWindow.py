@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit
 
 from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
@@ -93,6 +93,15 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessClockMaximumValueDecreaseButton = QPushButton("-")
         self.WildernessClockMaximumValueDecreaseButton.clicked.connect(lambda: self.ModifyWildernessClockMaximumValue(-1))
 
+        # Wilderness Log Label
+        self.WildernessLogLabel = QLabel("Wilderness Log")
+        self.WildernessLogLabel.setStyleSheet(self.LabelStyle)
+        self.WildernessLogLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Wilderness Log Text Edit
+        self.WildernessLogTextEdit = QTextEdit()
+        self.WildernessLogTextEdit.setReadOnly(True)
+
         # Create Layout
         self.Layout = QGridLayout()
 
@@ -126,6 +135,15 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessClockFrame.setLayout(self.WildernessClockLayout)
         self.Layout.addWidget(self.WildernessClockFrame)
 
+        # Add Wilderness Log Widgets to Layout
+        self.WildernessLogFrame = QFrame()
+        self.WildernessLogFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.WildernessLogLayout = QGridLayout()
+        self.WildernessLogLayout.addWidget(self.WildernessLogLabel, 0, 0)
+        self.WildernessLogLayout.addWidget(self.WildernessLogTextEdit, 1, 0)
+        self.WildernessLogFrame.setLayout(self.WildernessLogLayout)
+        self.Layout.addWidget(self.WildernessLogFrame, 0, 1, 2, 1)
+
         # Set Layout
         self.Frame.setLayout(self.Layout)
 
@@ -158,3 +176,9 @@ class WildernessTravelManagerWindow(Window):
         # Wilderness Clock Display
         self.WildernessClockCurrentValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.Value))
         self.WildernessClockMaximumValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.MaximumValue))
+
+        # Wilderness Log Display
+        WildernessLogString = ""
+        for LogEntry in reversed(self.WildernessTravelManager.WildernessLog):
+            WildernessLogString += LogEntry + "\n\n"
+        self.WildernessLogTextEdit.setPlainText(WildernessLogString[:-2])
