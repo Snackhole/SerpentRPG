@@ -48,8 +48,18 @@ class WildernessTravelManager:
         ClockGoesOff = self.SpendSuppliesAndDays(TravelCost)
         self.Log("Moved with a travel cost of " + str(TravelCost) + ", spending that many days and Supply points." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
 
-    def Forage(self):
-        pass
+    def Forage(self, HalfSucceeded, AllSucceeded):
+        ProjectedClockValue = self.WildernessClock.Value + 1
+        ClockGoesOff = self.SpendSuppliesAndDays(1)
+        if HalfSucceeded and not AllSucceeded:
+            SuppliesGainedString = "  Gained 3 Supply points."
+            self.ModifyCurrentSupplyPointsValue(3, RespectMinimum=True, RespectMaximum=True)
+        elif AllSucceeded:
+            SuppliesGainedString = "  Gained 5 Supply points!"
+            self.ModifyCurrentSupplyPointsValue(5, RespectMinimum=True, RespectMaximum=True)
+        else:
+            SuppliesGainedString = "  Gained no Supply points."
+        self.Log("Foraged for supplies, spending 1 day and Supply point." + SuppliesGainedString + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
 
     def ShortRest(self):
         pass
@@ -70,8 +80,12 @@ class WildernessTravelManager:
     def ModifySupplyPoolValue(self, Delta):
         self.SupplyPool += Delta
 
-    def ModifyCurrentSupplyPointsValue(self, Delta):
+    def ModifyCurrentSupplyPointsValue(self, Delta, RespectMinimum=False, RespectMaximum=False):
+        if RespectMinimum:
+            self.CurrentSupplyPoints = max(0, self.CurrentSupplyPoints)
         self.CurrentSupplyPoints += Delta
+        if RespectMaximum:
+            self.CurrentSupplyPoints = min(self.CurrentSupplyPoints, self.SupplyPool)
 
     def ModifyWildernessClockCurrentValue(self, Delta):
         self.WildernessClock.ModifyCurrentValue(Delta)

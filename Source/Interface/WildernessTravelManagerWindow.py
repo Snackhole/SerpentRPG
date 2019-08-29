@@ -218,8 +218,19 @@ class WildernessTravelManagerWindow(Window):
             self.UpdateDisplay()
 
     def Forage(self):
-        self.WildernessTravelManager.Forage()
-        self.UpdateDisplay()
+        NumberOfSuccesses, OK = QInputDialog.getItem(self, "Forage Success", "Number of party members who succeeded:", ["None", "Half or More", "All"])
+        if OK:
+            if NumberOfSuccesses == "Half or More":
+                HalfSucceeded = True
+                AllSucceeded = False
+            elif NumberOfSuccesses == "All":
+                HalfSucceeded = False
+                AllSucceeded = True
+            else:
+                HalfSucceeded = False
+                AllSucceeded = False
+            self.WildernessTravelManager.Forage(HalfSucceeded, AllSucceeded)
+            self.UpdateDisplay()
 
     def ShortRest(self):
         self.WildernessTravelManager.ShortRest()
