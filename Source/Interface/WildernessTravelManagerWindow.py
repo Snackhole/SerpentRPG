@@ -1,7 +1,7 @@
 import math
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog
 
 from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
@@ -212,8 +212,10 @@ class WildernessTravelManagerWindow(Window):
         self.UpdateDisplay()
 
     def Move(self):
-        self.WildernessTravelManager.Move()
-        self.UpdateDisplay()
+        TravelCost, OK = QInputDialog.getInt(self, "Travel Cost", "Travel cost to move:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.Move(TravelCost)
+            self.UpdateDisplay()
 
     def Forage(self):
         self.WildernessTravelManager.Forage()

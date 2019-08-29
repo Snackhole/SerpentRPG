@@ -43,8 +43,10 @@ class WildernessTravelManager:
             self.Log("Spent " + str(SupplyPointsAndDaysSpent) + " days and Supply points." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
         return ClockGoesOff
 
-    def Move(self):
-        pass
+    def Move(self, TravelCost):
+        ProjectedClockValue = self.WildernessClock.Value + TravelCost
+        ClockGoesOff = self.SpendSuppliesAndDays(TravelCost)
+        self.Log("Moved with a travel cost of " + str(TravelCost) + ", spending that many days and Supply points." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
 
     def Forage(self):
         pass
