@@ -21,3 +21,9 @@ class DieClock:
                 self.Value = 0
                 return True
         return False
+
+    def ModifyCurrentValue(self, Delta):
+        self.Value += Delta
+
+    def ModifyMaximumValue(self, Delta):
+        self.MaximumValue += Delta

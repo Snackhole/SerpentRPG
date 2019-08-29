@@ -47,3 +47,9 @@ class WildernessTravelManager:
 
     def ModifyCurrentSupplyPointsValue(self, Delta):
         self.CurrentSupplyPoints += Delta
+
+    def ModifyWildernessClockCurrentValue(self, Delta):
+        self.WildernessClock.ModifyCurrentValue(Delta)
+
+    def ModifyWildernessClockMaximumValue(self, Delta):
+        self.WildernessClock.ModifyMaximumValue(Delta)
