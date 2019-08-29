@@ -1,3 +1,5 @@
+import math
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit
 
@@ -19,6 +21,7 @@ class WildernessTravelManagerWindow(Window):
         # Styles
         self.LabelStyle = "QLabel {font-size: 15pt;}"
         self.LineEditStyle = "QLineEdit {font-size: 20pt;}"
+        self.LineEditStyleYellow = "QLineEdit {font-size: 20pt; color: goldenrod;}"
         self.LineEditStyleRed = "QLineEdit {font-size: 20pt; color: red;}"
 
         # Travel Actions Label
@@ -254,9 +257,16 @@ class WildernessTravelManagerWindow(Window):
         self.SupplyPoolLineEdit.setText(str(self.WildernessTravelManager.SupplyPool))
 
         # Check Supply Pool Values Too Low
-        self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyleRed if self.WildernessTravelManager.CurrentSupplyPoints < 0 else self.LineEditStyle)
-        self.SupplyPoolLineEdit.setStyleSheet(
-            self.LineEditStyleRed if self.WildernessTravelManager.SupplyPool < self.WildernessTravelManager.CurrentSupplyPoints or self.WildernessTravelManager.SupplyPool < 0 else self.LineEditStyle)
+        if self.WildernessTravelManager.CurrentSupplyPoints < 0:
+            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyleRed)
+        elif self.WildernessTravelManager.CurrentSupplyPoints <= math.floor(0.5 * self.WildernessTravelManager.SupplyPool) and self.WildernessTravelManager.SupplyPool > 0:
+            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyleYellow)
+        else:
+            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyle)
+        if self.WildernessTravelManager.SupplyPool < self.WildernessTravelManager.CurrentSupplyPoints or self.WildernessTravelManager.SupplyPool < 0:
+            self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyleRed)
+        else:
+            self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyle)
 
         # Wilderness Clock Display
         self.WildernessClockCurrentValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.Value))
