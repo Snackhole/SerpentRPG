@@ -50,6 +50,8 @@ class WildernessTravelManagerWindow(Window):
         self.SpendDaysButton.clicked.connect(self.SpendDays)
         self.SpendSuppliesAndDaysButton = QPushButton("Spend Supplies and Days")
         self.SpendSuppliesAndDaysButton.clicked.connect(self.SpendSuppliesAndDays)
+        self.GainSuppliesButton = QPushButton("Gain Supplies")
+        self.GainSuppliesButton.clicked.connect(self.GainSupplies)
 
         # Supply Pool Label
         self.SupplyPoolLabel = QLabel("Supply Pool")
@@ -150,6 +152,7 @@ class WildernessTravelManagerWindow(Window):
         self.TravelActionsLayout.addWidget(self.SpendSuppliesButton, 8, 0)
         self.TravelActionsLayout.addWidget(self.SpendDaysButton, 9, 0)
         self.TravelActionsLayout.addWidget(self.SpendSuppliesAndDaysButton, 10, 0)
+        self.TravelActionsLayout.addWidget(self.GainSuppliesButton, 11, 0)
         self.TravelActionsFrame.setLayout(self.TravelActionsLayout)
         self.Layout.addWidget(self.TravelActionsFrame, 0, 0, 2, 1)
 
@@ -268,6 +271,12 @@ class WildernessTravelManagerWindow(Window):
         SupplyPointsAndDaysSpent, OK = QInputDialog.getInt(self, "Spend Supplies and Days", "Supply points and days spent:", 1, 1)
         if OK:
             self.WildernessTravelManager.SpendSuppliesAndDays(SupplyPointsAndDaysSpent, Log=True)
+            self.UpdateDisplay()
+
+    def GainSupplies(self):
+        SupplyPointsGained, OK = QInputDialog.getInt(self, "Gain Supplies", "Supply points gained:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.GainSupplies(SupplyPointsGained, Log=True)
             self.UpdateDisplay()
 
     def UpdateDisplay(self):

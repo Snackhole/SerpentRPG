@@ -24,7 +24,7 @@ class WildernessTravelManager:
             self.Log("Spent " + str(SupplyPointsSpent) + " Supply points.")
 
     def GainSupplies(self, SupplyPointsGained, Log=False):
-        self.ModifyCurrentSupplyPointsValue(SupplyPointsGained)
+        self.ModifyCurrentSupplyPointsValue(SupplyPointsGained, RespectMinimum=True, RespectMaximum=True)
         if Log:
             self.Log("Gained " + str(SupplyPointsGained) + " Supply points.")
 
