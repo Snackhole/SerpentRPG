@@ -253,16 +253,22 @@ class WildernessTravelManagerWindow(Window):
         self.UpdateDisplay()
 
     def SpendSupplies(self):
-        self.WildernessTravelManager.SpendSupplies(1, Log=True)
-        self.UpdateDisplay()
+        SupplyPointsSpent, OK = QInputDialog.getInt(self, "Spend Supplies", "Supply points spent:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.SpendSupplies(SupplyPointsSpent, Log=True)
+            self.UpdateDisplay()
 
     def SpendDays(self):
-        self.WildernessTravelManager.SpendDays(1, Log=True)
-        self.UpdateDisplay()
+        DaysSpent, OK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.SpendDays(DaysSpent, Log=True)
+            self.UpdateDisplay()
 
     def SpendSuppliesAndDays(self):
-        self.WildernessTravelManager.SpendSuppliesAndDays(1, Log=True)
-        self.UpdateDisplay()
+        SupplyPointsAndDaysSpent, OK = QInputDialog.getInt(self, "Spend Supplies and Days", "Supply points and days spent:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.SpendSuppliesAndDays(SupplyPointsAndDaysSpent, Log=True)
+            self.UpdateDisplay()
 
     def UpdateDisplay(self):
         # Supply Pool Display
