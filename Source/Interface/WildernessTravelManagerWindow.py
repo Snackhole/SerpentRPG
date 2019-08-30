@@ -27,6 +27,9 @@ class WildernessTravelManagerWindow(Window):
         # Button and Line Edit Size Policy
         self.ButtonAndLineEditSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
+        # Pool and Clock Width
+        self.PoolAndClockWidth = 160
+
         # Travel Actions Label
         self.TravelActionsLabel = QLabel("Travel Actions")
         self.TravelActionsLabel.setStyleSheet(self.LabelStyle)
@@ -77,31 +80,37 @@ class WildernessTravelManagerWindow(Window):
         self.CurrentSupplyPointsLineEdit.setReadOnly(True)
         self.CurrentSupplyPointsLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyle)
-        self.CurrentSupplyPointsLineEdit.setMaximumWidth(80)
+        self.CurrentSupplyPointsLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.CurrentSupplyPointsLineEdit.setFixedWidth(self.PoolAndClockWidth)
 
         # Current Supply Points Buttons
         self.CurrentSupplyPointsIncreaseButton = QPushButton("+")
         self.CurrentSupplyPointsIncreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(1))
+        self.CurrentSupplyPointsIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.CurrentSupplyPointsDecreaseButton = QPushButton("-")
         self.CurrentSupplyPointsDecreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(-1))
+        self.CurrentSupplyPointsDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
 
         # Supply Pool Divider Label
         self.SupplyPoolDividerLabel = QLabel("/")
         self.SupplyPoolDividerLabel.setStyleSheet(self.LineEditStyle)
-        self.SupplyPoolDividerLabel.setMaximumWidth(10)
+        self.SupplyPoolDividerLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Supply Pool Line Edit
         self.SupplyPoolLineEdit = QLineEdit()
         self.SupplyPoolLineEdit.setReadOnly(True)
         self.SupplyPoolLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyle)
-        self.SupplyPoolLineEdit.setMaximumWidth(80)
+        self.SupplyPoolLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.SupplyPoolLineEdit.setFixedWidth(self.PoolAndClockWidth)
 
         # Supply Pool Buttons
         self.SupplyPoolIncreaseButton = QPushButton("+")
         self.SupplyPoolIncreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(1))
+        self.SupplyPoolIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SupplyPoolDecreaseButton = QPushButton("-")
         self.SupplyPoolDecreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(-1))
+        self.SupplyPoolDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
 
         # Wilderness Clock Label
         self.WildernessClockLabel = QLabel("Wilderness Clock")
@@ -113,31 +122,37 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessClockCurrentValueLineEdit.setReadOnly(True)
         self.WildernessClockCurrentValueLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.WildernessClockCurrentValueLineEdit.setStyleSheet(self.LineEditStyle)
-        self.WildernessClockCurrentValueLineEdit.setMaximumWidth(80)
+        self.WildernessClockCurrentValueLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.WildernessClockCurrentValueLineEdit.setFixedWidth(self.PoolAndClockWidth)
 
         # Wilderness Clock Current Value Buttons
         self.WildernessClockCurrentValueIncreaseButton = QPushButton("+")
         self.WildernessClockCurrentValueIncreaseButton.clicked.connect(lambda: self.ModifyWildernessClockCurrentValue(1))
+        self.WildernessClockCurrentValueIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.WildernessClockCurrentValueDecreaseButton = QPushButton("-")
         self.WildernessClockCurrentValueDecreaseButton.clicked.connect(lambda: self.ModifyWildernessClockCurrentValue(-1))
+        self.WildernessClockCurrentValueDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
 
         # Wilderness Clock Divider Label
         self.WildernessClockDividerLabel = QLabel("/")
         self.WildernessClockDividerLabel.setStyleSheet(self.LineEditStyle)
-        self.WildernessClockDividerLabel.setMaximumWidth(10)
+        self.WildernessClockDividerLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Wilderness Clock Maximum Value Line Edit
         self.WildernessClockMaximumValueLineEdit = QLineEdit()
         self.WildernessClockMaximumValueLineEdit.setReadOnly(True)
         self.WildernessClockMaximumValueLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.WildernessClockMaximumValueLineEdit.setStyleSheet(self.LineEditStyle)
-        self.WildernessClockMaximumValueLineEdit.setMaximumWidth(80)
+        self.WildernessClockMaximumValueLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.WildernessClockMaximumValueLineEdit.setFixedWidth(self.PoolAndClockWidth)
 
         # Wilderness Clock Maximum Value Buttons
         self.WildernessClockMaximumValueIncreaseButton = QPushButton("+")
         self.WildernessClockMaximumValueIncreaseButton.clicked.connect(lambda: self.ModifyWildernessClockMaximumValue(1))
+        self.WildernessClockMaximumValueIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.WildernessClockMaximumValueDecreaseButton = QPushButton("-")
         self.WildernessClockMaximumValueDecreaseButton.clicked.connect(lambda: self.ModifyWildernessClockMaximumValue(-1))
+        self.WildernessClockMaximumValueDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
 
         # Wilderness Log Label
         self.WildernessLogLabel = QLabel("Wilderness Log")
@@ -184,6 +199,9 @@ class WildernessTravelManagerWindow(Window):
         self.SupplyPoolLayout.addWidget(self.SupplyPoolLineEdit, 2, 2)
         self.SupplyPoolLayout.addWidget(self.CurrentSupplyPointsDecreaseButton, 3, 0)
         self.SupplyPoolLayout.addWidget(self.SupplyPoolDecreaseButton, 3, 2)
+        self.SupplyPoolLayout.setRowStretch(1, 1)
+        self.SupplyPoolLayout.setRowStretch(2, 2)
+        self.SupplyPoolLayout.setRowStretch(3, 1)
         self.SupplyPoolFrame.setLayout(self.SupplyPoolLayout)
         self.Layout.addWidget(self.SupplyPoolFrame, 0, 1)
 
@@ -199,6 +217,9 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueIncreaseButton, 1, 2)
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueLineEdit, 2, 2)
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueDecreaseButton, 3, 2)
+        self.WildernessClockLayout.setRowStretch(1, 1)
+        self.WildernessClockLayout.setRowStretch(2, 2)
+        self.WildernessClockLayout.setRowStretch(3, 1)
         self.WildernessClockFrame.setLayout(self.WildernessClockLayout)
         self.Layout.addWidget(self.WildernessClockFrame, 1, 1)
 
