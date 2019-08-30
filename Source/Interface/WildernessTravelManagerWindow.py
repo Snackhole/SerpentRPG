@@ -1,7 +1,7 @@
 import math
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy
 
 from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
@@ -24,6 +24,9 @@ class WildernessTravelManagerWindow(Window):
         self.LineEditStyleYellow = "QLineEdit {font-size: 20pt; color: goldenrod;}"
         self.LineEditStyleRed = "QLineEdit {font-size: 20pt; color: red;}"
 
+        # Button and Line Edit Size Policy
+        self.ButtonAndLineEditSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Travel Actions Label
         self.TravelActionsLabel = QLabel("Travel Actions")
         self.TravelActionsLabel.setStyleSheet(self.LabelStyle)
@@ -32,26 +35,37 @@ class WildernessTravelManagerWindow(Window):
         # Travel Action Buttons
         self.MoveButton = QPushButton("Move")
         self.MoveButton.clicked.connect(self.Move)
+        self.MoveButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.ForageButton = QPushButton("Forage")
         self.ForageButton.clicked.connect(self.Forage)
+        self.ForageButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.ShortRestButton = QPushButton("Short Rest")
         self.ShortRestButton.clicked.connect(self.ShortRest)
+        self.ShortRestButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.LongRestButton = QPushButton("Long Rest")
         self.LongRestButton.clicked.connect(self.LongRest)
+        self.LongRestButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.PurchaseSuppliesButton = QPushButton("Purchase Supplies")
         self.PurchaseSuppliesButton.clicked.connect(self.PurchaseSupplies)
+        self.PurchaseSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SeekShortTermLodgingButton = QPushButton("Seek Short-Term Lodging")
         self.SeekShortTermLodgingButton.clicked.connect(self.SeekShortTermLodging)
+        self.SeekShortTermLodgingButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SeekLongTermLodgingButton = QPushButton("Seek Long-Term Lodging")
         self.SeekLongTermLodgingButton.clicked.connect(self.SeekLongTermLodging)
+        self.SeekLongTermLodgingButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SpendSuppliesButton = QPushButton("Spend Supplies")
         self.SpendSuppliesButton.clicked.connect(self.SpendSupplies)
+        self.SpendSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SpendDaysButton = QPushButton("Spend Days")
         self.SpendDaysButton.clicked.connect(self.SpendDays)
+        self.SpendDaysButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SpendSuppliesAndDaysButton = QPushButton("Spend Supplies and Days")
         self.SpendSuppliesAndDaysButton.clicked.connect(self.SpendSuppliesAndDays)
+        self.SpendSuppliesAndDaysButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.GainSuppliesButton = QPushButton("Gain Supplies")
         self.GainSuppliesButton.clicked.connect(self.GainSupplies)
+        self.GainSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
 
         # Supply Pool Label
         self.SupplyPoolLabel = QLabel("Supply Pool")
@@ -153,6 +167,8 @@ class WildernessTravelManagerWindow(Window):
         self.TravelActionsLayout.addWidget(self.SpendDaysButton, 9, 0)
         self.TravelActionsLayout.addWidget(self.SpendSuppliesAndDaysButton, 10, 0)
         self.TravelActionsLayout.addWidget(self.GainSuppliesButton, 11, 0)
+        for Row in range(1, 12):
+            self.TravelActionsLayout.setRowStretch(Row, 1)
         self.TravelActionsFrame.setLayout(self.TravelActionsLayout)
         self.Layout.addWidget(self.TravelActionsFrame, 0, 0, 2, 1)
 
