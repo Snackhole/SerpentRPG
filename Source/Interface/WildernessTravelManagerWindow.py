@@ -211,7 +211,8 @@ class WildernessTravelManagerWindow(Window):
         self.WildernessLogFrame.setLayout(self.WildernessLogLayout)
         self.Layout.addWidget(self.WildernessLogFrame, 0, 2, 2, 1)
 
-        # Set Layout
+        # Set and Configure Layout
+        self.Layout.setColumnStretch(2, 1)
         self.Frame.setLayout(self.Layout)
 
     def ModifySupplyPoolValue(self, Delta):
