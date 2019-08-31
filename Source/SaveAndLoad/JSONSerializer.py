@@ -15,9 +15,9 @@ class JSONSerializer:
     To deserialize data from a JSON string, call the DeserializeDataFromJSONString method, which returns the reconstituted data structure.
     """
 
-    def __init__(self, ObjectClasses):
+    def __init__(self, ObjectClasses=()):
         """
-        ObjectClasses should be a list of classes to be serialized; a dictionary is created from them that allows the Decoder to reconstitute the objects from states.
+        ObjectClasses should be a tuple of classes to be serialized; a dictionary is created from them that allows the Decoder to reconstitute the objects from states.
         """
         self.ObjectClasses = ObjectClasses
         self.ObjectTypeCalls = {}
