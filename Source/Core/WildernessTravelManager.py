@@ -20,6 +20,12 @@ class WildernessTravelManager:
     def WildernessClockLogString(self, ProjectedClockValue, ClockGoesOff):
         return "  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""
 
+    def RemoveLastLogEntry(self):
+        self.WildernessLog = self.WildernessLog[:-1]
+
+    def ClearLog(self):
+        self.WildernessLog.clear()
+
     # Logged Methods
     def SpendSupplies(self, SupplyPointsSpent, Log=False):
         self.ModifyCurrentSupplyPointsValue(-SupplyPointsSpent)

@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame, QMessageBox
 
 
 class Window(QMainWindow):
@@ -30,6 +30,15 @@ class Window(QMainWindow):
 
     def UpdateWindowTitle(self):
         self.setWindowTitle(self.ScriptName)
+
+    def DisplayMessageBox(self, Message, Icon=QMessageBox.Information, Buttons=QMessageBox.Ok, Parent=None):
+        MessageBox = QMessageBox(self if Parent is None else Parent)
+        MessageBox.setWindowIcon(self.WindowIcon)
+        MessageBox.setWindowTitle(self.ScriptName)
+        MessageBox.setIcon(Icon)
+        MessageBox.setText(Message)
+        MessageBox.setStandardButtons(Buttons)
+        return MessageBox.exec_()
 
     # Window Management Methods
     def Center(self):

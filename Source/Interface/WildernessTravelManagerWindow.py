@@ -1,7 +1,7 @@
 import math
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy, QAction, QMessageBox
 
 from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
@@ -245,6 +245,26 @@ class WildernessTravelManagerWindow(Window):
         self.Layout.setColumnStretch(2, 1)
         self.Frame.setLayout(self.Layout)
 
+        # Create Actions
+        self.AddToLogAction = QAction("Add to Log")
+        self.AddToLogAction.triggered.connect(self.AddToLog)
+
+        self.RemoveLastLogEntryAction = QAction("Remove Last Log Entry")
+        self.RemoveLastLogEntryAction.triggered.connect(self.RemoveLastLogEntry)
+
+        self.ClearLogAction = QAction("Clear Log")
+        self.ClearLogAction.triggered.connect(self.ClearLog)
+
+        # Menu Bar
+        self.MenuBar = self.menuBar()
+
+        # File Menu
+
+        self.LogMenu = self.MenuBar.addMenu("Log")
+        self.LogMenu.addAction(self.AddToLogAction)
+        self.LogMenu.addAction(self.RemoveLastLogEntryAction)
+        self.LogMenu.addAction(self.ClearLogAction)
+
     def ModifySupplyPoolValue(self, Delta):
         self.WildernessTravelManager.ModifySupplyPoolValue(Delta)
         self.UpdateDisplay()
@@ -330,6 +350,22 @@ class WildernessTravelManagerWindow(Window):
         SupplyPointsGained, OK = QInputDialog.getInt(self, "Gain Supplies", "Supply points gained:", 1, 1)
         if OK:
             self.WildernessTravelManager.GainSupplies(SupplyPointsGained, Log=True)
+            self.UpdateDisplay()
+
+    def AddToLog(self):
+        LogString, OK = QInputDialog.getText(self, "Add to Log", "Add this to the Wilderness Log:")
+        if OK:
+            self.WildernessTravelManager.Log(LogString)
+            self.UpdateDisplay()
+
+    def RemoveLastLogEntry(self):
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.WildernessTravelManager.RemoveLastLogEntry()
+            self.UpdateDisplay()
+
+    def ClearLog(self):
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.WildernessTravelManager.ClearLog()
             self.UpdateDisplay()
 
     def UpdateDisplay(self):
