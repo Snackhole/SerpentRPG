@@ -22,7 +22,7 @@ class JSONSerializer:
         self.ObjectClasses = ObjectClasses
         self.ObjectTypeCalls = {}
         for ObjectClass in ObjectClasses:
-            self.ObjectTypeCalls[ObjectClass.__name__] = lambda State: ObjectClass.CreateFromState(State)
+            self.ObjectTypeCalls[ObjectClass.__name__] = lambda State, ObjectClass=ObjectClass: ObjectClass.CreateFromState(State)
 
     def SerializeDataToJSONString(self, Data, Indent=2):
         return json.dumps(Data, cls=Encoder, indent=Indent)

@@ -1,7 +1,8 @@
 from Core.DieClock import DieClock
+from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
-class WildernessTravelManager:
+class WildernessTravelManager(SerializableMixin):
     def __init__(self, SupplyPool=0, CurrentSupplyPoints=0):
         # Store Parameters
         self.SupplyPool = SupplyPool
@@ -120,3 +121,24 @@ class WildernessTravelManager:
 
     def ModifyWildernessClockMaximumValue(self, Delta):
         self.WildernessClock.ModifyMaximumValue(Delta)
+
+    # Serialization Methods
+    def SetState(self, NewState):
+        self.SupplyPool = NewState["SupplyPool"]
+        self.CurrentSupplyPoints = NewState["CurrentSupplyPoints"]
+        self.WildernessClock = NewState["WildernessClock"]
+        self.WildernessLog = NewState["WildernessLog"]
+
+    def GetState(self):
+        State = {}
+        State["SupplyPool"] = self.SupplyPool
+        State["CurrentSupplyPoints"] = self.CurrentSupplyPoints
+        State["WildernessClock"] = self.WildernessClock
+        State["WildernessLog"] = self.WildernessLog
+        return State
+
+    @classmethod
+    def CreateFromState(cls, State):
+        NewWildernessTravelManager = cls()
+        NewWildernessTravelManager.SetState(State)
+        return NewWildernessTravelManager

@@ -1,7 +1,8 @@
 from Core.DiceRoller import DiceRoller
+from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
-class DieClock:
+class DieClock(SerializableMixin):
     def __init__(self, ComplicationThreshold=10, MaximumValue=21):
         # Store Parameters
         self.ComplicationThreshold = ComplicationThreshold
@@ -27,3 +28,22 @@ class DieClock:
 
     def ModifyMaximumValue(self, Delta):
         self.MaximumValue += Delta
+
+    # Serialization Methods
+    def SetState(self, NewState):
+        self.ComplicationThreshold = NewState["ComplicationThreshold"]
+        self.MaximumValue = NewState["MaximumValue"]
+        self.Value = NewState["Value"]
+
+    def GetState(self):
+        State = {}
+        State["ComplicationThreshold"] = self.ComplicationThreshold
+        State["MaximumValue"] = self.MaximumValue
+        State["Value"] = self.Value
+        return State
+
+    @classmethod
+    def CreateFromState(cls, State):
+        NewDieClock = cls()
+        NewDieClock.SetState(State)
+        return NewDieClock
