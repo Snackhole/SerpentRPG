@@ -78,8 +78,15 @@ class WildernessTravelManager:
         self.GainSupplies(SupplyPointsGained)
         self.Log("Purchased " + str(SupplyPointsGained) + " Supply points.")
 
-    def SeekShortTermLodging(self):
-        pass
+    def SeekShortTermLodging(self, PaidWithSupplyPoint):
+        ProjectedClockValue = self.WildernessClock.Value + 1
+        ClockGoesOff = self.SpendDays(1)
+        if PaidWithSupplyPoint:
+            self.SpendSupplies(1)
+            LogString = "Spent 1 day and Supply point for short-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
+        else:
+            LogString = "Spent 1 day and money or valuable items on short-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
+        self.Log(LogString)
 
     def SeekLongTermLodging(self):
         pass

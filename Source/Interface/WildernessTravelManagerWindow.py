@@ -268,7 +268,7 @@ class WildernessTravelManagerWindow(Window):
             self.UpdateDisplay()
 
     def Forage(self):
-        NumberOfSuccesses, OK = QInputDialog.getItem(self, "Forage Success", "Number of party members who succeeded:", ["None", "Half or More", "All"])
+        NumberOfSuccesses, OK = QInputDialog.getItem(self, "Forage Success", "Number of party members who succeeded:", ["None", "Half or More", "All"], editable=False)
         if OK:
             if NumberOfSuccesses == "Half or More":
                 HalfSucceeded = True
@@ -297,8 +297,10 @@ class WildernessTravelManagerWindow(Window):
             self.UpdateDisplay()
 
     def SeekShortTermLodging(self):
-        self.WildernessTravelManager.SeekShortTermLodging()
-        self.UpdateDisplay()
+        PaidWithSupplyPoint, OK = QInputDialog.getItem(self, "Short-Term Lodging", "Paid with Supply point or sil:", ["Supply Point", "Sil"], editable=False)
+        if OK:
+            self.WildernessTravelManager.SeekShortTermLodging(PaidWithSupplyPoint == "Supply Point")
+            self.UpdateDisplay()
 
     def SeekLongTermLodging(self):
         self.WildernessTravelManager.SeekLongTermLodging()
