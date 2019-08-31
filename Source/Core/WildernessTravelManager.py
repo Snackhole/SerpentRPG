@@ -85,11 +85,18 @@ class WildernessTravelManager:
             self.SpendSupplies(1)
             LogString = "Spent 1 day and Supply point for short-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
         else:
-            LogString = "Spent 1 day and money or valuable items on short-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
+            LogString = "Spent 1 day and money or valuable items for short-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
         self.Log(LogString)
 
-    def SeekLongTermLodging(self):
-        pass
+    def SeekLongTermLodging(self, PaidWithSupplyPoints):
+        ProjectedClockValue = self.WildernessClock.Value + 2
+        ClockGoesOff = self.SpendDays(2)
+        if PaidWithSupplyPoints:
+            self.SpendSupplies(2)
+            LogString = "Spent 2 days and Supply points for long-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
+        else:
+            LogString = "Spent 2 days and money or valuable items for long-term lodging." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff)
+        self.Log(LogString)
 
     # Unlogged Methods
     def ModifySupplyPoolValue(self, Delta):

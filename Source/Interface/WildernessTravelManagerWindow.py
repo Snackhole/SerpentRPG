@@ -297,14 +297,16 @@ class WildernessTravelManagerWindow(Window):
             self.UpdateDisplay()
 
     def SeekShortTermLodging(self):
-        PaidWithSupplyPoint, OK = QInputDialog.getItem(self, "Short-Term Lodging", "Paid with Supply point or sil:", ["Supply Point", "Sil"], editable=False)
+        PaidWithSupplyPoint, OK = QInputDialog.getItem(self, "Short-Term Lodging", "Paid with Supply point or other value:", ["Supply Point", "Other Value"], editable=False)
         if OK:
             self.WildernessTravelManager.SeekShortTermLodging(PaidWithSupplyPoint == "Supply Point")
             self.UpdateDisplay()
 
     def SeekLongTermLodging(self):
-        self.WildernessTravelManager.SeekLongTermLodging()
-        self.UpdateDisplay()
+        PaidWithSupplyPoints, OK = QInputDialog.getItem(self, "Long-Term Lodging", "Paid with Supply points or other value:", ["Supply Points", "Other Value"], editable=False)
+        if OK:
+            self.WildernessTravelManager.SeekLongTermLodging(PaidWithSupplyPoints == "Supply Points")
+            self.UpdateDisplay()
 
     def SpendSupplies(self):
         SupplyPointsSpent, OK = QInputDialog.getInt(self, "Spend Supplies", "Supply points spent:", 1, 1)
