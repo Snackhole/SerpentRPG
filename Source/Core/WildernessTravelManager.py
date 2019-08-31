@@ -13,9 +13,12 @@ class WildernessTravelManager:
         # Variables
         self.WildernessLog = []
 
-    # Log Method
+    # Log Methods
     def Log(self, TextToLog):
         self.WildernessLog.append(TextToLog)
+
+    def WildernessClockLogString(self, ProjectedClockValue, ClockGoesOff):
+        return "  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""
 
     # Logged Methods
     def SpendSupplies(self, SupplyPointsSpent, Log=False):
@@ -32,7 +35,7 @@ class WildernessTravelManager:
         ProjectedClockValue = self.WildernessClock.Value + DaysSpent
         ClockGoesOff = self.WildernessClock.IncreaseClock(DaysSpent)
         if Log:
-            self.Log("Spent " + str(DaysSpent) + " days." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
+            self.Log("Spent " + str(DaysSpent) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
         return ClockGoesOff
 
     def SpendSuppliesAndDays(self, SupplyPointsAndDaysSpent, Log=False):
@@ -40,13 +43,13 @@ class WildernessTravelManager:
         ProjectedClockValue = self.WildernessClock.Value + SupplyPointsAndDaysSpent
         ClockGoesOff = self.SpendDays(SupplyPointsAndDaysSpent)
         if Log:
-            self.Log("Spent " + str(SupplyPointsAndDaysSpent) + " days and Supply points." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
+            self.Log("Spent " + str(SupplyPointsAndDaysSpent) + " days and Supply points." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
         return ClockGoesOff
 
     def Move(self, TravelCost):
         ProjectedClockValue = self.WildernessClock.Value + TravelCost
         ClockGoesOff = self.SpendSuppliesAndDays(TravelCost)
-        self.Log("Moved with a travel cost of " + str(TravelCost) + ", spending that many days and Supply points." + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
+        self.Log("Moved with a travel cost of " + str(TravelCost) + ", spending that many days and Supply points." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     def Forage(self, HalfSucceeded, AllSucceeded):
         ProjectedClockValue = self.WildernessClock.Value + 1
@@ -59,16 +62,21 @@ class WildernessTravelManager:
             self.ModifyCurrentSupplyPointsValue(5, RespectMinimum=True, RespectMaximum=True)
         else:
             SuppliesGainedString = "  Gained no Supply points."
-        self.Log("Foraged for supplies, spending 1 day and Supply point." + SuppliesGainedString + ("  The Wilderness Clock went off after " + str(ProjectedClockValue) + " days!" if ClockGoesOff else ""))
+        self.Log("Foraged for supplies, spending 1 day and Supply point." + SuppliesGainedString + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     def ShortRest(self):
-        pass
+        ProjectedClockValue = self.WildernessClock.Value + 1
+        ClockGoesOff = self.SpendSuppliesAndDays(1)
+        self.Log("Spent 1 day and Supply point on a short rest." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     def LongRest(self):
-        pass
+        ProjectedClockValue = self.WildernessClock.Value + 3
+        ClockGoesOff = self.SpendSuppliesAndDays(3)
+        self.Log("Spent 3 days and Supply points on a long rest." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
-    def PurchaseSupplies(self):
-        pass
+    def PurchaseSupplies(self, SupplyPointsGained):
+        self.GainSupplies(SupplyPointsGained)
+        self.Log("Purchased " + str(SupplyPointsGained) + " Supply points.")
 
     def SeekShortTermLodging(self):
         pass

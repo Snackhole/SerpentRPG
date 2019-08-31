@@ -291,8 +291,10 @@ class WildernessTravelManagerWindow(Window):
         self.UpdateDisplay()
 
     def PurchaseSupplies(self):
-        self.WildernessTravelManager.PurchaseSupplies()
-        self.UpdateDisplay()
+        SupplyPointsGained, OK = QInputDialog.getInt(self, "Purchase Supplies", "Supply points purchased:", 1, 1)
+        if OK:
+            self.WildernessTravelManager.PurchaseSupplies(SupplyPointsGained)
+            self.UpdateDisplay()
 
     def SeekShortTermLodging(self):
         self.WildernessTravelManager.SeekShortTermLodging()
