@@ -61,6 +61,21 @@ class SaveAndOpenMixin:
             self.FlashStatusBar("No file opened.")
             return None
 
+    def New(self, RespectUnsavedChanges=True):
+        assert isinstance(self, Window)
+        if self.UnsavedChanges and RespectUnsavedChanges:
+            SavePrompt = self.DisplayMessageBox("Save unsaved work before starting a new file?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
+            if SavePrompt == QMessageBox.Yes:
+                if not self.Save():
+                    return False
+            elif SavePrompt == QMessageBox.No:
+                pass
+            elif SavePrompt == QMessageBox.Cancel:
+                return False
+        self.CurrentOpenFileName = ""
+        self.FlashStatusBar("New file opened.")
+        return True
+
     def SetUpSaveAndOpen(self, FileExtension, FileDescription, ObjectClasses):
         self.FileExtension = FileExtension
         self.FileDescription = FileDescription
