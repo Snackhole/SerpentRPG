@@ -14,8 +14,8 @@ class SaveAndOpenMixin:
 
     def Save(self, ObjectToSerialize, SaveAs=False, AlternateFileDescription=None, AlternateFileExtension=None):
         assert isinstance(self, Window)
-        Caption = "Save " + self.FileDescription if AlternateFileDescription is None else AlternateFileDescription + " File"
-        Filter = self.FileDescription if AlternateFileDescription is None else AlternateFileDescription + " files (*" + self.FileExtension if AlternateFileExtension is None else AlternateFileExtension + ")"
+        Caption = "Save " + (self.FileDescription if AlternateFileDescription is None else AlternateFileDescription) + " File"
+        Filter = (self.FileDescription if AlternateFileDescription is None else AlternateFileDescription) + " files (*" + (self.FileExtension if AlternateFileExtension is None else AlternateFileExtension) + ")"
         SaveFileName = self.CurrentOpenFileName if self.CurrentOpenFileName != "" and not SaveAs else QFileDialog.getSaveFileName(caption=Caption, filter=Filter)[0]
         if SaveFileName != "":
             JSONString = self.JSONSerializer.SerializeDataToJSONString(ObjectToSerialize)
@@ -30,19 +30,19 @@ class SaveAndOpenMixin:
             self.FlashStatusBar("No file saved.")
             return False
 
-    def Open(self, FilePath=None, RespectUnsavedChanges=True, AlternateFileDescription=None, AlternateFileExtension=None):
+    def Open(self, ObjectToSerialize, FilePath=None, RespectUnsavedChanges=True, AlternateFileDescription=None, AlternateFileExtension=None):
         assert isinstance(self, Window)
         if self.UnsavedChanges and RespectUnsavedChanges:
             SavePrompt = self.DisplayMessageBox("Save unsaved work before opening?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
             if SavePrompt == QMessageBox.Yes:
-                if not self.Save():
+                if not self.Save(ObjectToSerialize):
                     return None
             elif SavePrompt == QMessageBox.No:
                 pass
             elif SavePrompt == QMessageBox.Cancel:
                 return None
-        Caption = "Open " + self.FileDescription if AlternateFileDescription is None else AlternateFileDescription + " File"
-        Filter = self.FileDescription if AlternateFileDescription is None else AlternateFileDescription + " files (*" + self.FileExtension if AlternateFileExtension is None else AlternateFileExtension + ")"
+        Caption = "Open " + (self.FileDescription if AlternateFileDescription is None else AlternateFileDescription) + " File"
+        Filter = (self.FileDescription if AlternateFileDescription is None else AlternateFileDescription) + " files (*" + (self.FileExtension if AlternateFileExtension is None else AlternateFileExtension) + ")"
         OpenFileName = FilePath if FilePath is not None else QFileDialog.getOpenFileName(caption=Caption, filter=Filter)[0]
         if OpenFileName != "":
             with open(OpenFileName, "r") as LoadFile:
@@ -61,12 +61,12 @@ class SaveAndOpenMixin:
             self.FlashStatusBar("No file opened.")
             return None
 
-    def New(self, RespectUnsavedChanges=True):
+    def New(self, ObjectToSerialize, RespectUnsavedChanges=True):
         assert isinstance(self, Window)
         if self.UnsavedChanges and RespectUnsavedChanges:
             SavePrompt = self.DisplayMessageBox("Save unsaved work before starting a new file?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
             if SavePrompt == QMessageBox.Yes:
-                if not self.Save():
+                if not self.Save(ObjectToSerialize):
                     return False
             elif SavePrompt == QMessageBox.No:
                 pass
@@ -74,24 +74,17 @@ class SaveAndOpenMixin:
                 return False
         self.CurrentOpenFileName = ""
         self.FlashStatusBar("New file opened.")
+        self.UnsavedChanges = False
         return True
 
     def closeEvent(self, event):
         assert isinstance(self, Window)
-        Close = True
         if self.UnsavedChanges:
-            SavePrompt = self.DisplayMessageBox("Save unsaved work before closing?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
+            SavePrompt = self.DisplayMessageBox("There are unsaved changes.  Close anyway?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No))
             if SavePrompt == QMessageBox.Yes:
-                if not self.Save():
-                    Close = False
+                event.accept()
             elif SavePrompt == QMessageBox.No:
-                pass
-            elif SavePrompt == QMessageBox.Cancel:
-                Close = False
-        if not Close:
-            event.ignore()
-        else:
-            event.accept()
+                event.ignore()
 
     def SetUpSaveAndOpen(self, FileExtension, FileDescription, ObjectClasses):
         self.FileExtension = FileExtension
