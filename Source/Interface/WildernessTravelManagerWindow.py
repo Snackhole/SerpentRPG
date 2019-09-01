@@ -402,7 +402,10 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
             WildernessLogString += LogEntry + "\n\n---\n\n"
         self.WildernessLogTextEdit.setPlainText(WildernessLogString[:-7])
 
+        # Update Window Title
+        self.UpdateWindowTitle()
+
     def UpdateWindowTitle(self):
-        CurrentFileTitleSection = " - [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
         UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
-        self.setWindowTitle(self.ScriptName + CurrentFileTitleSection + UnsavedChangesIndicator)
+        self.setWindowTitle("Wilderness Travel Manager - " + self.ScriptName + CurrentFileTitleSection + UnsavedChangesIndicator)
