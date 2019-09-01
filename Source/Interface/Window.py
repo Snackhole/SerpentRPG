@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame, QMessageBox
 
@@ -20,6 +21,9 @@ class Window(QMainWindow):
         # Create Interface
         self.CreateInterface()
 
+        # Create Status Bar
+        self.StatusBar = self.statusBar()
+
         # Set Central Frame
         self.setCentralWidget(self.Frame)
         self.show()
@@ -39,6 +43,10 @@ class Window(QMainWindow):
         MessageBox.setText(Message)
         MessageBox.setStandardButtons(Buttons)
         return MessageBox.exec_()
+
+    def FlashStatusBar(self, Status, Duration=2000):
+        self.StatusBar.setMessage(Status)
+        QTimer.singleShot(Duration, self.StatusBar.clearMessage)
 
     # Window Management Methods
     def Center(self):
