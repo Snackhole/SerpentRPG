@@ -3,10 +3,10 @@ from SaveAndLoad.JSONSerializer import SerializableMixin
 
 
 class WildernessTravelManager(SerializableMixin):
-    def __init__(self, SupplyPool=0, CurrentSupplyPoints=0):
+    def __init__(self):
         # Store Parameters
-        self.SupplyPool = SupplyPool
-        self.CurrentSupplyPoints = CurrentSupplyPoints
+        self.SupplyPool = 0
+        self.CurrentSupplyPoints = 0
 
         # Create Wilderness Clock
         self.WildernessClock = DieClock(5)
