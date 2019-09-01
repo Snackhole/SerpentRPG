@@ -1,18 +1,24 @@
 import math
+import os
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy, QAction, QMessageBox
 
+from Core.DieClock import DieClock
 from Core.WildernessTravelManager import WildernessTravelManager
 from Interface.Window import Window
+from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 
-class WildernessTravelManagerWindow(Window):
+class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
     def __init__(self, ScriptName):
         super().__init__(ScriptName)
 
         # Create Wilderness Travel Manager
         self.WildernessTravelManager = WildernessTravelManager()
+
+        # Set Up Save and Open
+        self.SetUpSaveAndOpen(".wildtrvl", "Wilderness Travel Manager", (WildernessTravelManager, DieClock))
 
         # Update Display
         self.UpdateDisplay()
@@ -368,6 +374,7 @@ class WildernessTravelManagerWindow(Window):
             self.WildernessTravelManager.ClearLog()
             self.UpdateDisplay()
 
+    # Display Update Methods
     def UpdateDisplay(self):
         # Supply Pool Display
         self.CurrentSupplyPointsLineEdit.setText(str(self.WildernessTravelManager.CurrentSupplyPoints))
@@ -394,3 +401,8 @@ class WildernessTravelManagerWindow(Window):
         for LogEntry in reversed(self.WildernessTravelManager.WildernessLog):
             WildernessLogString += LogEntry + "\n\n---\n\n"
         self.WildernessLogTextEdit.setPlainText(WildernessLogString[:-7])
+
+    def UpdateWindowTitle(self):
+        CurrentFileTitleSection = " - [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
+        self.setWindowTitle(self.ScriptName + CurrentFileTitleSection + UnsavedChangesIndicator)

@@ -10,16 +10,18 @@ class Window(QMainWindow):
         # Store Parameters
         self.ScriptName = ScriptName
 
-        # Window Icon and Title
+        # Window Icon
         self.WindowIcon = QIcon("Assets/SerpentRPG Icon.png")
         self.setWindowIcon(self.WindowIcon)
-        self.UpdateWindowTitle()
 
         # Create Central Frame
         self.Frame = QFrame()
 
         # Create Interface
         self.CreateInterface()
+
+        # Update Window Title
+        self.UpdateWindowTitle()
 
         # Create Status Bar
         self.StatusBar = self.statusBar()
