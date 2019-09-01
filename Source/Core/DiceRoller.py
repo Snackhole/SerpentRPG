@@ -31,11 +31,3 @@ class DiceRoller:
             RollResults.append(self.RollDice(DiceNumber, DieType, Modifier)["Total"])
         AverageResult = sum(RollResults) / len(RollResults)
         return AverageResult
-
-
-if __name__ == "__main__":
-    TestRoller = DiceRoller()
-    print(TestRoller.RollDice())
-    print(TestRoller.RollDice(2, 20, -3))
-    print(TestRoller.AverageRoll())
-    print(TestRoller.AverageRoll(1, 20, 5))
