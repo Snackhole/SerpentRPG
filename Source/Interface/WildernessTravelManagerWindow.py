@@ -251,7 +251,27 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.Layout.setColumnStretch(2, 1)
         self.Frame.setLayout(self.Layout)
 
-        # Create Actions
+        # Create Menu Actions
+        self.NewAction = QAction("New")
+        self.NewAction.setShortcut("Ctrl+N")
+        self.NewAction.triggered.connect(self.NewActionTriggered)
+
+        self.OpenAction = QAction("Open")
+        self.OpenAction.setShortcut("Ctrl+O")
+        self.OpenAction.triggered.connect(self.OpenActionTriggered)
+
+        self.SaveAction = QAction("Save")
+        self.SaveAction.setShortcut("Ctrl+S")
+        self.SaveAction.triggered.connect(self.SaveActionTriggered)
+
+        self.SaveAsAction = QAction("Save As")
+        self.SaveAsAction.setShortcut("Ctrl+Shift+S")
+        self.SaveAsAction.triggered.connect(self.SaveAsActionTriggered)
+
+        self.QuitAction = QAction("Quit")
+        self.QuitAction.setShortcut("Ctrl+Q")
+        self.QuitAction.triggered.connect(self.close)
+
         self.AddToLogAction = QAction("Add to Log")
         self.AddToLogAction.triggered.connect(self.AddToLog)
 
@@ -264,7 +284,14 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         # Menu Bar
         self.MenuBar = self.menuBar()
 
-        # File Menu
+        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu.addAction(self.NewAction)
+        self.FileMenu.addAction(self.OpenAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.SaveAction)
+        self.FileMenu.addAction(self.SaveAsAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.QuitAction)
 
         self.LogMenu = self.MenuBar.addMenu("Log")
         self.LogMenu.addAction(self.AddToLogAction)
@@ -358,20 +385,44 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
             self.WildernessTravelManager.GainSupplies(SupplyPointsGained, Log=True)
             self.UpdateDisplay()
 
+    # File Menu Action Methods
+    def NewActionTriggered(self):
+        if self.New(self.WildernessTravelManager):
+            self.WildernessTravelManager = WildernessTravelManager()
+        self.UpdateDisplay()
+
+    def OpenActionTriggered(self):
+        OpenData = self.Open(self.WildernessTravelManager)
+        if OpenData is not None:
+            self.WildernessTravelManager = OpenData
+        self.UpdateDisplay()
+
+    def SaveActionTriggered(self):
+        self.Save(self.WildernessTravelManager)
+        self.UpdateDisplay()
+
+    def SaveAsActionTriggered(self):
+        self.Save(self.WildernessTravelManager, SaveAs=True)
+        self.UpdateDisplay()
+
+    # Log Menu Action Methods
     def AddToLog(self):
         LogString, OK = QInputDialog.getText(self, "Add to Log", "Add this to the Wilderness Log:")
         if OK:
             self.WildernessTravelManager.Log(LogString)
+            self.UnsavedChanges = True
             self.UpdateDisplay()
 
     def RemoveLastLogEntry(self):
         if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.WildernessTravelManager.RemoveLastLogEntry()
+            self.UnsavedChanges = True
             self.UpdateDisplay()
 
     def ClearLog(self):
         if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.WildernessTravelManager.ClearLog()
+            self.UnsavedChanges = True
             self.UpdateDisplay()
 
     # Display Update Methods
