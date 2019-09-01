@@ -47,7 +47,7 @@ class Window(QMainWindow):
         return MessageBox.exec_()
 
     def FlashStatusBar(self, Status, Duration=2000):
-        self.StatusBar.setMessage(Status)
+        self.StatusBar.showMessage(Status)
         QTimer.singleShot(Duration, self.StatusBar.clearMessage)
 
     # Window Management Methods
