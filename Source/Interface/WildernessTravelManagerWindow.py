@@ -298,27 +298,29 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.LogMenu.addAction(self.RemoveLastLogEntryAction)
         self.LogMenu.addAction(self.ClearLogAction)
 
+    # Modify Values Methods
     def ModifySupplyPoolValue(self, Delta):
         self.WildernessTravelManager.ModifySupplyPoolValue(Delta)
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def ModifyCurrentSupplyPointsValue(self, Delta):
         self.WildernessTravelManager.ModifyCurrentSupplyPointsValue(Delta)
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def ModifyWildernessClockCurrentValue(self, Delta):
         self.WildernessTravelManager.ModifyWildernessClockCurrentValue(Delta)
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def ModifyWildernessClockMaximumValue(self, Delta):
         self.WildernessTravelManager.ModifyWildernessClockMaximumValue(Delta)
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
+    # Travel Action Methods
     def Move(self):
         TravelCost, OK = QInputDialog.getInt(self, "Travel Cost", "Travel cost to move:", 1, 1)
         if OK:
             self.WildernessTravelManager.Move(TravelCost)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def Forage(self):
         NumberOfSuccesses, OK = QInputDialog.getItem(self, "Forage Success", "Number of party members who succeeded:", ["None", "Half or More", "All"], editable=False)
@@ -333,57 +335,57 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
                 HalfSucceeded = False
                 AllSucceeded = False
             self.WildernessTravelManager.Forage(HalfSucceeded, AllSucceeded)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def ShortRest(self):
         self.WildernessTravelManager.ShortRest()
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def LongRest(self):
         self.WildernessTravelManager.LongRest()
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def PurchaseSupplies(self):
         SupplyPointsGained, OK = QInputDialog.getInt(self, "Purchase Supplies", "Supply points purchased:", 1, 1)
         if OK:
             self.WildernessTravelManager.PurchaseSupplies(SupplyPointsGained)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def SeekShortTermLodging(self):
         PaidWithSupplyPoint, OK = QInputDialog.getItem(self, "Short-Term Lodging", "Paid with Supply point or other value:", ["Supply Point", "Other Value"], editable=False)
         if OK:
             self.WildernessTravelManager.SeekShortTermLodging(PaidWithSupplyPoint == "Supply Point")
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def SeekLongTermLodging(self):
         PaidWithSupplyPoints, OK = QInputDialog.getItem(self, "Long-Term Lodging", "Paid with Supply points or other value:", ["Supply Points", "Other Value"], editable=False)
         if OK:
             self.WildernessTravelManager.SeekLongTermLodging(PaidWithSupplyPoints == "Supply Points")
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def SpendSupplies(self):
         SupplyPointsSpent, OK = QInputDialog.getInt(self, "Spend Supplies", "Supply points spent:", 1, 1)
         if OK:
             self.WildernessTravelManager.SpendSupplies(SupplyPointsSpent, Log=True)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def SpendDays(self):
         DaysSpent, OK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
         if OK:
             self.WildernessTravelManager.SpendDays(DaysSpent, Log=True)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def SpendSuppliesAndDays(self):
         SupplyPointsAndDaysSpent, OK = QInputDialog.getInt(self, "Spend Supplies and Days", "Supply points and days spent:", 1, 1)
         if OK:
             self.WildernessTravelManager.SpendSuppliesAndDays(SupplyPointsAndDaysSpent, Log=True)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def GainSupplies(self):
         SupplyPointsGained, OK = QInputDialog.getInt(self, "Gain Supplies", "Supply points gained:", 1, 1)
         if OK:
             self.WildernessTravelManager.GainSupplies(SupplyPointsGained, Log=True)
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     # File Menu Action Methods
     def NewActionTriggered(self):
@@ -410,20 +412,17 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         LogString, OK = QInputDialog.getText(self, "Add to Log", "Add this to the Wilderness Log:")
         if OK:
             self.WildernessTravelManager.Log(LogString)
-            self.UnsavedChanges = True
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntry(self):
         if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.WildernessTravelManager.RemoveLastLogEntry()
-            self.UnsavedChanges = True
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def ClearLog(self):
         if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
             self.WildernessTravelManager.ClearLog()
-            self.UnsavedChanges = True
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     # Display Update Methods
     def UpdateDisplay(self):
@@ -460,3 +459,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
         UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
         self.setWindowTitle("Wilderness Travel Manager - " + self.ScriptName + CurrentFileTitleSection + UnsavedChangesIndicator)
+
+    def UpdateUnsavedChangesFlag(self, UnsavedChanges):
+        self.UnsavedChanges = UnsavedChanges
+        self.UpdateDisplay()
