@@ -1,10 +1,10 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit
+from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
-from Interface.LineEditMouseWheelExtension import LineEditMouseWheelExtension
+from Interface.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -17,7 +17,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DiceRoller = DiceRollerWithPresetRolls()
 
         # Set up Save and Open
-        self.SetUpSaveAndOpen(".presetrolls", "Dice Roller", (DiceRollerWithPresetRolls,))
+        self.SetUpSaveAndOpen(".dicerolls", "Dice Roller", (DiceRollerWithPresetRolls,))
 
         # Update Display
         self.UpdateDisplay()
@@ -25,22 +25,24 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         # Styles
         self.LabelStyle = "QLabel {font-size: 20pt;}"
-        self.LineEditStyle = "QLineEdit {font-size: 20pt;}"
+        self.SpinBoxStyle = "QSpinBox {font-size: 20pt;}"
         self.RollButtonStyle = "QPushButton {font-size: 20pt;}"
 
-        # Button and Line Edit Size Policy
-        self.ButtonAndLineEditSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         # Dice Roller Width
         self.DiceRollerWidth = 80
 
         # Dice Number Line Edit
-        self.DiceNumberLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyDiceNumber(1 if event.angleDelta().y() > 0 else -1))
-        self.DiceNumberLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.DiceNumberLineEdit.setStyleSheet(self.LineEditStyle)
-        self.DiceNumberLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.DiceNumberLineEdit.setFixedWidth(self.DiceRollerWidth)
-        self.DiceNumberLineEdit.setText("1")
+        self.DiceNumberSpinBox = QSpinBox()
+        self.DiceNumberSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DiceNumberSpinBox.setStyleSheet(self.SpinBoxStyle)
+        self.DiceNumberSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.DiceNumberSpinBox.setFixedWidth(self.DiceRollerWidth)
+        self.DiceNumberSpinBox.setButtonSymbols(self.DiceNumberSpinBox.NoButtons)
+        self.DiceNumberSpinBox.setRange(1, 1000000000)
+        self.DiceNumberSpinBox.setValue(1)
 
         # Die Type Label
         self.DieTypeLabel = QLabel("d")
@@ -48,12 +50,14 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DieTypeLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Die Type Line Edit
-        self.DieTypeLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyDieType(1 if event.angleDelta().y() > 0 else -1))
-        self.DieTypeLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.DieTypeLineEdit.setStyleSheet(self.LineEditStyle)
-        self.DieTypeLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.DieTypeLineEdit.setFixedWidth(self.DiceRollerWidth)
-        self.DieTypeLineEdit.setText("20")
+        self.DieTypeSpinBox = DieTypeSpinBox()
+        self.DieTypeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DieTypeSpinBox.setStyleSheet(self.SpinBoxStyle)
+        self.DieTypeSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.DieTypeSpinBox.setFixedWidth(self.DiceRollerWidth)
+        self.DieTypeSpinBox.setButtonSymbols(self.DieTypeSpinBox.NoButtons)
+        self.DieTypeSpinBox.setRange(1, 1000000000)
+        self.DieTypeSpinBox.setValue(20)
 
         # Modifier Label
         self.ModifierLabel = QLabel("+")
@@ -61,17 +65,19 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.ModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Modifier Line Edit
-        self.ModifierLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyModifier(1 if event.angleDelta().y() > 0 else -1))
-        self.ModifierLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.ModifierLineEdit.setStyleSheet(self.LineEditStyle)
-        self.ModifierLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.ModifierLineEdit.setFixedWidth(self.DiceRollerWidth)
-        self.ModifierLineEdit.setText("0")
+        self.ModifierSpinBox = QSpinBox()
+        self.ModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ModifierSpinBox.setStyleSheet(self.SpinBoxStyle)
+        self.ModifierSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.ModifierSpinBox.setFixedWidth(self.DiceRollerWidth)
+        self.ModifierSpinBox.setButtonSymbols(self.ModifierSpinBox.NoButtons)
+        self.ModifierSpinBox.setRange(-1000000000, 1000000000)
+        self.ModifierSpinBox.setValue(0)
 
         # Roll Button
         self.RollButton = QPushButton("Roll")
-        self.RollButton.clicked.connect(self.Roll)
-        self.RollButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.RollButton.clicked.connect(lambda: self.Roll())
+        self.RollButton.setSizePolicy(self.InputsSizePolicy)
         self.RollButton.setStyleSheet(self.RollButtonStyle)
 
         # Results Log Label
@@ -90,11 +96,11 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DiceRollerInputsFrame = QFrame()
         self.DiceRollerInputsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.DiceRollerInputsLayout = QGridLayout()
-        self.DiceRollerInputsLayout.addWidget(self.DiceNumberLineEdit, 0, 0)
+        self.DiceRollerInputsLayout.addWidget(self.DiceNumberSpinBox, 0, 0)
         self.DiceRollerInputsLayout.addWidget(self.DieTypeLabel, 0, 1)
-        self.DiceRollerInputsLayout.addWidget(self.DieTypeLineEdit, 0, 2)
+        self.DiceRollerInputsLayout.addWidget(self.DieTypeSpinBox, 0, 2)
         self.DiceRollerInputsLayout.addWidget(self.ModifierLabel, 0, 3)
-        self.DiceRollerInputsLayout.addWidget(self.ModifierLineEdit, 0, 4)
+        self.DiceRollerInputsLayout.addWidget(self.ModifierSpinBox, 0, 4)
         self.DiceRollerInputsLayout.addWidget(self.RollButton, 0, 5)
         self.DiceRollerInputsFrame.setLayout(self.DiceRollerInputsLayout)
         self.Layout.addWidget(self.DiceRollerInputsFrame, 0, 0)
@@ -113,20 +119,21 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
     # Action Methods
     def Roll(self):
-        print("Rolled")
-
-    # Modify Values Methods
-    def ModifyDiceNumber(self, Delta):
-        print("ModifyDiceNumber:  " + str(Delta))
-
-    def ModifyDieType(self, Delta):
-        print("ModifyDieType:  " + str(Delta))
-
-    def ModifyModifier(self, Delta):
-        print("ModifyModifier:  " + str(Delta))
+        DiceNumber = self.DiceNumberSpinBox.value()
+        DieType = self.DieTypeSpinBox.value()
+        Modifier = self.ModifierSpinBox.value()
+        self.DiceRoller.RollAndLog(DiceNumber, DieType, Modifier)
+        self.UpdateDisplay()
 
     # Display Update Methods
     def UpdateDisplay(self):
+        # Results Log Display
+        ResultsLogString = ""
+        for LogEntry in reversed(self.DiceRoller.ResultsLog):
+            ResultsLogString += LogEntry + "\n\n---\n\n"
+        self.ResultsLogTextEdit.setPlainText(ResultsLogString[:-7])
+
+        # Update Window Title
         self.UpdateWindowTitle()
 
     def UpdateWindowTitle(self):
