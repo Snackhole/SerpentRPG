@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QPushButton, QGridLayout
+from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel
 
 from Interface.Window import Window
 
@@ -11,17 +11,23 @@ class ModeSelectionWindow(Window):
         self.Mode = None
 
     def CreateInterface(self):
-        # Buttons Style
-        self.ButtonsStyle = "QPushButton {font-size: 20pt;}"
+        # Mode Label
+        self.ModeLabel = QLabel("Mode:")
+
+        # Mode ComboBox
+        self.ModeComboBox = QComboBox()
+        self.ModeComboBox.addItem("Wilderness Travel Manager")
+        self.ModeComboBox.setEditable(False)
 
         # Buttons
-        self.WildernessTravelManagerModeButton = QPushButton("Wilderness Travel Manager")
-        self.WildernessTravelManagerModeButton.setStyleSheet(self.ButtonsStyle)
-        self.WildernessTravelManagerModeButton.clicked.connect(lambda: self.SelectMode("Wilderness Travel Manager"))
+        self.OpenButton = QPushButton("Open")
+        self.OpenButton.clicked.connect(lambda: self.SelectMode(self.ModeComboBox.currentText()))
 
         # Create and Set Layout
         self.Layout = QGridLayout()
-        self.Layout.addWidget(self.WildernessTravelManagerModeButton)
+        self.Layout.addWidget(self.ModeLabel, 0, 0)
+        self.Layout.addWidget(self.ModeComboBox, 0, 1)
+        self.Layout.addWidget(self.OpenButton, 1, 0, 1, 2)
         self.Frame.setLayout(self.Layout)
 
     def UpdateWindowTitle(self):
