@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QPushButton, QFrame, QTextEdit,
 
 from Core.DieClock import DieClock
 from Core.WildernessTravelManager import WildernessTravelManager
-from Interface.LineEditMouseWheelExtension import LineEditMouseWheelExtension
-from Interface.Window import Window
+from Interface.Widgets.LineEditMouseWheelExtension import LineEditMouseWheelExtension
+from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 

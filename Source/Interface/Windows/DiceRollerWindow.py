@@ -4,8 +4,8 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
-from Interface.DieTypeSpinBox import DieTypeSpinBox
-from Interface.Window import Window
+from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
+from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 

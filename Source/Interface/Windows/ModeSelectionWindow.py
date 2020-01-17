@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel
 
-from Interface.Window import Window
+from Interface.Windows.Window import Window
 
 
 class ModeSelectionWindow(Window):

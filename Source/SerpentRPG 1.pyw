@@ -3,9 +3,9 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from Interface.DiceRollerWindow import DiceRollerWindow
-from Interface.ModeSelectionWindow import ModeSelectionWindow
-from Interface.WildernessTravelManagerWindow import WildernessTravelManagerWindow
+from Interface.Windows.DiceRollerWindow import DiceRollerWindow
+from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
+from Interface.Windows.WildernessTravelManagerWindow import WildernessTravelManagerWindow
 
 if __name__ == "__main__":
     AppInst = QApplication(sys.argv)

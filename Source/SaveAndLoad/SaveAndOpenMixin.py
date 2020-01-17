@@ -12,7 +12,7 @@ class SaveAndOpenMixin:
         self.CurrentOpenFileName = ""
 
     def Save(self, ObjectToSave, SaveAs=False, AlternateFileDescription=None, AlternateFileExtension=None, SkipSerialization=False, ExportMode=False):
-        from Interface.Window import Window
+        from Interface.Windows.Window import Window
         assert isinstance(self, Window)
         ActionString = "Save " if not ExportMode else "Export "
         ActionDoneString = "saved" if not ExportMode else "exported"
@@ -34,7 +34,7 @@ class SaveAndOpenMixin:
             return False
 
     def Open(self, ObjectToSave, FilePath=None, RespectUnsavedChanges=True, AlternateFileDescription=None, AlternateFileExtension=None, ImportMode=False):
-        from Interface.Window import Window
+        from Interface.Windows.Window import Window
         assert isinstance(self, Window)
         ActionString = "Open " if not ImportMode else "Import "
         ActionInProgressString = "opening" if not ImportMode else "importing"
@@ -71,7 +71,7 @@ class SaveAndOpenMixin:
             return None
 
     def New(self, ObjectToSave, RespectUnsavedChanges=True):
-        from Interface.Window import Window
+        from Interface.Windows.Window import Window
         assert isinstance(self, Window)
         if self.UnsavedChanges and RespectUnsavedChanges:
             SavePrompt = self.DisplayMessageBox("Save unsaved work before starting a new file?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel))
@@ -88,7 +88,7 @@ class SaveAndOpenMixin:
         return True
 
     def closeEvent(self, event):
-        from Interface.Window import Window
+        from Interface.Windows.Window import Window
         assert isinstance(self, Window)
         if self.UnsavedChanges:
             SavePrompt = self.DisplayMessageBox("There are unsaved changes.  Close anyway?", Icon=QMessageBox.Warning, Buttons=(QMessageBox.Yes | QMessageBox.No))
