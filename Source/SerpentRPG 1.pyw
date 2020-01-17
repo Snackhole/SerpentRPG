@@ -3,6 +3,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
+from Interface.DiceRollerWindow import DiceRollerWindow
 from Interface.ModeSelectionWindow import ModeSelectionWindow
 from Interface.WildernessTravelManagerWindow import WildernessTravelManagerWindow
 
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     if Mode is not None:
         # Modes Dictionary
         Modes = {}
+        Modes["Dice Roller"] = DiceRollerWindow
         Modes["Wilderness Travel Manager"] = WildernessTravelManagerWindow
 
         # Create Mode Window

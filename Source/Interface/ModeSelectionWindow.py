@@ -16,6 +16,7 @@ class ModeSelectionWindow(Window):
 
         # Mode ComboBox
         self.ModeComboBox = QComboBox()
+        self.ModeComboBox.addItem("Dice Roller")
         self.ModeComboBox.addItem("Wilderness Travel Manager")
         self.ModeComboBox.setEditable(False)
 
