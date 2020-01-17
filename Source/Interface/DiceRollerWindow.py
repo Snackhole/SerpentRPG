@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton
+from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
 from Interface.LineEditMouseWheelExtension import LineEditMouseWheelExtension
@@ -74,6 +74,15 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.RollButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.RollButton.setStyleSheet(self.RollButtonStyle)
 
+        # Results Log Label
+        self.ResultsLogLabel = QLabel("Results Log")
+        self.ResultsLogLabel.setStyleSheet(self.LabelStyle)
+        self.ResultsLogLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Results Log Text Edit
+        self.ResultsLogTextEdit = QTextEdit()
+        self.ResultsLogTextEdit.setReadOnly(True)
+
         # Create Layout
         self.Layout = QGridLayout()
 
@@ -89,6 +98,15 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DiceRollerInputsLayout.addWidget(self.RollButton, 0, 5)
         self.DiceRollerInputsFrame.setLayout(self.DiceRollerInputsLayout)
         self.Layout.addWidget(self.DiceRollerInputsFrame, 0, 0)
+
+        # Results Log Widgets in Layout
+        self.ResultsLogFrame = QFrame()
+        self.ResultsLogFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.ResultsLogLayout = QGridLayout()
+        self.ResultsLogLayout.addWidget(self.ResultsLogLabel, 0, 0)
+        self.ResultsLogLayout.addWidget(self.ResultsLogTextEdit, 1, 0)
+        self.ResultsLogFrame.setLayout(self.ResultsLogLayout)
+        self.Layout.addWidget(self.ResultsLogFrame, 0, 1, 2, 1)
 
         # Set and Configure Layout
         self.Frame.setLayout(self.Layout)
