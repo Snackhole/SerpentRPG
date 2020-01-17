@@ -16,7 +16,7 @@ class DiceRoller:
         Results["Modifier"] = Modifier
         Results["Rolls"] = []
         Results["Total"] = 0
-        Results["ResultMessages"] = ResultMessages
+        Results["ResultMessage"] = None
 
         # Roll
         for Roll in range(DiceNumber):
@@ -25,6 +25,11 @@ class DiceRoller:
 
         # Total Results
         Results["Total"] = sum(Results["Rolls"]) + Modifier
+
+        # Resolve Result Message
+        if ResultMessages is not None:
+            if Results["Total"] in ResultMessages:
+                Results["ResultMessage"] = ResultMessages[Results["Total"]]
 
         return Results
 
@@ -43,6 +48,17 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
 
         # Preset Rolls
         self.PresetRolls = []
+
+        # Results Log
+        self.ResultsLog = []
+
+    def RollAndLog(self, DiceNumber, DieType, Modifier):
+        Results = self.RollDice(DiceNumber, DieType, Modifier)
+        self.LogFromResults(Results)
+
+    def RollAndLogPreset(self, PresetRollIndex):
+        Results = self.RollPreset(PresetRollIndex)
+        self.LogFromResults(Results, Prefix=self.PresetRolls[PresetRollIndex]["Name"] + ":")
 
     # Preset Roll Methods
     def CreatePresetRoll(self, Name, DiceNumber, DieType, Modifier, ResultMessages):
@@ -80,13 +96,27 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
         PresetRoll = self.PresetRolls[PresetRollIndex]
         return self.RollDice(PresetRoll["DiceNumber"], PresetRoll["DieType"], PresetRoll["Modifier"], PresetRoll["ResultMessages"])
 
+    # Log Methods
+    def Log(self, TextToLog):
+        self.ResultsLog.append(TextToLog)
+
+    def LogFromResults(self, Results, Prefix=None):
+        ResultsText = "" if Prefix is None else Prefix + "\n"
+        ResultsText += str(Results["DiceNumber"]) + "d" + str(Results["DieType"]) + ("+" if Results["Modifier"] >= 0 else "") + str(Results["Modifier"]) + " ->\n"
+        ResultsText += str(Results["Rolls"]) + ("+" if Results["Modifier"] >= 0 else "") + str(Results["Modifier"]) + " ->\n"
+        ResultsText += str(Results["Total"])
+        ResultsText += "" if Results["ResultMessage"] is None else "\n" + Results["ResultMessage"]
+        self.Log(ResultsText)
+
     # Serialization Methods
     def SetState(self, NewState):
         self.PresetRolls = NewState["PresetRolls"]
+        self.ResultsLog = NewState["ResultsLog"]
 
     def GetState(self):
         State = {}
         State["PresetRolls"] = self.PresetRolls
+        State["ResultsLog"] = self.ResultsLog
         return State
 
     @classmethod
