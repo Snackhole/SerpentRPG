@@ -2,10 +2,11 @@ import math
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy, QAction, QMessageBox
+from PyQt5.QtWidgets import QGridLayout, QLabel, QPushButton, QFrame, QTextEdit, QInputDialog, QSizePolicy, QAction, QMessageBox
 
 from Core.DieClock import DieClock
 from Core.WildernessTravelManager import WildernessTravelManager
+from Interface.LineEditMouseWheelExtension import LineEditMouseWheelExtension
 from Interface.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
@@ -83,7 +84,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.SupplyPoolLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Current Supply Points Line Edit
-        self.CurrentSupplyPointsLineEdit = QLineEdit()
+        self.CurrentSupplyPointsLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyCurrentSupplyPointsValue(1 if event.angleDelta().y() > 0 else -1))
         self.CurrentSupplyPointsLineEdit.setReadOnly(True)
         self.CurrentSupplyPointsLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyle)
@@ -106,7 +107,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.SupplyPoolDividerLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Supply Pool Line Edit
-        self.SupplyPoolLineEdit = QLineEdit()
+        self.SupplyPoolLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifySupplyPoolValue(1 if event.angleDelta().y() > 0 else -1))
         self.SupplyPoolLineEdit.setReadOnly(True)
         self.SupplyPoolLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyle)
@@ -129,7 +130,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessClockLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Wilderness Clock Current Value Line Edit
-        self.WildernessClockCurrentValueLineEdit = QLineEdit()
+        self.WildernessClockCurrentValueLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyWildernessClockCurrentValue(1 if event.angleDelta().y() > 0 else -1))
         self.WildernessClockCurrentValueLineEdit.setReadOnly(True)
         self.WildernessClockCurrentValueLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.WildernessClockCurrentValueLineEdit.setStyleSheet(self.LineEditStyle)
@@ -152,7 +153,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessClockDividerLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Wilderness Clock Maximum Value Line Edit
-        self.WildernessClockMaximumValueLineEdit = QLineEdit()
+        self.WildernessClockMaximumValueLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyWildernessClockMaximumValue(1 if event.angleDelta().y() > 0 else -1))
         self.WildernessClockMaximumValueLineEdit.setReadOnly(True)
         self.WildernessClockMaximumValueLineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.WildernessClockMaximumValueLineEdit.setStyleSheet(self.LineEditStyle)
