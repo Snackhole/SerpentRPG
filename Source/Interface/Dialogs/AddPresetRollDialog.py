@@ -17,6 +17,8 @@ class AddPresetRollDialog(QDialog):
         self.Confirm = False
 
         # Labels
+        self.PromptLabel = QLabel("Add preset roll?")
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.NameLabel = QLabel("Name:")
         self.DieTypeLabel = QLabel("d")
         self.ModifierLabel = QLabel("+")
@@ -43,18 +45,19 @@ class AddPresetRollDialog(QDialog):
         self.ModifierSpinBox.setValue(0)
 
         # Buttons
-        self.DoneButton = QPushButton("Done")
-        self.DoneButton.clicked.connect(self.Done)
+        self.AddButton = QPushButton("Add")
+        self.AddButton.clicked.connect(self.Add)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
         # Layout
         self.Layout = QGridLayout()
+        self.Layout.addWidget(self.PromptLabel, 0, 0, 1, 2)
         self.NameLayout = QGridLayout()
         self.NameLayout.addWidget(self.NameLabel, 0, 0)
         self.NameLayout.addWidget(self.NameLineEdit, 0, 1)
         self.NameLayout.setColumnStretch(1, 1)
-        self.Layout.addLayout(self.NameLayout, 0, 0, 1, 2)
+        self.Layout.addLayout(self.NameLayout, 1, 0, 1, 2)
         self.DiceInputsLayout = QGridLayout()
         self.DiceInputsLayout.addWidget(self.DiceNumberSpinBox, 0, 0)
         self.DiceInputsLayout.addWidget(self.DieTypeLabel, 0, 1)
@@ -64,9 +67,9 @@ class AddPresetRollDialog(QDialog):
         self.DiceInputsLayout.setColumnStretch(0, 1)
         self.DiceInputsLayout.setColumnStretch(2, 1)
         self.DiceInputsLayout.setColumnStretch(4, 1)
-        self.Layout.addLayout(self.DiceInputsLayout, 1, 0, 1, 2)
-        self.Layout.addWidget(self.DoneButton, 3, 0)
-        self.Layout.addWidget(self.CancelButton, 3, 1)
+        self.Layout.addLayout(self.DiceInputsLayout, 2, 0, 1, 2)
+        self.Layout.addWidget(self.AddButton, 4, 0)
+        self.Layout.addWidget(self.CancelButton, 4, 1)
         self.setLayout(self.Layout)
 
         # Set Window Title and Icon
@@ -76,7 +79,7 @@ class AddPresetRollDialog(QDialog):
         # Execute Dialog
         self.exec_()
 
-    def Done(self):
+    def Add(self):
         if self.ValidInput():
             self.Data = {}
             self.Data["Name"] = self.NameLineEdit.text()
