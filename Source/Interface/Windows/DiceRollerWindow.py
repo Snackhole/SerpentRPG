@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
+from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.PresetRollsTreeWidget import PresetRollsTreeWidget
 from Interface.Windows.Window import Window
@@ -177,7 +178,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.UpdateDisplay()
 
     def AddPresetRoll(self):
-        pass
+        Confirm = AddPresetRollDialog(self).Confirm
+        if Confirm:
+            pass
 
     def DeletePresetRoll(self):
         pass
