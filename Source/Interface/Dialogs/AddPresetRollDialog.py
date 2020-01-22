@@ -1,5 +1,7 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox
+
+from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 
 
 class AddPresetRollDialog(QDialog):
@@ -10,6 +12,8 @@ class AddPresetRollDialog(QDialog):
         self.DiceRollerWindow = DiceRollerWindow
 
         # Variables
+        self.ResultMessages = {}
+        self.Data = None
         self.Confirm = False
 
         # Labels
@@ -17,17 +21,26 @@ class AddPresetRollDialog(QDialog):
         self.DieTypeLabel = QLabel("d")
         self.ModifierLabel = QLabel("+")
 
-        # Line Edits
+        # Roll Inputs
         self.NameLineEdit = QLineEdit()
 
-        self.DiceNumberLineEdit = QLineEdit()
-        self.DiceNumberLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.DiceNumberSpinBox = QSpinBox()
+        self.DiceNumberSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DiceNumberSpinBox.setButtonSymbols(self.DiceNumberSpinBox.NoButtons)
+        self.DiceNumberSpinBox.setRange(1, 1000000000)
+        self.DiceNumberSpinBox.setValue(1)
 
-        self.DieTypeLineEdit = QLineEdit()
-        self.DieTypeLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.DieTypeSpinBox = DieTypeSpinBox()
+        self.DieTypeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.DieTypeSpinBox.setButtonSymbols(self.DieTypeSpinBox.NoButtons)
+        self.DieTypeSpinBox.setRange(1, 1000000000)
+        self.DieTypeSpinBox.setValue(20)
 
-        self.ModifierLineEdit = QLineEdit()
-        self.ModifierLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.ModifierSpinBox = QSpinBox()
+        self.ModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ModifierSpinBox.setButtonSymbols(self.ModifierSpinBox.NoButtons)
+        self.ModifierSpinBox.setRange(-1000000000, 1000000000)
+        self.ModifierSpinBox.setValue(0)
 
         # Buttons
         self.DoneButton = QPushButton("Done")
@@ -43,11 +56,11 @@ class AddPresetRollDialog(QDialog):
         self.NameLayout.setColumnStretch(1, 1)
         self.Layout.addLayout(self.NameLayout, 0, 0, 1, 2)
         self.DiceInputsLayout = QGridLayout()
-        self.DiceInputsLayout.addWidget(self.DiceNumberLineEdit, 0, 0)
+        self.DiceInputsLayout.addWidget(self.DiceNumberSpinBox, 0, 0)
         self.DiceInputsLayout.addWidget(self.DieTypeLabel, 0, 1)
-        self.DiceInputsLayout.addWidget(self.DieTypeLineEdit, 0, 2)
+        self.DiceInputsLayout.addWidget(self.DieTypeSpinBox, 0, 2)
         self.DiceInputsLayout.addWidget(self.ModifierLabel, 0, 3)
-        self.DiceInputsLayout.addWidget(self.ModifierLineEdit, 0, 4)
+        self.DiceInputsLayout.addWidget(self.ModifierSpinBox, 0, 4)
         self.DiceInputsLayout.setColumnStretch(0, 1)
         self.DiceInputsLayout.setColumnStretch(2, 1)
         self.DiceInputsLayout.setColumnStretch(4, 1)
@@ -64,7 +77,21 @@ class AddPresetRollDialog(QDialog):
         self.exec_()
 
     def Done(self):
-        pass
+        if self.ValidInput():
+            self.Data = {}
+            self.Data["Name"] = self.NameLineEdit.text()
+            self.Data["DiceNumber"] = self.DiceNumberSpinBox.value()
+            self.Data["DieType"] = self.DieTypeSpinBox.value()
+            self.Data["Modifier"] = self.ModifierSpinBox.value()
+            self.Confirm = True
+            self.close()
 
     def Cancel(self):
-        pass
+        self.close()
+
+    def ValidInput(self):
+        Valid = True
+        if self.NameLineEdit.text() == "":
+            Valid = False
+            return Valid
+        return Valid
