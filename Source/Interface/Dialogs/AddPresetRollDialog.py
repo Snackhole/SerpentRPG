@@ -98,3 +98,60 @@ class AddPresetRollDialog(QDialog):
             Valid = False
             return Valid
         return Valid
+
+
+class AddResultMessageDialog(QDialog):
+    def __init__(self, AddPresetRollDialog):
+        super().__init__(parent=AddPresetRollDialog)
+
+        # Store Parameters
+        self.AddPresetRollDialog = AddPresetRollDialog
+
+        # Variables
+        self.Result = None
+        self.Message = None
+        self.Confirm = False
+
+        # Labels
+        self.PromptLabel = QLabel("Add result message to preset roll?")
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.ResultLabel = QLabel("Result:")
+        self.MessageLabel = QLabel("Message:")
+
+        # Inputs
+        self.ResultSpinBox = QSpinBox()
+        self.ResultSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.ResultSpinBox.setButtonSymbols(self.ResultSpinBox.NoButtons)
+        self.ResultSpinBox.setRange(-1000000000, 1000000000)
+        self.ResultSpinBox.setValue(1)
+        self.MessageLineEdit = QLineEdit()
+
+        # Buttons
+        self.AddButton = QPushButton("Add")
+        self.AddButton.clicked.connect(self.Add)
+        self.CancelButton = QPushButton("Cancel")
+        self.CancelButton.clicked.connect(self.Cancel)
+
+        # Set Window Title and Icon
+        self.setWindowTitle(self.DiceRollerWindow.ScriptName)
+        self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Execute Dialog
+        self.exec_()
+
+    def Add(self):
+        if self.ValidInput():
+            self.Result = self.ResultSpinBox.value()
+            self.Message = self.MessageLineEdit.text()
+            self.Confirm = True
+            self.close()
+
+    def Cancel(self):
+        self.close()
+
+    def ValidInput(self):
+        Valid = True
+        if self.NewResultMessage.text() == "":
+            Valid = False
+            return Valid
+        return Valid
