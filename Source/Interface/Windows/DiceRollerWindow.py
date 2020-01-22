@@ -5,16 +5,18 @@ from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButto
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
+from Interface.Widgets.PresetRollsTreeWidget import PresetRollsTreeWidget
 from Interface.Windows.Window import Window
 from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 
 class DiceRollerWindow(Window, SaveAndOpenMixin):
     def __init__(self, ScriptName):
-        super().__init__(ScriptName)
-
         # Create Dice Roller
         self.DiceRoller = DiceRollerWithPresetRolls()
+
+        # Initialize Window and SaveAndOpenMixin
+        super().__init__(ScriptName)
 
         # Set up Save and Open
         self.SetUpSaveAndOpen(".dicerolls", "Dice Roller", (DiceRollerWithPresetRolls,))
@@ -80,6 +82,26 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.RollButton.setSizePolicy(self.InputsSizePolicy)
         self.RollButton.setStyleSheet(self.RollButtonStyle)
 
+        # Preset Rolls Label
+        self.PresetRollsLabel = QLabel("Preset Rolls")
+        self.PresetRollsLabel.setStyleSheet(self.LabelStyle)
+        self.PresetRollsLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Preset Rolls Tree Widget
+        self.PresetRollsTreeWidget = PresetRollsTreeWidget(self.DiceRoller)
+
+        # Preset Rolls Buttons
+        self.PresetRollsRollButton = QPushButton("Roll")
+        self.PresetRollsRollButton.setSizePolicy(self.InputsSizePolicy)
+        self.PresetRollsAddButton = QPushButton("+")
+        self.PresetRollsAddButton.setSizePolicy(self.InputsSizePolicy)
+        self.PresetRollsDeleteButton = QPushButton("-")
+        self.PresetRollsDeleteButton.setSizePolicy(self.InputsSizePolicy)
+        self.PresetRollsMoveUpButton = QPushButton("\u2191")
+        self.PresetRollsMoveUpButton.setSizePolicy(self.InputsSizePolicy)
+        self.PresetRollsMoveDownButton = QPushButton("\u2193")
+        self.PresetRollsMoveDownButton.setSizePolicy(self.InputsSizePolicy)
+
         # Results Log Label
         self.ResultsLogLabel = QLabel("Results Log")
         self.ResultsLogLabel.setStyleSheet(self.LabelStyle)
@@ -102,8 +124,27 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DiceRollerInputsLayout.addWidget(self.ModifierLabel, 0, 3)
         self.DiceRollerInputsLayout.addWidget(self.ModifierSpinBox, 0, 4)
         self.DiceRollerInputsLayout.addWidget(self.RollButton, 0, 5)
+        self.DiceRollerInputsLayout.setColumnStretch(0, 1)
+        self.DiceRollerInputsLayout.setColumnStretch(2, 1)
+        self.DiceRollerInputsLayout.setColumnStretch(4, 1)
         self.DiceRollerInputsFrame.setLayout(self.DiceRollerInputsLayout)
         self.Layout.addWidget(self.DiceRollerInputsFrame, 0, 0)
+
+        # Preset Rolls in Layout
+        self.PresetRollsFrame = QFrame()
+        self.PresetRollsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.PresetRollsLayout = QGridLayout()
+        self.PresetRollsLayout.addWidget(self.PresetRollsLabel, 0, 0, 1, 2)
+        self.PresetRollsLayout.addWidget(self.PresetRollsTreeWidget, 1, 0, 5, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsRollButton, 1, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsAddButton, 2, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsDeleteButton, 3, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsMoveUpButton, 4, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsMoveDownButton, 5, 1)
+        for Row in range(1, 6):
+            self.PresetRollsLayout.setRowStretch(Row, 1)
+        self.PresetRollsFrame.setLayout(self.PresetRollsLayout)
+        self.Layout.addWidget(self.PresetRollsFrame, 1, 0)
 
         # Results Log Widgets in Layout
         self.ResultsLogFrame = QFrame()
@@ -115,6 +156,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.Layout.addWidget(self.ResultsLogFrame, 0, 1, 2, 1)
 
         # Set and Configure Layout
+        self.Layout.setColumnStretch(1, 1)
         self.Frame.setLayout(self.Layout)
 
     # Action Methods
