@@ -37,7 +37,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         # Dice Roller Width
         self.DiceRollerWidth = 80
 
-        # Dice Number Line Edit
+        # Dice Number Spin Box
         self.DiceNumberSpinBox = QSpinBox()
         self.DiceNumberSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.DiceNumberSpinBox.setStyleSheet(self.SpinBoxStyle)
@@ -52,7 +52,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DieTypeLabel.setStyleSheet(self.LabelStyle)
         self.DieTypeLabel.setAlignment(QtCore.Qt.AlignCenter)
 
-        # Die Type Line Edit
+        # Die Type Spin Box
         self.DieTypeSpinBox = DieTypeSpinBox()
         self.DieTypeSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.DieTypeSpinBox.setStyleSheet(self.SpinBoxStyle)
@@ -67,7 +67,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.ModifierLabel.setStyleSheet(self.LabelStyle)
         self.ModifierLabel.setAlignment(QtCore.Qt.AlignCenter)
 
-        # Modifier Line Edit
+        # Modifier Spin Box
         self.ModifierSpinBox = QSpinBox()
         self.ModifierSpinBox.setAlignment(QtCore.Qt.AlignCenter)
         self.ModifierSpinBox.setStyleSheet(self.SpinBoxStyle)
