@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox, QSizePolicy
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox, QSizePolicy, QMessageBox
 
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.ResultMessagesTreeWidget import ResultMessagesTreeWidget
@@ -119,6 +119,7 @@ class AddPresetRollDialog(QDialog):
         Valid = True
         if self.NameLineEdit.text() == "":
             Valid = False
+            self.DiceRollerWindow.DisplayMessageBox("Preset rolls must have a name.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
         return Valid
 
@@ -130,11 +131,13 @@ class AddPresetRollDialog(QDialog):
 
 
 class AddResultMessageDialog(QDialog):
-    def __init__(self, AddPresetRollDialog):
+    def __init__(self, AddPresetRollDialog, ResultMessages, DiceRollerWindow):
         super().__init__(parent=AddPresetRollDialog)
 
         # Store Parameters
         self.AddPresetRollDialog = AddPresetRollDialog
+        self.DiceRollerWindow = DiceRollerWindow
+        self.ResultMessagesKeys = ResultMessages.keys()
 
         # Variables
         self.Result = None
@@ -182,5 +185,10 @@ class AddResultMessageDialog(QDialog):
         Valid = True
         if self.NewResultMessage.text() == "":
             Valid = False
+            self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
+            return Valid
+        if self.ResultSpinBox.value() in self.ResultMessagesKeys:
+            Valid = False
+            self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
         return Valid
