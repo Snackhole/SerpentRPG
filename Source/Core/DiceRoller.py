@@ -70,18 +70,14 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
         PresetRoll["ResultMessages"] = ResultMessages
         return PresetRoll
 
-    def AppendPresetRoll(self, Name, DiceNumber, DieType, Modifier, ResultMessages):
+    def AddPresetRoll(self, Name, DiceNumber, DieType, Modifier, ResultMessages):
         self.PresetRolls.append(self.CreatePresetRoll(Name, DiceNumber, DieType, Modifier, ResultMessages))
 
     def RemovePresetRoll(self, PresetRollIndex):
         del self.PresetRolls[PresetRollIndex]
 
     def EditPresetRoll(self, PresetRollIndex, Name, DiceNumber, DieType, Modifier, ResultMessages):
-        self.PresetRolls[PresetRollIndex]["Name"] = Name
-        self.PresetRolls[PresetRollIndex]["DiceNumber"] = DiceNumber
-        self.PresetRolls[PresetRollIndex]["DieType"] = DieType
-        self.PresetRolls[PresetRollIndex]["Modifier"] = Modifier
-        self.PresetRolls[PresetRollIndex]["ResultMessages"] = ResultMessages
+        self.PresetRolls[PresetRollIndex] = self.CreatePresetRoll(Name, DiceNumber, DieType, Modifier, ResultMessages)
 
     def MovePresetRoll(self, PresetRollIndex, Delta):
         TargetIndex = PresetRollIndex + Delta
