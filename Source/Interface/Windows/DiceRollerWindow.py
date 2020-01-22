@@ -178,8 +178,8 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.UpdateDisplay()
 
     def AddPresetRoll(self):
-        Confirm = AddPresetRollDialog(self).Confirm
-        if Confirm:
+        AddPresetRollDialogInst = AddPresetRollDialog(self)
+        if AddPresetRollDialogInst.Confirm:
             pass
 
     def DeletePresetRoll(self):
