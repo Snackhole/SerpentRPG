@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
 class ResultMessagesTreeWidget(QTreeWidget):
@@ -10,17 +10,22 @@ class ResultMessagesTreeWidget(QTreeWidget):
 
         # Header Setup
         self.setHeaderHidden(True)
+        self.setRootIsDecorated(False)
+        self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def FillFromResultMessages(self):
-        pass
+        self.clear()
+        for Key, Value in sorted(self.ResultMessages.items()):
+            self.invisibleRootItem().addChild(ResultMessagesWidgetItem(Key, Value))
 
 
 class ResultMessagesWidgetItem(QTreeWidgetItem):
-    def __init__(self, Title):
+    def __init__(self, Result, Message):
         super().__init__()
 
         # Store Parameters
-        self.Title = Title
+        self.Result = Result
+        self.Message = Message
 
         # Set Text
-        self.setText(0, self.Title)
+        self.setText(0, str(self.Result) + ":  " + self.Message)

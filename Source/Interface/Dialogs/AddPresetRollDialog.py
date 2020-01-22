@@ -51,7 +51,7 @@ class AddPresetRollDialog(QDialog):
         self.ModifierSpinBox.setValue(0)
 
         # Result Messages Tree Widget
-        self.ResultMessagesTreeView = ResultMessagesTreeWidget(self.ResultMessages)
+        self.ResultMessagesTreeWidget = ResultMessagesTreeWidget(self.ResultMessages)
 
         # Buttons
         self.AddResultMessageButton = QPushButton("+")
@@ -85,7 +85,7 @@ class AddPresetRollDialog(QDialog):
         self.Layout.addLayout(self.DiceInputsLayout, 2, 0, 1, 2)
         self.ResultMessagesLayout = QGridLayout()
         self.ResultMessagesLayout.addWidget(self.ResultMessagesLabel, 0, 0)
-        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeView, 1, 0, 2, 1)
+        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeWidget, 1, 0, 2, 1)
         self.ResultMessagesLayout.addWidget(self.AddResultMessageButton, 1, 1)
         self.ResultMessagesLayout.addWidget(self.DeleteResultMessageButton, 2, 1)
         self.ResultMessagesLayout.setRowStretch(1, 1)
@@ -98,6 +98,9 @@ class AddPresetRollDialog(QDialog):
         # Set Window Title and Icon
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Update Display
+        self.UpdateDisplay()
 
         # Execute Dialog
         self.exec_()
@@ -124,10 +127,18 @@ class AddPresetRollDialog(QDialog):
         return Valid
 
     def AddResultMessage(self):
-        pass
+        AddResultMessageDialogInst = AddResultMessageDialog(self, self.ResultMessages, self.DiceRollerWindow)
+        if AddResultMessageDialogInst.Confirm:
+            Result = AddResultMessageDialogInst.Result
+            Message = AddResultMessageDialogInst.Message
+            self.ResultMessages[Result] = Message
+            self.UpdateDisplay()
 
     def DeleteResultMessage(self):
         pass
+
+    def UpdateDisplay(self):
+        self.ResultMessagesTreeWidget.FillFromResultMessages()
 
 
 class AddResultMessageDialog(QDialog):
@@ -164,6 +175,19 @@ class AddResultMessageDialog(QDialog):
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
+        # Layout
+        self.Layout = QGridLayout()
+        self.Layout.addWidget(self.PromptLabel, 0, 0, 1, 2)
+        self.Layout.addWidget(self.ResultLabel, 1, 0)
+        self.Layout.addWidget(self.ResultSpinBox, 1, 1)
+        self.Layout.addWidget(self.MessageLabel, 2, 0)
+        self.Layout.addWidget(self.MessageLineEdit, 2, 1)
+        self.ButtonsLayout = QGridLayout()
+        self.ButtonsLayout.addWidget(self.AddButton, 0, 0)
+        self.ButtonsLayout.addWidget(self.CancelButton, 0, 1)
+        self.Layout.addLayout(self.ButtonsLayout, 3, 0, 1, 2)
+        self.setLayout(self.Layout)
+
         # Set Window Title and Icon
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
@@ -183,7 +207,7 @@ class AddResultMessageDialog(QDialog):
 
     def ValidInput(self):
         Valid = True
-        if self.NewResultMessage.text() == "":
+        if self.MessageLineEdit.text() == "":
             Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
