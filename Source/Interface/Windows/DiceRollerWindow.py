@@ -92,14 +92,23 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
         # Preset Rolls Buttons
         self.PresetRollsRollButton = QPushButton("Roll")
+        self.PresetRollsRollButton.clicked.connect(self.RollPresetRoll)
         self.PresetRollsRollButton.setSizePolicy(self.InputsSizePolicy)
+
         self.PresetRollsAddButton = QPushButton("+")
+        self.PresetRollsAddButton.clicked.connect(self.AddPresetRoll)
         self.PresetRollsAddButton.setSizePolicy(self.InputsSizePolicy)
+
         self.PresetRollsDeleteButton = QPushButton("-")
+        self.PresetRollsDeleteButton.clicked.connect(self.DeletePresetRoll)
         self.PresetRollsDeleteButton.setSizePolicy(self.InputsSizePolicy)
+
         self.PresetRollsMoveUpButton = QPushButton("\u2191")
+        self.PresetRollsMoveUpButton.clicked.connect(self.MovePresetRollUp)
         self.PresetRollsMoveUpButton.setSizePolicy(self.InputsSizePolicy)
+
         self.PresetRollsMoveDownButton = QPushButton("\u2193")
+        self.PresetRollsMoveDownButton.clicked.connect(self.MovePresetRollDown)
         self.PresetRollsMoveDownButton.setSizePolicy(self.InputsSizePolicy)
 
         # Results Log Label
@@ -159,13 +168,28 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.Layout.setColumnStretch(1, 1)
         self.Frame.setLayout(self.Layout)
 
-    # Action Methods
+    # Button Methods
     def Roll(self):
         DiceNumber = self.DiceNumberSpinBox.value()
         DieType = self.DieTypeSpinBox.value()
         Modifier = self.ModifierSpinBox.value()
         self.DiceRoller.RollAndLog(DiceNumber, DieType, Modifier)
         self.UpdateDisplay()
+
+    def AddPresetRoll(self):
+        pass
+
+    def DeletePresetRoll(self):
+        pass
+
+    def MovePresetRollUp(self):
+        pass
+
+    def MovePresetRollDown(self):
+        pass
+
+    def RollPresetRoll(self):
+        pass
 
     # Display Update Methods
     def UpdateDisplay(self):
