@@ -1,7 +1,8 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox
+from PyQt5.QtWidgets import QDialog, QLabel, QLineEdit, QGridLayout, QPushButton, QSpinBox, QSizePolicy
 
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
+from Interface.Widgets.ResultMessagesTreeWidget import ResultMessagesTreeWidget
 
 
 class AddPresetRollDialog(QDialog):
@@ -16,12 +17,17 @@ class AddPresetRollDialog(QDialog):
         self.Data = None
         self.Confirm = False
 
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         # Labels
         self.PromptLabel = QLabel("Add preset roll?")
         self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.NameLabel = QLabel("Name:")
         self.DieTypeLabel = QLabel("d")
         self.ModifierLabel = QLabel("+")
+        self.ResultMessagesLabel = QLabel("Result Messages:")
+        self.ResultMessagesLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Roll Inputs
         self.NameLineEdit = QLineEdit()
@@ -44,7 +50,16 @@ class AddPresetRollDialog(QDialog):
         self.ModifierSpinBox.setRange(-1000000000, 1000000000)
         self.ModifierSpinBox.setValue(0)
 
+        # Result Messages Tree Widget
+        self.ResultMessagesTreeView = ResultMessagesTreeWidget(self.ResultMessages)
+
         # Buttons
+        self.AddResultMessageButton = QPushButton("+")
+        self.AddResultMessageButton.clicked.connect(self.AddResultMessage)
+        self.AddResultMessageButton.setSizePolicy(self.InputsSizePolicy)
+        self.DeleteResultMessageButton = QPushButton("-")
+        self.DeleteResultMessageButton.clicked.connect(self.DeleteResultMessage)
+        self.DeleteResultMessageButton.setSizePolicy(self.InputsSizePolicy)
         self.AddButton = QPushButton("Add")
         self.AddButton.clicked.connect(self.Add)
         self.CancelButton = QPushButton("Cancel")
@@ -68,6 +83,14 @@ class AddPresetRollDialog(QDialog):
         self.DiceInputsLayout.setColumnStretch(2, 1)
         self.DiceInputsLayout.setColumnStretch(4, 1)
         self.Layout.addLayout(self.DiceInputsLayout, 2, 0, 1, 2)
+        self.ResultMessagesLayout = QGridLayout()
+        self.ResultMessagesLayout.addWidget(self.ResultMessagesLabel, 0, 0)
+        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeView, 1, 0, 2, 1)
+        self.ResultMessagesLayout.addWidget(self.AddResultMessageButton, 1, 1)
+        self.ResultMessagesLayout.addWidget(self.DeleteResultMessageButton, 2, 1)
+        self.ResultMessagesLayout.setRowStretch(1, 1)
+        self.ResultMessagesLayout.setRowStretch(2, 1)
+        self.Layout.addLayout(self.ResultMessagesLayout, 3, 0, 1, 2)
         self.Layout.addWidget(self.AddButton, 4, 0)
         self.Layout.addWidget(self.CancelButton, 4, 1)
         self.setLayout(self.Layout)
@@ -98,6 +121,12 @@ class AddPresetRollDialog(QDialog):
             Valid = False
             return Valid
         return Valid
+
+    def AddResultMessage(self):
+        pass
+
+    def DeleteResultMessage(self):
+        pass
 
 
 class AddResultMessageDialog(QDialog):
