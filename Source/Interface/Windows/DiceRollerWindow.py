@@ -4,7 +4,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
-from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog
+from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog, EditPresetRollDialog
 from Interface.Widgets.DieTypeSpinBox import DieTypeSpinBox
 from Interface.Widgets.PresetRollsTreeWidget import PresetRollsTreeWidget
 from Interface.Windows.Window import Window
@@ -104,6 +104,10 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.PresetRollsDeleteButton.clicked.connect(self.DeletePresetRoll)
         self.PresetRollsDeleteButton.setSizePolicy(self.InputsSizePolicy)
 
+        self.PresetRollsEditButton = QPushButton("Edit")
+        self.PresetRollsEditButton.clicked.connect(self.EditPresetRoll)
+        self.PresetRollsEditButton.setSizePolicy(self.InputsSizePolicy)
+
         self.PresetRollsMoveUpButton = QPushButton("\u2191")
         self.PresetRollsMoveUpButton.clicked.connect(self.MovePresetRollUp)
         self.PresetRollsMoveUpButton.setSizePolicy(self.InputsSizePolicy)
@@ -145,13 +149,14 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.PresetRollsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.PresetRollsLayout = QGridLayout()
         self.PresetRollsLayout.addWidget(self.PresetRollsLabel, 0, 0, 1, 2)
-        self.PresetRollsLayout.addWidget(self.PresetRollsTreeWidget, 1, 0, 5, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsTreeWidget, 1, 0, 6, 1)
         self.PresetRollsLayout.addWidget(self.PresetRollsRollButton, 1, 1)
         self.PresetRollsLayout.addWidget(self.PresetRollsAddButton, 2, 1)
         self.PresetRollsLayout.addWidget(self.PresetRollsDeleteButton, 3, 1)
-        self.PresetRollsLayout.addWidget(self.PresetRollsMoveUpButton, 4, 1)
-        self.PresetRollsLayout.addWidget(self.PresetRollsMoveDownButton, 5, 1)
-        for Row in range(1, 6):
+        self.PresetRollsLayout.addWidget(self.PresetRollsEditButton, 4, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsMoveUpButton, 5, 1)
+        self.PresetRollsLayout.addWidget(self.PresetRollsMoveDownButton, 6, 1)
+        for Row in range(1, 7):
             self.PresetRollsLayout.setRowStretch(Row, 1)
         self.PresetRollsFrame.setLayout(self.PresetRollsLayout)
         self.Layout.addWidget(self.PresetRollsFrame, 1, 0)
@@ -190,6 +195,16 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
             if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
                 del self.DiceRoller.PresetRolls[CurrentPresetRoll.Index]
+                self.UpdateUnsavedChangesFlag(True)
+
+    def EditPresetRoll(self):
+        CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            EditPresetRollDialogInst = EditPresetRollDialog(CurrentPresetRoll.PresetRoll, self)
+            if EditPresetRollDialogInst.Confirm:
+                Data = EditPresetRollDialogInst.Data
+                self.DiceRoller.EditPresetRoll(CurrentPresetRoll.Index, Data["Name"], Data["DiceNumber"], Data["DieType"], Data["Modifier"], Data["ResultMessages"])
                 self.UpdateUnsavedChangesFlag(True)
 
     def MovePresetRollUp(self):

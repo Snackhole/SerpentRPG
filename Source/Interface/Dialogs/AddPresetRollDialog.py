@@ -60,8 +60,13 @@ class AddPresetRollDialog(QDialog):
         self.DeleteResultMessageButton = QPushButton("-")
         self.DeleteResultMessageButton.clicked.connect(self.DeleteResultMessage)
         self.DeleteResultMessageButton.setSizePolicy(self.InputsSizePolicy)
+        self.EditResultMessageButton = QPushButton("Edit")
+        self.EditResultMessageButton.clicked.connect(self.EditResultMessage)
+        self.EditResultMessageButton.setSizePolicy((self.InputsSizePolicy))
         self.AddButton = QPushButton("Add")
         self.AddButton.clicked.connect(self.Add)
+        self.AddButton.setDefault(True)
+        self.AddButton.setAutoDefault(True)
         self.CancelButton = QPushButton("Cancel")
         self.CancelButton.clicked.connect(self.Cancel)
 
@@ -85,11 +90,13 @@ class AddPresetRollDialog(QDialog):
         self.Layout.addLayout(self.DiceInputsLayout, 2, 0, 1, 2)
         self.ResultMessagesLayout = QGridLayout()
         self.ResultMessagesLayout.addWidget(self.ResultMessagesLabel, 0, 0)
-        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeWidget, 1, 0, 2, 1)
+        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeWidget, 1, 0, 3, 1)
         self.ResultMessagesLayout.addWidget(self.AddResultMessageButton, 1, 1)
         self.ResultMessagesLayout.addWidget(self.DeleteResultMessageButton, 2, 1)
+        self.ResultMessagesLayout.addWidget(self.EditResultMessageButton, 3, 1)
         self.ResultMessagesLayout.setRowStretch(1, 1)
         self.ResultMessagesLayout.setRowStretch(2, 1)
+        self.ResultMessagesLayout.setRowStretch(3, 1)
         self.Layout.addLayout(self.ResultMessagesLayout, 3, 0, 1, 2)
         self.Layout.addWidget(self.AddButton, 4, 0)
         self.Layout.addWidget(self.CancelButton, 4, 1)
@@ -98,6 +105,9 @@ class AddPresetRollDialog(QDialog):
         # Set Window Title and Icon
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Edit Hook
+        self.EditHook()
 
         # Update Display
         self.UpdateDisplay()
@@ -143,8 +153,25 @@ class AddPresetRollDialog(QDialog):
                 del self.ResultMessages[CurrentResultMessage.Result]
                 self.UpdateDisplay()
 
+    def EditResultMessage(self):
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentResultMessage = CurrentSelection[0]
+            CurrentResult = CurrentResultMessage.Result
+            EditResultMessageDialogInst = EditResultMessageDialog(CurrentResult, self, self.ResultMessages, self.DiceRollerWindow)
+            if EditResultMessageDialogInst.Confirm:
+                NewResult = EditResultMessageDialogInst.Result
+                Message = EditResultMessageDialogInst.Message
+                self.ResultMessages[NewResult] = Message
+                if CurrentResult != NewResult:
+                    del self.ResultMessages[CurrentResult]
+                self.UpdateDisplay()
+
     def UpdateDisplay(self):
         self.ResultMessagesTreeWidget.FillFromResultMessages()
+
+    def EditHook(self):
+        pass
 
 
 class AddResultMessageDialog(QDialog):
@@ -154,7 +181,7 @@ class AddResultMessageDialog(QDialog):
         # Store Parameters
         self.AddPresetRollDialog = AddPresetRollDialog
         self.DiceRollerWindow = DiceRollerWindow
-        self.ResultMessagesKeys = ResultMessages.keys()
+        self.ResultMessages = ResultMessages
 
         # Variables
         self.Result = None
@@ -198,6 +225,9 @@ class AddResultMessageDialog(QDialog):
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
 
+        # Edit Hook
+        self.EditHook()
+
         # Execute Dialog
         self.exec_()
 
@@ -217,7 +247,63 @@ class AddResultMessageDialog(QDialog):
             Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
-        if self.ResultSpinBox.value() in self.ResultMessagesKeys:
+        if self.ResultSpinBox.value() in self.ResultMessages.keys():
+            Valid = False
+            self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
+            return Valid
+        return Valid
+
+    def EditHook(self):
+        pass
+
+
+class EditPresetRollDialog(AddPresetRollDialog):
+    def __init__(self, PresetRoll, DiceRollerWindow):
+        # Store Parameters
+        self.PresetRoll = PresetRoll
+
+        # Initialize AddPresetRollDialog
+        super().__init__(DiceRollerWindow)
+
+    def EditHook(self):
+        # Update Prompt and Button
+        self.PromptLabel.setText("Edit preset roll?")
+        self.AddButton.setText("Done")
+
+        # Update Data
+        self.NameLineEdit.setText(self.PresetRoll["Name"])
+        self.DiceNumberSpinBox.setValue(self.PresetRoll["DiceNumber"])
+        self.DieTypeSpinBox.setValue(self.PresetRoll["DieType"])
+        self.ModifierSpinBox.setValue(self.PresetRoll["Modifier"])
+        self.ResultMessages = self.PresetRoll["ResultMessages"].copy()
+        self.ResultMessagesTreeWidget.ResultMessages = self.ResultMessages
+
+
+class EditResultMessageDialog(AddResultMessageDialog):
+    def __init__(self, CurrentResult, AddPresetRollDialog, ResultMessages, DiceRollerWindow):
+        # Store Parameters
+        self.CurrentResult = CurrentResult
+
+        # Initialize AddResultMessageDialog
+        super().__init__(AddPresetRollDialog, ResultMessages, DiceRollerWindow)
+
+    def EditHook(self):
+        # Update Prompt and Button
+        self.PromptLabel.setText("Edit result message?")
+        self.AddButton.setText("Done")
+
+        # Update Data
+        self.ResultSpinBox.setValue(self.CurrentResult)
+        self.MessageLineEdit.setText(self.ResultMessages[self.CurrentResult])
+
+    def ValidInput(self):
+        Valid = True
+        if self.MessageLineEdit.text() == "":
+            Valid = False
+            self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
+            return Valid
+        ResultValue = self.ResultSpinBox.value()
+        if ResultValue in self.ResultMessages.keys() and ResultValue != self.CurrentResult:
             Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
