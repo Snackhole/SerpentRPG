@@ -15,15 +15,16 @@ class PresetRollsTreeWidget(QTreeWidget):
 
     def FillFromPresetRolls(self):
         self.clear()
-        for PresetRoll in self.DiceRoller.PresetRolls:
-            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRoll))
+        for PresetRollIndex in range(len(self.DiceRoller.PresetRolls)):
+            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, self.DiceRoller.PresetRolls[PresetRollIndex]))
 
 
 class PresetRollsWidgetItem(QTreeWidgetItem):
-    def __init__(self, PresetRoll):
+    def __init__(self, Index, PresetRoll):
         super().__init__()
 
         # Store Parameters
+        self.Index = Index
         self.PresetRoll = PresetRoll
 
         # Set Text

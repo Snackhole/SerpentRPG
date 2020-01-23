@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox
+from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
 from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog
@@ -185,7 +185,12 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
             self.UpdateDisplay()
 
     def DeletePresetRoll(self):
-        pass
+        CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentPresetRoll = CurrentSelection[0]
+                del self.DiceRoller.PresetRolls[CurrentPresetRoll.Index]
+                self.UpdateDisplay()
 
     def MovePresetRollUp(self):
         pass
