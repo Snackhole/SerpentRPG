@@ -18,6 +18,11 @@ class PresetRollsTreeWidget(QTreeWidget):
         for PresetRollIndex in range(len(self.DiceRoller.PresetRolls)):
             self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRollIndex, self.DiceRoller.PresetRolls[PresetRollIndex]))
 
+    def SelectIndex(self, Index):
+        DestinationIndex = self.model().index(Index, 0)
+        self.setCurrentIndex(DestinationIndex)
+        self.scrollToItem(self.currentItem(), self.PositionAtCenter)
+
 
 class PresetRollsWidgetItem(QTreeWidgetItem):
     def __init__(self, Index, PresetRoll):

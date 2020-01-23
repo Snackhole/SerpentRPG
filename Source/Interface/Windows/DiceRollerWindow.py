@@ -182,7 +182,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         if AddPresetRollDialogInst.Confirm:
             Data = AddPresetRollDialogInst.Data
             self.DiceRoller.AddPresetRoll(Data["Name"], Data["DiceNumber"], Data["DieType"], Data["Modifier"], Data["ResultMessages"])
-            self.UpdateDisplay()
+            self.UpdateUnsavedChangesFlag(True)
 
     def DeletePresetRoll(self):
         CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
@@ -190,13 +190,21 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
             if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
                 del self.DiceRoller.PresetRolls[CurrentPresetRoll.Index]
-                self.UpdateDisplay()
+                self.UpdateUnsavedChangesFlag(True)
 
     def MovePresetRollUp(self):
-        pass
+        self.MovePresetRoll(-1)
 
     def MovePresetRollDown(self):
-        pass
+        self.MovePresetRoll(1)
+
+    def MovePresetRoll(self, Delta):
+        CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetRoll = CurrentSelection[0]
+            if self.DiceRoller.MovePresetRoll(CurrentPresetRoll.Index, Delta):
+                self.UpdateUnsavedChangesFlag(True)
+                self.PresetRollsTreeWidget.SelectIndex(CurrentPresetRoll.Index + Delta)
 
     def RollPresetRoll(self):
         pass

@@ -81,12 +81,13 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
 
     def MovePresetRoll(self, PresetRollIndex, Delta):
         TargetIndex = PresetRollIndex + Delta
-        if TargetIndex < 0 or TargetIndex > len(self.PresetRolls):
-            return
+        if TargetIndex < 0 or TargetIndex > len(self.PresetRolls) - 1:
+            return False
         CurrentPresetRoll = self.PresetRolls[PresetRollIndex]
         TargetPresetRoll = self.PresetRolls[TargetIndex]
         self.PresetRolls[TargetIndex] = CurrentPresetRoll
         self.PresetRolls[PresetRollIndex] = TargetPresetRoll
+        return True
 
     def RollPreset(self, PresetRollIndex):
         PresetRoll = self.PresetRolls[PresetRollIndex]
