@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QHeaderView
 
 
 class PresetRollsTreeWidget(QTreeWidget):
@@ -10,19 +10,21 @@ class PresetRollsTreeWidget(QTreeWidget):
 
         # Header Setup
         self.setHeaderHidden(True)
+        self.setRootIsDecorated(False)
+        self.header().setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def FillFromPresetRolls(self):
-        for PresetRollIndex in range(len(self.DiceRoller.PresetRolls)):
-            pass
+        self.clear()
+        for PresetRoll in self.DiceRoller.PresetRolls:
+            self.invisibleRootItem().addChild(PresetRollsWidgetItem(PresetRoll))
 
 
 class PresetRollsWidgetItem(QTreeWidgetItem):
-    def __init__(self, Title, Index):
+    def __init__(self, PresetRoll):
         super().__init__()
 
         # Store Parameters
-        self.Title = Title
-        self.Index = Index
+        self.PresetRoll = PresetRoll
 
         # Set Text
-        self.setText(0, self.Title)
+        self.setText(0, self.PresetRoll["Name"])

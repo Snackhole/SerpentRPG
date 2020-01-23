@@ -180,7 +180,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
     def AddPresetRoll(self):
         AddPresetRollDialogInst = AddPresetRollDialog(self)
         if AddPresetRollDialogInst.Confirm:
-            pass
+            Data = AddPresetRollDialogInst.Data
+            self.DiceRoller.AddPresetRoll(Data["Name"], Data["DiceNumber"], Data["DieType"], Data["Modifier"], Data["ResultMessages"])
+            self.UpdateDisplay()
 
     def DeletePresetRoll(self):
         pass
@@ -201,6 +203,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         for LogEntry in reversed(self.DiceRoller.ResultsLog):
             ResultsLogString += LogEntry + "\n\n---\n\n"
         self.ResultsLogTextEdit.setPlainText(ResultsLogString[:-7])
+
+        # Fill Preset Rolls Tree Widget
+        self.PresetRollsTreeWidget.FillFromPresetRolls()
 
         # Update Window Title
         self.UpdateWindowTitle()

@@ -112,6 +112,7 @@ class AddPresetRollDialog(QDialog):
             self.Data["DiceNumber"] = self.DiceNumberSpinBox.value()
             self.Data["DieType"] = self.DieTypeSpinBox.value()
             self.Data["Modifier"] = self.ModifierSpinBox.value()
+            self.Data["ResultMessages"] = self.ResultMessages
             self.Confirm = True
             self.close()
 
