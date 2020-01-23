@@ -135,7 +135,12 @@ class AddPresetRollDialog(QDialog):
             self.UpdateDisplay()
 
     def DeleteResultMessage(self):
-        pass
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            if self.DiceRollerWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+                CurrentResultMessage = CurrentSelection[0]
+                del self.ResultMessages[CurrentResultMessage.Result]
+                self.UpdateDisplay()
 
     def UpdateDisplay(self):
         self.ResultMessagesTreeWidget.FillFromResultMessages()
