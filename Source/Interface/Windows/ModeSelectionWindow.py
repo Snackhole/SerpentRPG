@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton, QGridLayout, QComboBox, QLabel
 
 from Interface.Windows.Window import Window
@@ -37,3 +38,10 @@ class ModeSelectionWindow(Window):
     def SelectMode(self, Mode):
         self.Mode = Mode
         self.close()
+
+    def keyPressEvent(self, QKeyEvent):
+        KeyPressed = QKeyEvent.key()
+        if KeyPressed == QtCore.Qt.Key_Return or KeyPressed == QtCore.Qt.Key_Enter:
+            self.SelectMode(self.ModeComboBox.currentText())
+        else:
+            super().keyPressEvent(QKeyEvent)
