@@ -1,5 +1,7 @@
+import os
+
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout
+from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout, QFrame
 
 from Core.DieClock import DieClock
 from Interface.Widgets.LineEditMouseWheelExtension import LineEditMouseWheelExtension
@@ -31,6 +33,11 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
         # Line Entry Width
         self.LineEntryWidth = 160
+
+        # Clock Label
+        self.ClockLabel = QLabel("Clock")
+        self.ClockLabel.setStyleSheet(self.LabelStyle)
+        self.ClockLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Die Clock Current Value Line Edit
         self.DieClockCurrentValueLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyDieClockValue(1 if event.angleDelta().y() > 0 else -1))
@@ -76,44 +83,80 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         # Increase Clock Button
         self.IncreaseClockButton = QPushButton("Increase Clock")
         self.IncreaseClockButton.clicked.connect(lambda: self.IncreaseClock())
+        self.IncreaseClockButton.setSizePolicy(self.InputsSizePolicy)
+        self.IncreaseClockButton.setStyleSheet(self.ClockButtonsStyle)
 
         # Increase Clock By Button
         self.IncreaseClockByButton = QPushButton("Increase Clock By...")
         self.IncreaseClockByButton.clicked.connect(lambda: self.IncreaseClockBy())
+        self.IncreaseClockByButton.setSizePolicy(self.InputsSizePolicy)
+
+        # Threshold Label
+        self.ThresholdLabel = QLabel("Threshold")
+        self.ThresholdLabel.setStyleSheet(self.LabelStyle)
+        self.ThresholdLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Create Layout
         self.Layout = QGridLayout()
-        self.Layout.addWidget(self.DieClockCurrentValueIncreaseButton, 0, 0)
-        self.Layout.addWidget(self.DieClockCurrentValueLineEdit, 1, 0)
-        self.Layout.addWidget(self.DieClockCurrentValueDecreaseButton, 2, 0)
-        self.Layout.addWidget(self.DieClockDividerLabel, 1, 1)
-        self.Layout.addWidget(self.DieClockMaximumValueIncreaseButton, 0, 2)
-        self.Layout.addWidget(self.DieClockMaximumValueLineEdit, 1, 2)
-        self.Layout.addWidget(self.DieClockMaximumValueDecreaseButton, 2, 2)
-        self.Layout.addWidget(self.IncreaseClockButton, 3, 0)
-        self.Layout.addWidget(self.IncreaseClockByButton, 3, 2)
+
+        self.ClockFrame = QFrame()
+        self.ClockFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.ClockLayout = QGridLayout()
+        self.ClockLayout.addWidget(self.ClockLabel, 0, 0, 1, 3)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueIncreaseButton, 1, 0)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueLineEdit, 2, 0)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueDecreaseButton, 3, 0)
+        self.ClockLayout.addWidget(self.DieClockDividerLabel, 2, 1)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueIncreaseButton, 1, 2)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueLineEdit, 2, 2)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueDecreaseButton, 3, 2)
+        self.ClockLayout.addWidget(self.IncreaseClockButton, 4, 0, 1, 3)
+        self.ClockLayout.addWidget(self.IncreaseClockByButton, 5, 0, 1, 3)
+        self.ClockFrame.setLayout(self.ClockLayout)
+        self.ClockLayout.setRowStretch(1, 1)
+        self.ClockLayout.setRowStretch(2, 1)
+        self.ClockLayout.setRowStretch(3, 1)
+        self.ClockLayout.setRowStretch(4, 1)
+        self.ClockLayout.setRowStretch(5, 1)
+        self.ClockLayout.setColumnStretch(0, 1)
+        self.ClockLayout.setColumnStretch(2, 1)
+        self.Layout.addWidget(self.ClockFrame, 0, 0)
 
         # Set and Configure Layout
-        self.Layout.setRowStretch(0, 1)
-        self.Layout.setRowStretch(1, 1)
-        self.Layout.setRowStretch(2, 1)
-        self.Layout.setColumnStretch(0, 1)
-        self.Layout.setColumnStretch(2, 1)
         self.Frame.setLayout(self.Layout)
 
     # Clock Methods
     def ModifyDieClockValue(self, Delta):
-        pass
+        self.DieClock.ModifyCurrentValue(Delta)
+        self.UpdateUnsavedChangesFlag(True)
 
     def ModifyDieClockMaximumValue(self, Delta):
-        pass
+        self.DieClock.ModifyMaximumValue(Delta)
+        self.UpdateUnsavedChangesFlag(True)
 
     def IncreaseClock(self):
-        pass
+        ClockGoesOff = self.DieClock.IncreaseClock()
+        self.UpdateUnsavedChangesFlag(True)
+        if ClockGoesOff:
+            self.DisplayMessageBox("The clock went off!")
 
     def IncreaseClockBy(self):
         pass
 
     # Display Methods
     def UpdateDisplay(self):
-        pass
+        # Die Clock Display
+        self.DieClockCurrentValueLineEdit.setText(str(self.DieClock.Value))
+        self.DieClockMaximumValueLineEdit.setText(str(self.DieClock.MaximumValue))
+
+        # Update Window Title
+        self.UpdateWindowTitle()
+
+    def UpdateWindowTitle(self):
+        CurrentFileTitleSection = " [" + os.path.basename(self.CurrentOpenFileName) + "]" if self.CurrentOpenFileName != "" else ""
+        UnsavedChangesIndicator = " *" if self.UnsavedChanges else ""
+        self.setWindowTitle("Die Clock - " + self.ScriptName + CurrentFileTitleSection + UnsavedChangesIndicator)
+
+    def UpdateUnsavedChangesFlag(self, UnsavedChanges):
+        self.UnsavedChanges = UnsavedChanges
+        self.UpdateDisplay()
