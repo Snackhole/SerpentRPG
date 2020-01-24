@@ -79,7 +79,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
         # Roll Button
         self.RollButton = QPushButton("Roll")
-        self.RollButton.clicked.connect(lambda: self.Roll())
+        self.RollButton.clicked.connect(lambda: self.RollAction.trigger())
         self.RollButton.setSizePolicy(self.InputsSizePolicy)
         self.RollButton.setStyleSheet(self.RollButtonStyle)
 
@@ -239,7 +239,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         DieType = self.DieTypeSpinBox.value()
         Modifier = self.ModifierSpinBox.value()
         self.DiceRoller.RollAndLog(DiceNumber, DieType, Modifier)
-        self.UpdateDisplay()
+        self.UpdateUnsavedChangesFlag(True)
 
     def AverageRoll(self):
         pass
