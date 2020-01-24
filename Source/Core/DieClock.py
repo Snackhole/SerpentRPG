@@ -24,10 +24,21 @@ class DieClock(SerializableMixin):
         return False
 
     def ModifyCurrentValue(self, Delta):
-        self.Value += Delta
+        TargetValue = self.Value + Delta
+        if TargetValue >= 0:
+            self.Value = TargetValue
 
     def ModifyMaximumValue(self, Delta):
-        self.MaximumValue += Delta
+        TargetValue = self.MaximumValue + Delta
+        if TargetValue >= 2:
+            self.MaximumValue = TargetValue
+        if self.MaximumValue <= self.ComplicationThreshold:
+            self.ComplicationThreshold = self.MaximumValue - 1
+
+    def ModifyComplicationThreshold(self, Delta):
+        TargetThreshold = self.ComplicationThreshold + Delta
+        if TargetThreshold < self.MaximumValue and TargetThreshold >= 0:
+            self.ComplicationThreshold = TargetThreshold
 
     # Serialization Methods
     def SetState(self, NewState):
