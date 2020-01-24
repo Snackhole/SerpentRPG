@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout, QFrame, QInputDialog
+from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout, QFrame, QInputDialog, QAction
 
 from Core.DieClock import DieClock
 from Interface.Widgets.LineEditMouseWheelExtension import LineEditMouseWheelExtension
@@ -77,13 +77,13 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
         # Increase Clock Button
         self.IncreaseClockButton = QPushButton("Increase Clock")
-        self.IncreaseClockButton.clicked.connect(lambda: self.IncreaseClock())
+        self.IncreaseClockButton.clicked.connect(lambda: self.IncreaseClockAction.trigger())
         self.IncreaseClockButton.setSizePolicy(self.InputsSizePolicy)
         self.IncreaseClockButton.setStyleSheet(self.LargeButtonsStyle)
 
         # Increase Clock By Button
         self.IncreaseClockByButton = QPushButton("Increase Clock By...")
-        self.IncreaseClockByButton.clicked.connect(lambda: self.IncreaseClockBy())
+        self.IncreaseClockByButton.clicked.connect(lambda: self.IncreaseClockByAction.trigger())
         self.IncreaseClockByButton.setSizePolicy(self.InputsSizePolicy)
 
         # Threshold Label
@@ -148,6 +148,51 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         # Set and Configure Layout
         self.Frame.setLayout(self.Layout)
 
+        # Create Menu Actions
+        self.NewAction = QAction("New")
+        self.NewAction.setShortcut("Ctrl+N")
+        self.NewAction.triggered.connect(self.NewActionTriggered)
+
+        self.OpenAction = QAction("Open")
+        self.OpenAction.setShortcut("Ctrl+O")
+        self.OpenAction.triggered.connect(self.OpenActionTriggered)
+
+        self.SaveAction = QAction("Save")
+        self.SaveAction.setShortcut("Ctrl+S")
+        self.SaveAction.triggered.connect(self.SaveActionTriggered)
+
+        self.SaveAsAction = QAction("Save As")
+        self.SaveAsAction.setShortcut("Ctrl+Shift+S")
+        self.SaveAsAction.triggered.connect(self.SaveAsActionTriggered)
+
+        self.QuitAction = QAction("Quit")
+        self.QuitAction.setShortcut("Ctrl+Q")
+        self.QuitAction.triggered.connect(self.close)
+
+        self.IncreaseClockAction = QAction("Increase Clock")
+        self.IncreaseClockAction.setShortcut("Ctrl+I")
+        self.IncreaseClockAction.triggered.connect(lambda: self.IncreaseClock())
+
+        self.IncreaseClockByAction = QAction("Increase Clock By...")
+        self.IncreaseClockByAction.setShortcut("Ctrl+Shift+I")
+        self.IncreaseClockByAction.triggered.connect(lambda: self.IncreaseClockBy())
+
+        # Menu Bar
+        self.MenuBar = self.menuBar()
+
+        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu.addAction(self.NewAction)
+        self.FileMenu.addAction(self.OpenAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.SaveAction)
+        self.FileMenu.addAction(self.SaveAsAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.QuitAction)
+
+        self.ClockMenu = self.MenuBar.addMenu("Clock")
+        self.ClockMenu.addAction(self.IncreaseClockAction)
+        self.ClockMenu.addAction(self.IncreaseClockByAction)
+
     # Clock Methods
     def ModifyDieClockValue(self, Delta):
         self.DieClock.ModifyCurrentValue(Delta)
@@ -174,6 +219,19 @@ class DieClockWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
             if ClockGoesOff:
                 self.DisplayMessageBox("The clock went off!")
+
+    # Serialization Methods
+    def NewActionTriggered(self):
+        pass
+
+    def OpenActionTriggered(self):
+        pass
+
+    def SaveActionTriggered(self):
+        pass
+
+    def SaveAsActionTriggered(self):
+        pass
 
     # Display Methods
     def UpdateDisplay(self):
