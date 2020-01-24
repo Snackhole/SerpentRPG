@@ -90,6 +90,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
         # Preset Rolls Tree Widget
         self.PresetRollsTreeWidget = PresetRollsTreeWidget(self.DiceRoller)
+        self.PresetRollsTreeWidget.itemActivated.connect(lambda: self.RollPresetRoll())
 
         # Preset Rolls Buttons
         self.PresetRollsRollButton = QPushButton("Roll")
