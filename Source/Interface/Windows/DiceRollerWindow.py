@@ -297,16 +297,25 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
     # File Menu Action Methods
     def NewActionTriggered(self):
-        pass
+        if self.New(self.DiceRoller):
+            self.DiceRoller = DiceRollerWithPresetRolls()
+            self.PresetRollsTreeWidget.DiceRoller = self.DiceRoller
+        self.UpdateDisplay()
 
     def OpenActionTriggered(self):
-        pass
+        OpenData = self.Open(self.DiceRoller)
+        if OpenData is not None:
+            self.DiceRoller = OpenData
+            self.PresetRollsTreeWidget.DiceRoller = OpenData
+        self.UpdateDisplay()
 
     def SaveActionTriggered(self):
-        pass
+        self.Save(self.DiceRoller)
+        self.UpdateDisplay()
 
     def SaveAsActionTriggered(self):
-        pass
+        self.Save(self.DiceRoller, SaveAs=True)
+        self.UpdateDisplay()
 
     # Log Menu Action Methods
     def AddToLog(self):
