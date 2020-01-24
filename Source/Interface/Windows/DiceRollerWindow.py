@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox
+from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox, QAction
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
 from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog, EditPresetRollDialog
@@ -174,6 +174,53 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.Layout.setColumnStretch(1, 1)
         self.Frame.setLayout(self.Layout)
 
+        # Create Menu Actions
+        self.NewAction = QAction("New")
+        self.NewAction.setShortcut("Ctrl+N")
+        self.NewAction.triggered.connect(self.NewActionTriggered)
+
+        self.OpenAction = QAction("Open")
+        self.OpenAction.setShortcut("Ctrl+O")
+        self.OpenAction.triggered.connect(self.OpenActionTriggered)
+
+        self.SaveAction = QAction("Save")
+        self.SaveAction.setShortcut("Ctrl+S")
+        self.SaveAction.triggered.connect(self.SaveActionTriggered)
+
+        self.SaveAsAction = QAction("Save As")
+        self.SaveAsAction.setShortcut("Ctrl+Shift+S")
+        self.SaveAsAction.triggered.connect(self.SaveAsActionTriggered)
+
+        self.QuitAction = QAction("Quit")
+        self.QuitAction.setShortcut("Ctrl+Q")
+        self.QuitAction.triggered.connect(self.close)
+
+        self.AddToLogAction = QAction("Add to Log")
+        self.AddToLogAction.triggered.connect(self.AddToLog)
+
+        self.RemoveLastLogEntryAction = QAction("Remove Last Log Entry")
+        self.RemoveLastLogEntryAction.triggered.connect(self.RemoveLastLogEntry)
+
+        self.ClearLogAction = QAction("Clear Log")
+        self.ClearLogAction.triggered.connect(self.ClearLog)
+
+        # Menu Bar
+        self.MenuBar = self.menuBar()
+
+        self.FileMenu = self.MenuBar.addMenu("File")
+        self.FileMenu.addAction(self.NewAction)
+        self.FileMenu.addAction(self.OpenAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.SaveAction)
+        self.FileMenu.addAction(self.SaveAsAction)
+        self.FileMenu.addSeparator()
+        self.FileMenu.addAction(self.QuitAction)
+
+        self.LogMenu = self.MenuBar.addMenu("Log")
+        self.LogMenu.addAction(self.AddToLogAction)
+        self.LogMenu.addAction(self.RemoveLastLogEntryAction)
+        self.LogMenu.addAction(self.ClearLogAction)
+
     # Button Methods
     def Roll(self):
         DiceNumber = self.DiceNumberSpinBox.value()
@@ -222,6 +269,29 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
                 self.PresetRollsTreeWidget.SelectIndex(CurrentPresetRoll.Index + Delta)
 
     def RollPresetRoll(self):
+        pass
+
+    # File Menu Action Methods
+    def NewActionTriggered(self):
+        pass
+
+    def OpenActionTriggered(self):
+        pass
+
+    def SaveActionTriggered(self):
+        pass
+
+    def SaveAsActionTriggered(self):
+        pass
+
+    # Log Menu Action Methods
+    def AddToLog(self):
+        pass
+
+    def RemoveLastLogEntry(self):
+        pass
+
+    def ClearLog(self):
         pass
 
     # Display Update Methods
