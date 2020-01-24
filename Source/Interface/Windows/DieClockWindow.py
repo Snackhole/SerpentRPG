@@ -222,16 +222,23 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
     # Serialization Methods
     def NewActionTriggered(self):
-        pass
+        if self.New(self.DieClock):
+            self.DieClock = DieClock()
+        self.UpdateDisplay()
 
     def OpenActionTriggered(self):
-        pass
+        OpenData = self.Open(self.DieClock)
+        if OpenData is not None:
+            self.DieClock = OpenData
+        self.UpdateDisplay()
 
     def SaveActionTriggered(self):
-        pass
+        self.Save(self.DieClock)
+        self.UpdateDisplay()
 
     def SaveAsActionTriggered(self):
-        pass
+        self.Save(self.DieClock, SaveAs=True)
+        self.UpdateDisplay()
 
     # Display Methods
     def UpdateDisplay(self):
