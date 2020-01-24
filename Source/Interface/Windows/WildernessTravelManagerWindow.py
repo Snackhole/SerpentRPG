@@ -170,6 +170,28 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessClockMaximumValueDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.WildernessClockMaximumValueDecreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
 
+        # Wilderness Clock Threshold Label
+        self.WildernessClockThresholdLabel = QLabel("Threshold")
+        self.WildernessClockThresholdLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Wilderness Clock Threshold Line Edit
+        self.WildernessClockThresholdLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyWildernessClockThreshold(1 if event.angleDelta().y() > 0 else -1))
+        self.WildernessClockThresholdLineEdit.setReadOnly(True)
+        self.WildernessClockThresholdLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.WildernessClockThresholdLineEdit.setStyleSheet(self.LineEditStyle)
+        self.WildernessClockThresholdLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.WildernessClockThresholdLineEdit.setFixedWidth(self.PoolAndClockWidth)
+
+        # Wilderness Clock Threshold Buttons
+        self.WildernessClockThresholdIncreaseButton = QPushButton("+")
+        self.WildernessClockThresholdIncreaseButton.clicked.connect(lambda: self.ModifyWildernessClockThreshold(1))
+        self.WildernessClockThresholdIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.WildernessClockThresholdIncreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
+        self.WildernessClockThresholdDecreaseButton = QPushButton("-")
+        self.WildernessClockThresholdDecreaseButton.clicked.connect(lambda: self.ModifyWildernessClockThreshold(-1))
+        self.WildernessClockThresholdDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.WildernessClockThresholdDecreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
+
         # Wilderness Log Label
         self.WildernessLogLabel = QLabel("Wilderness Log")
         self.WildernessLogLabel.setStyleSheet(self.LabelStyle)
@@ -233,6 +255,14 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueIncreaseButton, 1, 2)
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueLineEdit, 2, 2)
         self.WildernessClockLayout.addWidget(self.WildernessClockMaximumValueDecreaseButton, 3, 2)
+        self.WildernessClockThresholdFrame = QFrame()
+        self.WildernessClockThresholdLayout = QGridLayout()
+        self.WildernessClockThresholdLayout.addWidget(self.WildernessClockThresholdLabel, 0, 0, 1, 3)
+        self.WildernessClockThresholdLayout.addWidget(self.WildernessClockThresholdDecreaseButton, 1, 0)
+        self.WildernessClockThresholdLayout.addWidget(self.WildernessClockThresholdLineEdit, 1, 1)
+        self.WildernessClockThresholdLayout.addWidget(self.WildernessClockThresholdIncreaseButton, 1, 2)
+        self.WildernessClockThresholdFrame.setLayout(self.WildernessClockThresholdLayout)
+        self.WildernessClockLayout.addWidget(self.WildernessClockThresholdFrame, 4, 0, 1, 3)
         self.WildernessClockLayout.setRowStretch(1, 1)
         self.WildernessClockLayout.setRowStretch(2, 2)
         self.WildernessClockLayout.setRowStretch(3, 1)
@@ -314,6 +344,10 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
 
     def ModifyWildernessClockMaximumValue(self, Delta):
         self.WildernessTravelManager.ModifyWildernessClockMaximumValue(Delta)
+        self.UpdateUnsavedChangesFlag(True)
+
+    def ModifyWildernessClockThreshold(self, Delta):
+        self.WildernessTravelManager.ModifyWildernessClockThreshold(Delta)
         self.UpdateUnsavedChangesFlag(True)
 
     # Travel Action Methods
@@ -446,6 +480,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         # Wilderness Clock Display
         self.WildernessClockCurrentValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.Value))
         self.WildernessClockMaximumValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.MaximumValue))
+        self.WildernessClockThresholdLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.ComplicationThreshold))
 
         # Wilderness Log Display
         WildernessLogString = ""

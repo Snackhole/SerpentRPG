@@ -122,6 +122,9 @@ class WildernessTravelManager(SerializableMixin):
     def ModifyWildernessClockMaximumValue(self, Delta):
         self.WildernessClock.ModifyMaximumValue(Delta)
 
+    def ModifyWildernessClockThreshold(self, Delta):
+        self.WildernessClock.ModifyComplicationThreshold(Delta)
+
     # Serialization Methods
     def SetState(self, NewState):
         self.SupplyPool = NewState["SupplyPool"]
