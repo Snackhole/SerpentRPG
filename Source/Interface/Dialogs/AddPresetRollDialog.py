@@ -63,6 +63,9 @@ class AddPresetRollDialog(QDialog):
         self.EditResultMessageButton = QPushButton("Edit")
         self.EditResultMessageButton.clicked.connect(self.EditResultMessage)
         self.EditResultMessageButton.setSizePolicy((self.InputsSizePolicy))
+        self.CopyResultMessageButton = QPushButton("Copy")
+        self.CopyResultMessageButton.clicked.connect(self.CopyResultMessage)
+        self.CopyResultMessageButton.setSizePolicy((self.InputsSizePolicy))
         self.AddButton = QPushButton("Add")
         self.AddButton.clicked.connect(self.Add)
         self.AddButton.setDefault(True)
@@ -90,13 +93,15 @@ class AddPresetRollDialog(QDialog):
         self.Layout.addLayout(self.DiceInputsLayout, 2, 0, 1, 2)
         self.ResultMessagesLayout = QGridLayout()
         self.ResultMessagesLayout.addWidget(self.ResultMessagesLabel, 0, 0)
-        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeWidget, 1, 0, 3, 1)
+        self.ResultMessagesLayout.addWidget(self.ResultMessagesTreeWidget, 1, 0, 4, 1)
         self.ResultMessagesLayout.addWidget(self.AddResultMessageButton, 1, 1)
         self.ResultMessagesLayout.addWidget(self.DeleteResultMessageButton, 2, 1)
         self.ResultMessagesLayout.addWidget(self.EditResultMessageButton, 3, 1)
+        self.ResultMessagesLayout.addWidget(self.CopyResultMessageButton, 4, 1)
         self.ResultMessagesLayout.setRowStretch(1, 1)
         self.ResultMessagesLayout.setRowStretch(2, 1)
         self.ResultMessagesLayout.setRowStretch(3, 1)
+        self.ResultMessagesLayout.setRowStretch(4, 1)
         self.Layout.addLayout(self.ResultMessagesLayout, 3, 0, 1, 2)
         self.Layout.addWidget(self.AddButton, 4, 0)
         self.Layout.addWidget(self.CancelButton, 4, 1)
@@ -130,12 +135,10 @@ class AddPresetRollDialog(QDialog):
         self.close()
 
     def ValidInput(self):
-        Valid = True
         if self.NameLineEdit.text() == "":
-            Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Preset rolls must have a name.", Icon=QMessageBox.Warning, Parent=self)
-            return Valid
-        return Valid
+            return False
+        return True
 
     def AddResultMessage(self):
         AddResultMessageDialogInst = AddResultMessageDialog(self, self.ResultMessages, self.DiceRollerWindow)
@@ -165,6 +168,18 @@ class AddPresetRollDialog(QDialog):
                 self.ResultMessages[NewResult] = Message
                 if CurrentResult != NewResult:
                     del self.ResultMessages[CurrentResult]
+                self.UpdateDisplay()
+
+    def CopyResultMessage(self):
+        CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentResultMessage = CurrentSelection[0]
+            CopyResultMessageDialogInst = CopyResultMessageDialog(self, self.ResultMessages, self.DiceRollerWindow)
+            if CopyResultMessageDialogInst.Confirm:
+                Floor = CopyResultMessageDialogInst.RangeFloor
+                Ceiling = CopyResultMessageDialogInst.RangeCeiling
+                for Result in range(Floor, Ceiling + 1):
+                    self.ResultMessages[str(Result)] = CurrentResultMessage.Message
                 self.UpdateDisplay()
 
     def UpdateDisplay(self):
@@ -242,16 +257,13 @@ class AddResultMessageDialog(QDialog):
         self.close()
 
     def ValidInput(self):
-        Valid = True
         if self.MessageLineEdit.text() == "":
-            Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
-            return Valid
+            return False
         if self.ResultSpinBox.value() in self.ResultMessages.keys():
-            Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
-            return Valid
-        return Valid
+            return False
+        return True
 
     def EditHook(self):
         pass
@@ -297,14 +309,106 @@ class EditResultMessageDialog(AddResultMessageDialog):
         self.MessageLineEdit.setText(self.ResultMessages[self.CurrentResult])
 
     def ValidInput(self):
-        Valid = True
         if self.MessageLineEdit.text() == "":
-            Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
-            return Valid
+            return False
         ResultValue = str(self.ResultSpinBox.value())
         if ResultValue in self.ResultMessages.keys() and ResultValue != self.CurrentResult:
-            Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
-            return Valid
-        return Valid
+            return False
+        return True
+
+
+class CopyResultMessageDialog(QDialog):
+    def __init__(self, AddPresetRollDialog, ResultMessages, DiceRollerWindow):
+        super().__init__(parent=AddPresetRollDialog)
+
+        # Store Parameters
+        self.AddPresetRollDialog = AddPresetRollDialog
+        self.ResultMessages = ResultMessages
+        self.DiceRollerWindow = DiceRollerWindow
+
+        # Variables
+        self.RangeFloor = None
+        self.RangeCeiling = None
+        self.Confirm = False
+
+        # Inputs Size Policy
+        self.InputsSizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
+        # Prompt Label
+        self.PromptLabel = QLabel("Copy result message to result range:")
+        self.PromptLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Floor Spin Box
+        self.FloorSpinBox = QSpinBox()
+        self.FloorSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.FloorSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.FloorSpinBox.setButtonSymbols(self.FloorSpinBox.NoButtons)
+        self.FloorSpinBox.setRange(-1000000000, 1000000000)
+        self.FloorSpinBox.setValue(1)
+
+        # Range Label
+        self.RangeLabel = QLabel("to")
+        self.RangeLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Ceiling Spin Box
+        self.CeilingSpinBox = QSpinBox()
+        self.CeilingSpinBox.setAlignment(QtCore.Qt.AlignCenter)
+        self.CeilingSpinBox.setSizePolicy(self.InputsSizePolicy)
+        self.CeilingSpinBox.setButtonSymbols(self.CeilingSpinBox.NoButtons)
+        self.CeilingSpinBox.setRange(-1000000000, 1000000000)
+        self.CeilingSpinBox.setValue(1)
+
+        # Buttons
+        self.CopyButton = QPushButton("Copy")
+        self.CopyButton.clicked.connect(self.Copy)
+        self.CopyButton.setSizePolicy(self.InputsSizePolicy)
+        self.CancelButton = QPushButton("Cancel")
+        self.CancelButton.clicked.connect(self.Cancel)
+        self.CancelButton.setSizePolicy(self.InputsSizePolicy)
+
+        # Layout
+        self.Layout = QGridLayout()
+        self.Layout.addWidget(self.PromptLabel, 0, 0, 1, 3)
+        self.Layout.addWidget(self.FloorSpinBox, 1, 0)
+        self.Layout.addWidget(self.RangeLabel, 1, 1)
+        self.Layout.addWidget(self.CeilingSpinBox, 1, 2)
+        self.ButtonsLayout = QGridLayout()
+        self.ButtonsLayout.addWidget(self.CopyButton, 0, 0)
+        self.ButtonsLayout.addWidget(self.CancelButton, 0, 1)
+        self.Layout.addLayout(self.ButtonsLayout, 2, 0, 1, 3)
+        self.Layout.setRowStretch(1, 1)
+        self.Layout.setRowStretch(2, 1)
+        self.Layout.setColumnStretch(0, 1)
+        self.Layout.setColumnStretch(2, 1)
+        self.setLayout(self.Layout)
+
+        # Set Window Title and Icon
+        self.setWindowTitle(self.DiceRollerWindow.ScriptName)
+        self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Execute Dialog
+        self.exec_()
+
+    def Copy(self):
+        if self.ValidInput():
+            self.Confirm = True
+            self.RangeFloor = self.FloorSpinBox.value()
+            self.RangeCeiling = self.CeilingSpinBox.value()
+            self.close()
+
+    def Cancel(self):
+        self.close()
+
+    def ValidInput(self):
+        Floor = self.FloorSpinBox.value()
+        Ceiling = self.CeilingSpinBox.value()
+        if Floor > Ceiling:
+            self.DiceRollerWindow.DisplayMessageBox("The floor of the range cannot be greater than the ceiling.")
+            return False
+        for Result in range(Floor, Ceiling + 1):
+            if str(Result) in self.ResultMessages:
+                self.DiceRollerWindow.DisplayMessageBox("Cannot copy.  At least one result in this range already has a message associated with it")
+                return False
+        return True
