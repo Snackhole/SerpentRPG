@@ -25,7 +25,7 @@ class DieClockWindow(Window, SaveAndOpenMixin):
     def CreateInterface(self):
         # Styles
         self.LineEditStyle = "QLineEdit {font-size: 20pt;}"
-        self.ClockButtonsStyle = "QPushButton {font-size: 20pt;}"
+        self.LargeButtonsStyle = "QPushButton {font-size: 20pt;}"
         self.LabelStyle = "QLabel {font-size: 20pt;}"
 
         # Inputs Size Policy
@@ -51,11 +51,11 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         self.DieClockCurrentValueIncreaseButton = QPushButton("+")
         self.DieClockCurrentValueIncreaseButton.clicked.connect(lambda: self.ModifyDieClockValue(1))
         self.DieClockCurrentValueIncreaseButton.setSizePolicy(self.InputsSizePolicy)
-        self.DieClockCurrentValueIncreaseButton.setStyleSheet(self.ClockButtonsStyle)
+        self.DieClockCurrentValueIncreaseButton.setStyleSheet(self.LargeButtonsStyle)
         self.DieClockCurrentValueDecreaseButton = QPushButton("-")
         self.DieClockCurrentValueDecreaseButton.clicked.connect(lambda: self.ModifyDieClockValue(-1))
         self.DieClockCurrentValueDecreaseButton.setSizePolicy(self.InputsSizePolicy)
-        self.DieClockCurrentValueDecreaseButton.setStyleSheet(self.ClockButtonsStyle)
+        self.DieClockCurrentValueDecreaseButton.setStyleSheet(self.LargeButtonsStyle)
 
         # Die Clock Divider Label
         self.DieClockDividerLabel = QLabel("/")
@@ -74,17 +74,17 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         self.DieClockMaximumValueIncreaseButton = QPushButton("+")
         self.DieClockMaximumValueIncreaseButton.clicked.connect(lambda: self.ModifyDieClockMaximumValue(1))
         self.DieClockMaximumValueIncreaseButton.setSizePolicy(self.InputsSizePolicy)
-        self.DieClockMaximumValueIncreaseButton.setStyleSheet(self.ClockButtonsStyle)
+        self.DieClockMaximumValueIncreaseButton.setStyleSheet(self.LargeButtonsStyle)
         self.DieClockMaximumValueDecreaseButton = QPushButton("-")
         self.DieClockMaximumValueDecreaseButton.clicked.connect(lambda: self.ModifyDieClockMaximumValue(-1))
         self.DieClockMaximumValueDecreaseButton.setSizePolicy(self.InputsSizePolicy)
-        self.DieClockMaximumValueDecreaseButton.setStyleSheet(self.ClockButtonsStyle)
+        self.DieClockMaximumValueDecreaseButton.setStyleSheet(self.LargeButtonsStyle)
 
         # Increase Clock Button
         self.IncreaseClockButton = QPushButton("Increase Clock")
         self.IncreaseClockButton.clicked.connect(lambda: self.IncreaseClock())
         self.IncreaseClockButton.setSizePolicy(self.InputsSizePolicy)
-        self.IncreaseClockButton.setStyleSheet(self.ClockButtonsStyle)
+        self.IncreaseClockButton.setStyleSheet(self.LargeButtonsStyle)
 
         # Increase Clock By Button
         self.IncreaseClockByButton = QPushButton("Increase Clock By...")
@@ -95,6 +95,24 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         self.ThresholdLabel = QLabel("Threshold")
         self.ThresholdLabel.setStyleSheet(self.LabelStyle)
         self.ThresholdLabel.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Threshold Line Edit
+        self.ThresholdLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyThreshold(1 if event.angleDelta().y() > 0 else -1))
+        self.ThresholdLineEdit.setReadOnly(True)
+        self.ThresholdLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.ThresholdLineEdit.setStyleSheet(self.LineEditStyle)
+        self.ThresholdLineEdit.setSizePolicy(self.InputsSizePolicy)
+        self.ThresholdLineEdit.setMinimumWidth(self.LineEntryWidth)
+
+        # Threshold Buttons
+        self.ThresholdIncreaseButton = QPushButton("+")
+        self.ThresholdIncreaseButton.clicked.connect(lambda: self.ModifyThreshold(1))
+        self.ThresholdIncreaseButton.setSizePolicy(self.InputsSizePolicy)
+        self.ThresholdIncreaseButton.setStyleSheet(self.LargeButtonsStyle)
+        self.ThresholdDecreaseButton = QPushButton("-")
+        self.ThresholdDecreaseButton.clicked.connect(lambda: self.ModifyThreshold(-1))
+        self.ThresholdDecreaseButton.setSizePolicy(self.InputsSizePolicy)
+        self.ThresholdDecreaseButton.setStyleSheet(self.LargeButtonsStyle)
 
         # Create Layout
         self.Layout = QGridLayout()
@@ -114,13 +132,26 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         self.ClockLayout.addWidget(self.IncreaseClockByButton, 5, 0, 1, 3)
         self.ClockFrame.setLayout(self.ClockLayout)
         self.ClockLayout.setRowStretch(1, 1)
-        self.ClockLayout.setRowStretch(2, 1)
+        self.ClockLayout.setRowStretch(2, 2)
         self.ClockLayout.setRowStretch(3, 1)
         self.ClockLayout.setRowStretch(4, 1)
         self.ClockLayout.setRowStretch(5, 1)
         self.ClockLayout.setColumnStretch(0, 1)
         self.ClockLayout.setColumnStretch(2, 1)
         self.Layout.addWidget(self.ClockFrame, 0, 0)
+
+        self.ThresholdFrame = QFrame()
+        self.ThresholdFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.ThresholdLayout = QGridLayout()
+        self.ThresholdLayout.addWidget(self.ThresholdLabel, 0, 0)
+        self.ThresholdLayout.addWidget(self.ThresholdIncreaseButton, 1, 0)
+        self.ThresholdLayout.addWidget(self.ThresholdLineEdit, 2, 0)
+        self.ThresholdLayout.addWidget(self.ThresholdDecreaseButton, 3, 0)
+        self.ThresholdFrame.setLayout(self.ThresholdLayout)
+        self.ThresholdLayout.setRowStretch(1, 1)
+        self.ThresholdLayout.setRowStretch(2, 2)
+        self.ThresholdLayout.setRowStretch(3, 1)
+        self.Layout.addWidget(self.ThresholdFrame, 0, 1)
 
         # Set and Configure Layout
         self.Frame.setLayout(self.Layout)
@@ -132,6 +163,10 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
     def ModifyDieClockMaximumValue(self, Delta):
         self.DieClock.ModifyMaximumValue(Delta)
+        self.UpdateUnsavedChangesFlag(True)
+
+    def ModifyThreshold(self, Delta):
+        self.DieClock.ModifyComplicationThreshold(Delta)
         self.UpdateUnsavedChangesFlag(True)
 
     def IncreaseClock(self):
@@ -148,6 +183,9 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         # Die Clock Display
         self.DieClockCurrentValueLineEdit.setText(str(self.DieClock.Value))
         self.DieClockMaximumValueLineEdit.setText(str(self.DieClock.MaximumValue))
+
+        # Threshold Display
+        self.ThresholdLineEdit.setText(str(self.DieClock.ComplicationThreshold))
 
         # Update Window Title
         self.UpdateWindowTitle()
