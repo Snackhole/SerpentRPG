@@ -288,7 +288,12 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
                 self.PresetRollsTreeWidget.SelectIndex(CurrentPresetRoll.Index + Delta)
 
     def RollPresetRoll(self):
-        pass
+        CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentPresetIndex = CurrentSelection[0].Index
+            self.DiceRoller.RollAndLogPreset(CurrentPresetIndex)
+            self.UpdateUnsavedChangesFlag(True)
+            self.PresetRollsTreeWidget.SelectIndex(CurrentPresetIndex)
 
     # File Menu Action Methods
     def NewActionTriggered(self):
