@@ -28,4 +28,4 @@ class ResultMessagesWidgetItem(QTreeWidgetItem):
         self.Message = Message
 
         # Set Text
-        self.setText(0, str(self.Result) + ":  " + self.Message)
+        self.setText(0, self.Result + ":  " + self.Message)

@@ -28,8 +28,9 @@ class DiceRoller:
 
         # Resolve Result Message
         if ResultMessages is not None:
-            if Results["Total"] in ResultMessages:
-                Results["ResultMessage"] = ResultMessages[Results["Total"]]
+            TotalString = str(Results["Total"])
+            if TotalString in ResultMessages:
+                Results["ResultMessage"] = ResultMessages[TotalString]
 
         return Results
 

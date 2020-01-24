@@ -233,7 +233,7 @@ class AddResultMessageDialog(QDialog):
 
     def Add(self):
         if self.ValidInput():
-            self.Result = self.ResultSpinBox.value()
+            self.Result = str(self.ResultSpinBox.value())
             self.Message = self.MessageLineEdit.text()
             self.Confirm = True
             self.close()
@@ -293,7 +293,7 @@ class EditResultMessageDialog(AddResultMessageDialog):
         self.AddButton.setText("Done")
 
         # Update Data
-        self.ResultSpinBox.setValue(self.CurrentResult)
+        self.ResultSpinBox.setValue(int(self.CurrentResult))
         self.MessageLineEdit.setText(self.ResultMessages[self.CurrentResult])
 
     def ValidInput(self):
@@ -302,7 +302,7 @@ class EditResultMessageDialog(AddResultMessageDialog):
             Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
             return Valid
-        ResultValue = self.ResultSpinBox.value()
+        ResultValue = str(self.ResultSpinBox.value())
         if ResultValue in self.ResultMessages.keys() and ResultValue != self.CurrentResult:
             Valid = False
             self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
