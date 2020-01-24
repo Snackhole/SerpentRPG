@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox, QAction
+from PyQt5.QtWidgets import QSizePolicy, QGridLayout, QFrame, QLabel, QPushButton, QTextEdit, QSpinBox, QMessageBox, QAction, QInputDialog
 
 from Core.DiceRoller import DiceRollerWithPresetRolls
 from Interface.Dialogs.AddPresetRollDialog import AddPresetRollDialog, EditPresetRollDialog
@@ -319,13 +319,20 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
     # Log Menu Action Methods
     def AddToLog(self):
-        pass
+        LogString, OK = QInputDialog.getText(self, "Add to Log", "Add this to the Results Log:")
+        if OK:
+            self.DiceRoller.Log(LogString)
+            self.UpdateUnsavedChangesFlag(True)
 
     def RemoveLastLogEntry(self):
-        pass
+        if self.DisplayMessageBox("Are you sure you want to remove the last log entry?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.DiceRoller.RemoveLastLogEntry()
+            self.UpdateUnsavedChangesFlag(True)
 
     def ClearLog(self):
-        pass
+        if self.DisplayMessageBox("Are you sure you want to clear the log?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
+            self.DiceRoller.ClearLog()
+            self.UpdateUnsavedChangesFlag(True)
 
     # Display Update Methods
     def UpdateDisplay(self):

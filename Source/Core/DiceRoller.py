@@ -110,6 +110,12 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
         ResultsText += "" if Results["ResultMessage"] is None else "\n" + Results["ResultMessage"]
         self.Log(ResultsText)
 
+    def RemoveLastLogEntry(self):
+        self.ResultsLog = self.ResultsLog[:-1]
+
+    def ClearLog(self):
+        self.ResultsLog.clear()
+
     # Serialization Methods
     def SetState(self, NewState):
         self.PresetRolls = NewState["PresetRolls"]
