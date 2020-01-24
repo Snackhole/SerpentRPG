@@ -195,6 +195,14 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.QuitAction.setShortcut("Ctrl+Q")
         self.QuitAction.triggered.connect(self.close)
 
+        self.RollAction = QAction("Roll")
+        self.RollAction.setShortcut("Ctrl+R")
+        self.RollAction.triggered.connect(self.Roll)
+
+        self.AverageRollAction = QAction("Average Roll")
+        self.AverageRollAction.setShortcut("Ctrl+Shift+R")
+        self.AverageRollAction.triggered.connect(self.AverageRoll)
+
         self.AddToLogAction = QAction("Add to Log")
         self.AddToLogAction.triggered.connect(self.AddToLog)
 
@@ -216,18 +224,25 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.FileMenu.addSeparator()
         self.FileMenu.addAction(self.QuitAction)
 
+        self.RollerMenu = self.MenuBar.addMenu("Roller")
+        self.RollerMenu.addAction(self.RollAction)
+        self.RollerMenu.addAction(self.AverageRollAction)
+
         self.LogMenu = self.MenuBar.addMenu("Log")
         self.LogMenu.addAction(self.AddToLogAction)
         self.LogMenu.addAction(self.RemoveLastLogEntryAction)
         self.LogMenu.addAction(self.ClearLogAction)
 
-    # Button Methods
+    # Roller Methods
     def Roll(self):
         DiceNumber = self.DiceNumberSpinBox.value()
         DieType = self.DieTypeSpinBox.value()
         Modifier = self.ModifierSpinBox.value()
         self.DiceRoller.RollAndLog(DiceNumber, DieType, Modifier)
         self.UpdateDisplay()
+
+    def AverageRoll(self):
+        pass
 
     def AddPresetRoll(self):
         AddPresetRollDialogInst = AddPresetRollDialog(self)
