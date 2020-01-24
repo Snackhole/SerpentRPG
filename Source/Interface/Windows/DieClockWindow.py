@@ -1,7 +1,7 @@
 import os
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout, QFrame
+from PyQt5.QtWidgets import QSizePolicy, QPushButton, QLabel, QGridLayout, QFrame, QInputDialog
 
 from Core.DieClock import DieClock
 from Interface.Widgets.LineEditMouseWheelExtension import LineEditMouseWheelExtension
@@ -168,7 +168,12 @@ class DieClockWindow(Window, SaveAndOpenMixin):
             self.DisplayMessageBox("The clock went off!")
 
     def IncreaseClockBy(self):
-        pass
+        ValueIncrease, OK = QInputDialog.getInt(self, "Clock Increase", "Increase clock by:", 1, 1)
+        if OK:
+            ClockGoesOff = self.DieClock.IncreaseClock(ValueIncrease)
+            self.UpdateUnsavedChangesFlag(True)
+            if ClockGoesOff:
+                self.DisplayMessageBox("The clock went off!")
 
     # Display Methods
     def UpdateDisplay(self):
