@@ -34,11 +34,6 @@ class DieClockWindow(Window, SaveAndOpenMixin):
         # Line Entry Width
         self.LineEntryWidth = 160
 
-        # Clock Label
-        self.ClockLabel = QLabel("Clock")
-        self.ClockLabel.setStyleSheet(self.LabelStyle)
-        self.ClockLabel.setAlignment(QtCore.Qt.AlignCenter)
-
         # Die Clock Current Value Line Edit
         self.DieClockCurrentValueLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyDieClockValue(1 if event.angleDelta().y() > 0 else -1))
         self.DieClockCurrentValueLineEdit.setReadOnly(True)
@@ -93,7 +88,6 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
         # Threshold Label
         self.ThresholdLabel = QLabel("Threshold")
-        self.ThresholdLabel.setStyleSheet(self.LabelStyle)
         self.ThresholdLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # Threshold Line Edit
@@ -116,42 +110,40 @@ class DieClockWindow(Window, SaveAndOpenMixin):
 
         # Create Layout
         self.Layout = QGridLayout()
-
+        self.ButtonsFrame = QFrame()
+        self.ButtonsFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
+        self.ButtonsLayout = QGridLayout()
+        self.ButtonsLayout.addWidget(self.IncreaseClockButton, 0, 0)
+        self.ButtonsLayout.addWidget(self.IncreaseClockByButton, 1, 0)
+        self.ButtonsFrame.setLayout(self.ButtonsLayout)
+        self.ButtonsLayout.setRowStretch(0, 1)
+        self.ButtonsLayout.setRowStretch(1, 1)
+        self.Layout.addWidget(self.ButtonsFrame, 0, 0)
         self.ClockFrame = QFrame()
         self.ClockFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.ClockLayout = QGridLayout()
-        self.ClockLayout.addWidget(self.ClockLabel, 0, 0, 1, 3)
-        self.ClockLayout.addWidget(self.DieClockCurrentValueIncreaseButton, 1, 0)
-        self.ClockLayout.addWidget(self.DieClockCurrentValueLineEdit, 2, 0)
-        self.ClockLayout.addWidget(self.DieClockCurrentValueDecreaseButton, 3, 0)
-        self.ClockLayout.addWidget(self.DieClockDividerLabel, 2, 1)
-        self.ClockLayout.addWidget(self.DieClockMaximumValueIncreaseButton, 1, 2)
-        self.ClockLayout.addWidget(self.DieClockMaximumValueLineEdit, 2, 2)
-        self.ClockLayout.addWidget(self.DieClockMaximumValueDecreaseButton, 3, 2)
-        self.ClockLayout.addWidget(self.IncreaseClockButton, 4, 0, 1, 3)
-        self.ClockLayout.addWidget(self.IncreaseClockByButton, 5, 0, 1, 3)
-        self.ClockFrame.setLayout(self.ClockLayout)
-        self.ClockLayout.setRowStretch(1, 1)
-        self.ClockLayout.setRowStretch(2, 2)
-        self.ClockLayout.setRowStretch(3, 1)
-        self.ClockLayout.setRowStretch(4, 1)
-        self.ClockLayout.setRowStretch(5, 1)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueIncreaseButton, 0, 0)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueLineEdit, 1, 0)
+        self.ClockLayout.addWidget(self.DieClockCurrentValueDecreaseButton, 2, 0)
+        self.ClockLayout.addWidget(self.DieClockDividerLabel, 1, 1)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueIncreaseButton, 0, 2)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueLineEdit, 1, 2)
+        self.ClockLayout.addWidget(self.DieClockMaximumValueDecreaseButton, 2, 2)
+        self.ClockLayout.setRowStretch(0, 1)
+        self.ClockLayout.setRowStretch(1, 2)
+        self.ClockLayout.setRowStretch(2, 1)
         self.ClockLayout.setColumnStretch(0, 1)
         self.ClockLayout.setColumnStretch(2, 1)
-        self.Layout.addWidget(self.ClockFrame, 0, 0)
-
         self.ThresholdFrame = QFrame()
-        self.ThresholdFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
         self.ThresholdLayout = QGridLayout()
-        self.ThresholdLayout.addWidget(self.ThresholdLabel, 0, 0)
-        self.ThresholdLayout.addWidget(self.ThresholdIncreaseButton, 1, 0)
-        self.ThresholdLayout.addWidget(self.ThresholdLineEdit, 2, 0)
-        self.ThresholdLayout.addWidget(self.ThresholdDecreaseButton, 3, 0)
+        self.ThresholdLayout.addWidget(self.ThresholdLabel, 0, 0, 1, 3)
+        self.ThresholdLayout.addWidget(self.ThresholdDecreaseButton, 1, 0)
+        self.ThresholdLayout.addWidget(self.ThresholdLineEdit, 1, 1)
+        self.ThresholdLayout.addWidget(self.ThresholdIncreaseButton, 1, 2)
         self.ThresholdFrame.setLayout(self.ThresholdLayout)
-        self.ThresholdLayout.setRowStretch(1, 1)
-        self.ThresholdLayout.setRowStretch(2, 2)
-        self.ThresholdLayout.setRowStretch(3, 1)
-        self.Layout.addWidget(self.ThresholdFrame, 0, 1)
+        self.ClockLayout.addWidget(self.ThresholdFrame, 3, 0, 1, 3)
+        self.ClockFrame.setLayout(self.ClockLayout)
+        self.Layout.addWidget(self.ClockFrame, 1, 0)
 
         # Set and Configure Layout
         self.Frame.setLayout(self.Layout)
