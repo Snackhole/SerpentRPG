@@ -15,7 +15,7 @@ class ResultMessagesTreeWidget(QTreeWidget):
 
     def FillFromResultMessages(self):
         self.clear()
-        for Key, Value in sorted(self.ResultMessages.items()):
+        for Key, Value in sorted(self.ResultMessages.items(), key=lambda x: int(x[0])):
             self.invisibleRootItem().addChild(ResultMessagesWidgetItem(Key, Value))
 
 
