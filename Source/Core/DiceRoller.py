@@ -60,6 +60,10 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
         Results = self.RollPreset(PresetRollIndex)
         self.LogFromResults(Results, Prefix=self.PresetRolls[PresetRollIndex]["Name"] + ":")
 
+    def RollAndLogAverage(self, DiceNumber=1, DieType=6, Modifier=0, NumberRolls=100000):
+        AverageResult = self.AverageRoll(DiceNumber, DieType, Modifier, NumberRolls)
+        self.Log("Average result of " + str(DiceNumber) + "d" + str(DieType) + ("+" if Modifier >= 0 else "") + str(Modifier) + " over " + str(NumberRolls) + " rolls:\n\n" + str(AverageResult))
+
     # Preset Roll Methods
     def CreatePresetRoll(self, Name, DiceNumber, DieType, Modifier, ResultMessages):
         PresetRoll = {}

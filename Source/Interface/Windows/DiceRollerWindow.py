@@ -242,7 +242,11 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def AverageRoll(self):
-        pass
+        DiceNumber = self.DiceNumberSpinBox.value()
+        DieType = self.DieTypeSpinBox.value()
+        Modifier = self.ModifierSpinBox.value()
+        self.DiceRoller.RollAndLogAverage(DiceNumber, DieType, Modifier)
+        self.UpdateUnsavedChangesFlag(True)
 
     def AddPresetRoll(self):
         AddPresetRollDialogInst = AddPresetRollDialog(self)
