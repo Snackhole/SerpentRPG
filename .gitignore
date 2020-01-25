@@ -156,5 +156,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# SerpentNotes Runtime Files
-Favorites.cfg
+# SerpentRPG Runtime Files and Compiled Versions
+Versions/
