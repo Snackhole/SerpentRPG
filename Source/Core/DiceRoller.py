@@ -1,3 +1,4 @@
+import copy
 import random
 
 from SaveAndLoad.JSONSerializer import SerializableMixin
@@ -83,6 +84,9 @@ class DiceRollerWithPresetRolls(DiceRoller, SerializableMixin):
 
     def EditPresetRoll(self, PresetRollIndex, Name, DiceNumber, DieType, Modifier, ResultMessages):
         self.PresetRolls[PresetRollIndex] = self.CreatePresetRoll(Name, DiceNumber, DieType, Modifier, ResultMessages)
+
+    def CopyPresetRoll(self, PresetRollIndex):
+        self.PresetRolls.append(copy.deepcopy(self.PresetRolls[PresetRollIndex]))
 
     def MovePresetRoll(self, PresetRollIndex, Delta):
         TargetIndex = PresetRollIndex + Delta
