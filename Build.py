@@ -6,7 +6,7 @@ from PyInstaller import __main__ as PyInstall
 
 def Build():
     # Version String
-    Version = "1"
+    Version = "2"
 
     # Build Variables
     ExecutableScript = "Source/SerpentRPG " + Version + ".pyw"
