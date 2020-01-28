@@ -261,8 +261,12 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         if len(CurrentSelection) > 0:
             if self.DisplayMessageBox("Are you sure you want to delete this preset roll?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentPresetRoll = CurrentSelection[0]
-                del self.DiceRoller.PresetRolls[CurrentPresetRoll.Index]
+                CurrentPresetRollIndex = CurrentPresetRoll.Index
+                del self.DiceRoller.PresetRolls[CurrentPresetRollIndex]
                 self.UpdateUnsavedChangesFlag(True)
+                PresetRollsLength = len(self.DiceRoller.PresetRolls)
+                if PresetRollsLength > 0:
+                    self.PresetRollsTreeWidget.SelectIndex(CurrentPresetRollIndex if CurrentPresetRollIndex < PresetRollsLength else PresetRollsLength - 1)
 
     def EditPresetRoll(self):
         CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
