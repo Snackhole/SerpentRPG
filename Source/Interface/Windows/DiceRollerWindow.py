@@ -90,11 +90,11 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
         # Preset Rolls Tree Widget
         self.PresetRollsTreeWidget = PresetRollsTreeWidget(self.DiceRoller)
-        self.PresetRollsTreeWidget.itemActivated.connect(lambda: self.RollPresetRoll())
+        self.PresetRollsTreeWidget.itemActivated.connect(lambda: self.RollPresetRollAction.trigger())
 
         # Preset Rolls Buttons
         self.PresetRollsRollButton = QPushButton("Roll")
-        self.PresetRollsRollButton.clicked.connect(self.RollPresetRoll)
+        self.PresetRollsRollButton.clicked.connect(lambda: self.RollPresetRollAction.trigger())
         self.PresetRollsRollButton.setSizePolicy(self.InputsSizePolicy)
 
         self.PresetRollsAddButton = QPushButton("+")
@@ -205,8 +205,12 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.RollAction.setShortcut("Ctrl+R")
         self.RollAction.triggered.connect(self.Roll)
 
+        self.RollPresetRollAction = QAction("Roll Preset")
+        self.RollPresetRollAction.setShortcut("Ctrl+Shift+R")
+        self.RollPresetRollAction.triggered.connect(self.RollPresetRoll)
+
         self.AverageRollAction = QAction("Average Roll")
-        self.AverageRollAction.setShortcut("Ctrl+Shift+R")
+        self.AverageRollAction.setShortcut("Ctrl+Alt+R")
         self.AverageRollAction.triggered.connect(self.AverageRoll)
 
         self.AddToLogAction = QAction("Add to Log")
@@ -232,6 +236,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
 
         self.RollerMenu = self.MenuBar.addMenu("Roller")
         self.RollerMenu.addAction(self.RollAction)
+        self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)
 
         self.LogMenu = self.MenuBar.addMenu("Log")
