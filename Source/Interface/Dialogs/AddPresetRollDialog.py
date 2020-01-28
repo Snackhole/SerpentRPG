@@ -153,8 +153,13 @@ class AddPresetRollDialog(QDialog):
         if len(CurrentSelection) > 0:
             if self.DiceRollerWindow.DisplayMessageBox("Are you sure you want to delete this result message?  This cannot be undone.", Icon=QMessageBox.Question, Buttons=(QMessageBox.Yes | QMessageBox.No)) == QMessageBox.Yes:
                 CurrentResultMessage = CurrentSelection[0]
-                del self.ResultMessages[CurrentResultMessage.Result]
+                CurrentResult = CurrentResultMessage.Result
+                CurrentResultInt = int(CurrentResult)
+                del self.ResultMessages[CurrentResult]
                 self.UpdateDisplay()
+                ResultMessagesLength = len(self.ResultMessages)
+                if ResultMessagesLength > 0:
+                    self.ResultMessagesTreeWidget.SelectIndex(CurrentResultInt if CurrentResultInt < ResultMessagesLength else ResultMessagesLength - 1)
 
     def EditResultMessage(self):
         CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
@@ -260,7 +265,7 @@ class AddResultMessageDialog(QDialog):
         if self.MessageLineEdit.text() == "":
             self.DiceRollerWindow.DisplayMessageBox("Result message cannot be blank.", Icon=QMessageBox.Warning, Parent=self)
             return False
-        if self.ResultSpinBox.value() in self.ResultMessages.keys():
+        if str(self.ResultSpinBox.value()) in self.ResultMessages.keys():
             self.DiceRollerWindow.DisplayMessageBox("Result already has an associated message.  Please choose another result.", Icon=QMessageBox.Warning, Parent=self)
             return False
         return True

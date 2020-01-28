@@ -18,6 +18,11 @@ class ResultMessagesTreeWidget(QTreeWidget):
         for Key, Value in sorted(self.ResultMessages.items(), key=lambda x: int(x[0])):
             self.invisibleRootItem().addChild(ResultMessagesWidgetItem(Key, Value))
 
+    def SelectIndex(self, Index):
+        DestinationIndex = self.model().index(Index, 0)
+        self.setCurrentIndex(DestinationIndex)
+        self.scrollToItem(self.currentItem(), self.PositionAtCenter)
+
 
 class ResultMessagesWidgetItem(QTreeWidgetItem):
     def __init__(self, Result, Message):
