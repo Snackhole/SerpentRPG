@@ -196,6 +196,11 @@ class AddPresetRollDialog(QDialog):
                 for Result in range(Floor, Ceiling + 1):
                     self.ResultMessages[str(Result)] = CurrentResultMessage.Message
                 self.UpdateDisplay()
+                SortedKeys = sorted(self.ResultMessages.keys(), key=lambda x: int(x))
+                for KeyIndex in range(0, len(SortedKeys)):
+                    if str(Ceiling) == SortedKeys[KeyIndex]:
+                        self.ResultMessagesTreeWidget.SelectIndex(KeyIndex)
+                        break
 
     def UpdateDisplay(self):
         self.ResultMessagesTreeWidget.FillFromResultMessages()
