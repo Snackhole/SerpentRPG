@@ -368,7 +368,13 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.ResultsLogTextEdit.setPlainText(ResultsLogString[:-7])
 
         # Fill Preset Rolls Tree Widget
-        self.PresetRollsTreeWidget.FillFromPresetRolls()
+        CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
+        if len(CurrentSelection) > 0:
+            CurrentSelectionIndex = CurrentSelection[0].Index
+            self.PresetRollsTreeWidget.FillFromPresetRolls()
+            self.PresetRollsTreeWidget.SelectIndex(CurrentSelectionIndex)
+        else:
+            self.PresetRollsTreeWidget.FillFromPresetRolls()
 
         # Update Window Title
         self.UpdateWindowTitle()
