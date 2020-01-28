@@ -147,6 +147,11 @@ class AddPresetRollDialog(QDialog):
             Message = AddResultMessageDialogInst.Message
             self.ResultMessages[Result] = Message
             self.UpdateDisplay()
+            SortedKeys = sorted(self.ResultMessages.keys(), key=lambda x: int(x))
+            for KeyIndex in range(0, len(SortedKeys)):
+                if Result == SortedKeys[KeyIndex]:
+                    self.ResultMessagesTreeWidget.SelectIndex(KeyIndex)
+                    break
 
     def DeleteResultMessage(self):
         CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
@@ -174,6 +179,11 @@ class AddPresetRollDialog(QDialog):
                 if CurrentResult != NewResult:
                     del self.ResultMessages[CurrentResult]
                 self.UpdateDisplay()
+                SortedKeys = sorted(self.ResultMessages.keys(), key=lambda x: int(x))
+                for KeyIndex in range(0, len(SortedKeys)):
+                    if NewResult == SortedKeys[KeyIndex]:
+                        self.ResultMessagesTreeWidget.SelectIndex(KeyIndex)
+                        break
 
     def CopyResultMessage(self):
         CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
