@@ -255,6 +255,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
             Data = AddPresetRollDialogInst.Data
             self.DiceRoller.AddPresetRoll(Data["Name"], Data["DiceNumber"], Data["DieType"], Data["Modifier"], Data["ResultMessages"])
             self.UpdateUnsavedChangesFlag(True)
+            self.PresetRollsTreeWidget.SelectIndex(len(self.DiceRoller.PresetRolls) - 1)
 
     def DeletePresetRoll(self):
         CurrentSelection = self.PresetRollsTreeWidget.selectedItems()
@@ -277,6 +278,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
                 Data = EditPresetRollDialogInst.Data
                 self.DiceRoller.EditPresetRoll(CurrentPresetRoll.Index, Data["Name"], Data["DiceNumber"], Data["DieType"], Data["Modifier"], Data["ResultMessages"])
                 self.UpdateUnsavedChangesFlag(True)
+                self.PresetRollsTreeWidget.SelectIndex(CurrentPresetRoll.Index)
 
     def MovePresetRollUp(self):
         self.MovePresetRoll(-1)
