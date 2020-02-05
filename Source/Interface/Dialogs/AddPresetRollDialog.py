@@ -263,6 +263,9 @@ class AddResultMessageDialog(QDialog):
         # Edit Hook
         self.EditHook()
 
+        # Select Text in Result Spin Box
+        self.ResultSpinBox.selectAll()
+
         # Execute Dialog
         self.exec_()
 
@@ -407,6 +410,9 @@ class CopyResultMessageDialog(QDialog):
         # Set Window Title and Icon
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Select Text in Floor Spin Box
+        self.FloorSpinBox.selectAll()
 
         # Execute Dialog
         self.exec_()
