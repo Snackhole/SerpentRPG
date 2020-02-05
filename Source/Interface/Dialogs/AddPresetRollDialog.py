@@ -189,7 +189,7 @@ class AddPresetRollDialog(QDialog):
         CurrentSelection = self.ResultMessagesTreeWidget.selectedItems()
         if len(CurrentSelection) > 0:
             CurrentResultMessage = CurrentSelection[0]
-            CopyResultMessageDialogInst = CopyResultMessageDialog(self, self.ResultMessages, self.DiceRollerWindow)
+            CopyResultMessageDialogInst = CopyResultMessageDialog(CurrentResultMessage.Result, self, self.ResultMessages, self.DiceRollerWindow)
             if CopyResultMessageDialogInst.Confirm:
                 Floor = CopyResultMessageDialogInst.RangeFloor
                 Ceiling = CopyResultMessageDialogInst.RangeCeiling
@@ -343,10 +343,11 @@ class EditResultMessageDialog(AddResultMessageDialog):
 
 
 class CopyResultMessageDialog(QDialog):
-    def __init__(self, AddPresetRollDialog, ResultMessages, DiceRollerWindow):
+    def __init__(self, CurrentResult, AddPresetRollDialog, ResultMessages, DiceRollerWindow):
         super().__init__(parent=AddPresetRollDialog)
 
         # Store Parameters
+        self.CurrentResult = CurrentResult
         self.AddPresetRollDialog = AddPresetRollDialog
         self.ResultMessages = ResultMessages
         self.DiceRollerWindow = DiceRollerWindow
@@ -354,6 +355,7 @@ class CopyResultMessageDialog(QDialog):
         # Variables
         self.RangeFloor = None
         self.RangeCeiling = None
+        self.InitialValue = int(self.CurrentResult) + 1
         self.Confirm = False
 
         # Inputs Size Policy
@@ -410,6 +412,10 @@ class CopyResultMessageDialog(QDialog):
         # Set Window Title and Icon
         self.setWindowTitle(self.DiceRollerWindow.ScriptName)
         self.setWindowIcon(self.DiceRollerWindow.WindowIcon)
+
+        # Set Initial Values
+        self.FloorSpinBox.setValue(self.InitialValue)
+        self.CeilingSpinBox.setValue(self.InitialValue)
 
         # Select Text in Floor Spin Box
         self.FloorSpinBox.selectAll()
