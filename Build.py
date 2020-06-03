@@ -45,7 +45,7 @@ def Build():
     shutil.move(ExecutableZipName, BuildFolder)
 
     # Prompt to Install Dependencies
-    ProceedPrompt = "\n---\nInstall dependencies to build folder (" + BuildFolder + ") using a command prompt in the project directory:\n\n    python -m pip install -r requirements.txt --target \"" + BuildFolder + "\"\n\nOnce all dependencies are installed, input \"PROCEED\" to continue with build or \"CANCEL\" to cancel and clean up build files:\n---\n"
+    ProceedPrompt = "\n---\nInstall dependencies to build folder (" + BuildFolder + ") using a command prompt:\n\n    python -m pip install -r \"" + os.getcwd() + "\\requirements.txt\" --target \"" + os.getcwd() + "\\" + BuildFolder + "\"\n\nOnce all dependencies are installed, input \"PROCEED\" to continue with build or \"CANCEL\" to cancel and clean up build files:\n---\n"
     ProceedResponse = input(ProceedPrompt)
     if ProceedResponse == "PROCEED":
         pass
