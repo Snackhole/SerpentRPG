@@ -1,5 +1,6 @@
 import os
 import shutil
+import zipapp
 
 # Build Variables
 Version = "5"
@@ -8,6 +9,10 @@ VersionedAppName = AppName + " " + Version
 
 CodeFiles = ["Core", "Interface", "SaveAndLoad", "Build.py", "SerpentRPG.py"]
 AssetFiles = ["Assets"]
+
+ExecutableZipName = AppName + ".pyzw"
+Interpreter = "python3"
+Main = AppName + ":StartApp"
 
 
 def Build():
@@ -39,6 +44,23 @@ def Build():
     # Copy Code to Build Folder
     CopyFilesToBuildFolder(CodeFiles)
     print("Code files copied to build folder.")
+
+    # Create Executable Archive
+    zipapp.create_archive(BuildFolder, ExecutableZipName, Interpreter, Main)
+    print("Executable archive created.")
+
+    # Delete Code from Build Folder
+    for File in os.listdir(BuildFolder):
+        BuildFile = BuildFolder + "/" + File
+        if os.path.isfile(BuildFile):
+            os.unlink(BuildFile)
+        elif os.path.isdir(BuildFile):
+            shutil.rmtree(BuildFile)
+    print("Code deleted from build folder.")
+
+    # Move Executable Archive to Build Folder
+    shutil.move(ExecutableZipName, BuildFolder)
+    print("Executable archive moved to build folder.")
 
 
 if __name__ == "__main__":
