@@ -1,7 +1,36 @@
+import os
+import shutil
+
 # Build Variables
 Version = "5"
 AppName = "SerpentRPG"
 VersionedAppName = AppName + " " + Version
+
+
+def Build():
+    # Additional Build Variables
+    BuildFolder = "BUILD - " + VersionedAppName
+
+    # Build Functions
+    def CopyFilesToBuildFolder(FilesList, DestinationFolderOverride=None):
+        DestinationFolder = BuildFolder if DestinationFolderOverride is None else DestinationFolderOverride
+        for File in FilesList:
+            if os.path.isfile(File):
+                shutil.copy(File, DestinationFolder)
+            elif os.path.isdir(File):
+                DestinationSubFolder = DestinationFolder + "/" + File
+                if not os.path.exists(DestinationSubFolder):
+                    os.makedirs(DestinationSubFolder)
+                FilesInSubFolder = [File + "/" + SubFolderFile for SubFolderFile in os.listdir(File)]
+                CopyFilesToBuildFolder(FilesInSubFolder, DestinationSubFolder)
+
+    def CleanUp():
+        shutil.rmtree(BuildFolder)
+        print("Build files cleaned up.")
+
+
+if __name__ == "__main__":
+    Build()
 
 # import os
 # import shutil
