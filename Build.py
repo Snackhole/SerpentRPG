@@ -50,8 +50,8 @@ def Build():
     if ProceedResponse == "PROCEED":
         pass
     elif ProceedResponse == "CANCEL":
-        CleanUp()
         print("Build canceled.")
+        CleanUp()
         return
     else:
         return
