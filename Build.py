@@ -26,7 +26,6 @@ def Build():
 
     def CleanUp():
         shutil.rmtree(BuildFolder)
-        os.unlink("SerpentRPG.pyzw")
         print("Build files cleaned up.")
 
     # Copy Code to Build Folder
