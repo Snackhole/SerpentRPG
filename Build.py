@@ -62,6 +62,10 @@ def Build():
     shutil.move(ExecutableZipName, BuildFolder)
     print("Executable archive moved to build folder.")
 
+    # Copy Asset Files to Build Folder
+    CopyFilesToBuildFolder(AssetFiles)
+    print("Asset files copied to build folder.")
+
 
 if __name__ == "__main__":
     Build()
