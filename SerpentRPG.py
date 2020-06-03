@@ -1,5 +1,7 @@
-import os
 import sys
+import os
+
+sys.path.append(os.getcwd())
 
 from PyQt5.QtWidgets import QApplication
 
@@ -7,12 +9,13 @@ from Interface.Windows.DiceRollerWindow import DiceRollerWindow
 from Interface.Windows.DieClockWindow import DieClockWindow
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
 from Interface.Windows.WildernessTravelManagerWindow import WildernessTravelManagerWindow
+from Build import VersionedAppName
 
 if __name__ == "__main__":
     AppInst = QApplication(sys.argv)
 
     # Script Name
-    ScriptName = os.path.splitext(os.path.basename(__file__))[0]
+    ScriptName = VersionedAppName
 
     # Mode Selection Window
     ModeSelectionWindowInst = ModeSelectionWindow(ScriptName)
