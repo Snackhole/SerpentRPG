@@ -20,26 +20,14 @@ def Build():
     BuildFolder = "BUILD - " + VersionedAppName
 
     # Build Functions
-    def CopyFilesToBuildFolder(FilesList, DestinationFolderOverride=None):
-        DestinationFolder = BuildFolder if DestinationFolderOverride is None else DestinationFolderOverride
-        for File in FilesList:
-            if os.path.isfile(File):
-                shutil.copy(File, DestinationFolder)
-            elif os.path.isdir(File):
-                DestinationSubFolder = DestinationFolder + "/" + File
-                if not os.path.exists(DestinationSubFolder):
-                    os.makedirs(DestinationSubFolder)
-                FilesInSubFolder = [File + "/" + SubFolderFile for SubFolderFile in os.listdir(File)]
-                CopyFilesToBuildFolder(FilesInSubFolder, DestinationSubFolder)
+    def CopyFilesToBuildFolder(CopiedFiles):
+        IgnoredFiles = [File for File in os.listdir(".") if File not in CopiedFiles]
+        shutil.copytree(".", BuildFolder, ignore=lambda Source, Contents: IgnoredFiles)
 
     def CleanUp():
         shutil.rmtree(BuildFolder)
+        os.unlink("SerpentRPG.pyzw")
         print("Build files cleaned up.")
-
-    # Create Build Folder
-    if not os.path.exists(BuildFolder):
-        os.makedirs(BuildFolder)
-    print("Build folder created.")
 
     # Copy Code to Build Folder
     CopyFilesToBuildFolder(CodeFiles)
@@ -49,22 +37,32 @@ def Build():
     zipapp.create_archive(BuildFolder, ExecutableZipName, Interpreter, Main)
     print("Executable archive created.")
 
-    # Delete Code from Build Folder
-    for File in os.listdir(BuildFolder):
-        BuildFile = BuildFolder + "/" + File
-        if os.path.isfile(BuildFile):
-            os.unlink(BuildFile)
-        elif os.path.isdir(BuildFile):
-            shutil.rmtree(BuildFile)
-    print("Code deleted from build folder.")
+    # Delete Build Folder
+    shutil.rmtree(BuildFolder)
+    print("Build folder deleted.")
 
-    # Move Executable Archive to Build Folder
-    shutil.move(ExecutableZipName, BuildFolder)
-    print("Executable archive moved to build folder.")
-
-    # Copy Asset Files to Build Folder
+    # Copy Assets to Build Folder and Move Executable Zip
     CopyFilesToBuildFolder(AssetFiles)
-    print("Asset files copied to build folder.")
+    shutil.move(ExecutableZipName, BuildFolder)
+
+    # Prompt to Install Dependencies
+    ProceedPrompt = "\n---\nInstall dependencies to build folder (" + BuildFolder + ") using a command prompt in the project directory:\n\n    python -m pip install -r requirements.txt --target \"" + BuildFolder + "\"\n\nOnce all dependencies are installed, input \"PROCEED\" to continue with build or \"CANCEL\" to cancel and clean up build files:\n---\n"
+    ProceedResponse = input(ProceedPrompt)
+    if ProceedResponse == "PROCEED":
+        pass
+    elif ProceedResponse == "CANCEL":
+        CleanUp()
+        print("Build canceled.")
+        return
+    else:
+        return
+
+    # Zip Build
+    shutil.make_archive(VersionedAppName, "zip", BuildFolder)
+    print("Build zipped.")
+
+    # Clean Up
+    CleanUp()
 
 
 if __name__ == "__main__":
