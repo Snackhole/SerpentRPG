@@ -6,6 +6,9 @@ Version = "5"
 AppName = "SerpentRPG"
 VersionedAppName = AppName + " " + Version
 
+CodeFiles = ["Core", "Interface", "SaveAndLoad", "Build.py", "SerpentRPG.py"]
+AssetFiles = ["Assets"]
+
 
 def Build():
     # Additional Build Variables
@@ -27,6 +30,15 @@ def Build():
     def CleanUp():
         shutil.rmtree(BuildFolder)
         print("Build files cleaned up.")
+
+    # Create Build Folder
+    if not os.path.exists(BuildFolder):
+        os.makedirs(BuildFolder)
+    print("Build folder created.")
+
+    # Copy Code to Build Folder
+    CopyFilesToBuildFolder(CodeFiles)
+    print("Code files copied to build folder.")
 
 
 if __name__ == "__main__":
