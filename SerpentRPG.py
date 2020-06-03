@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.getcwd())
 
@@ -11,7 +11,8 @@ from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
 from Interface.Windows.WildernessTravelManagerWindow import WildernessTravelManagerWindow
 from Build import VersionedAppName
 
-if __name__ == "__main__":
+
+def StartApp():
     AppInst = QApplication(sys.argv)
 
     # Script Name
@@ -37,3 +38,7 @@ if __name__ == "__main__":
 
         # Enter Mode Loop
         sys.exit(AppInst.exec_())
+
+
+if __name__ == "__main__":
+    StartApp()
