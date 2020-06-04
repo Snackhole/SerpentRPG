@@ -42,7 +42,9 @@ def Build():
 
     # Copy Assets to Build Folder and Move Executable Zip
     CopyFilesToBuildFolder(AssetFiles)
+    print("Assets copied to build folder.")
     shutil.move(ExecutableZipName, BuildFolder)
+    print("Executable archive moved to build folder.")
 
     # Prompt to Install Dependencies
     ProceedPrompt = "\n---\nInstall dependencies to build folder (" + BuildFolder + ") using a command prompt:\n\n    python -m pip install -r \"" + os.getcwd() + "\\requirements.txt\" --target \"" + os.getcwd() + "\\" + BuildFolder + "\"\n\nOnce all dependencies are installed, input \"PROCEED\" to continue with build or \"CANCEL\" to cancel and clean up build files:\n---\n"
