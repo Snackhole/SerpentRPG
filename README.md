@@ -1,11 +1,11 @@
 # SerpentRPG
-SerpentRPG is a small set of custom tools for playing tabletop roleplaying games, written in Python 3 with PyQT5.  Currently, it includes a dice roller with table functionality, a die clock (a method of simulating time pressures) and a wilderness travel manager.
+SerpentRPG is a small set of custom tools for playing tabletop roleplaying games, written in Python 3.8 with PyQT5.  Currently, it includes a dice roller with table functionality, a die clock (a method of simulating time pressures) and a wilderness travel manager.
 
 ## Installation
-Because SerpentRPG is written in Python and packaged as an executable zip, a Python 3 installation is required to run it.  It was written and tested initially in Python 3.6.3, but appears to run fine up to at least version 3.8.2.  Chances are it will run in any complete Python 3 environment as long as the other installation steps are followed.
+Because SerpentRPG is written in Python and packaged as an executable zip, a Python 3 installation is required to run it.  It was written and tested in Python 3.8, though it may or may not run in other versions of Python 3.
 
 ### Windows
-On Windows, Python 3 can be installed by downloading the installer for the desired version from [python.org](https://www.python.org/).  Make sure to include the py launcher, associate files with Python, and add Python to the environment variables.
+On Windows, Python 3.8 can be installed by downloading the installer from [python.org](https://www.python.org/).  Make sure to include the py launcher, associate files with Python, and add Python to the environment variables.
 
 At this point, you should be able to download the .zip file of the latest Windows release from this repository, unzip it wherever you like, and double-click on SerpentRPG.pyzw to run the app.
 
@@ -14,7 +14,7 @@ A shortcut to SerpentRPG can be created on Windows by right-clicking on SerpentR
 ### Linux
 On Linux, SerpentRPG has only been built and tested for Ubuntu 20.04.  It probably runs just fine on many other distros, but you're on your own as far as resolving any problems or differences.
 
-It is generally assumed that you already have Python 3 installed as part of your distro.  However, you will likely still need to resolve some dependencies before running the app.
+It is generally assumed that you already have Python 3 installed as part of your distro.  If your distro has 3.8, you should be fine; otherwise, you may or may not need to install 3.8.  Either way, you will likely still need to resolve some dependencies before running the app.
 
 First, install pip if you don't already have it:
 
@@ -39,4 +39,4 @@ The .cfg files should be left as they store settings and contexts between uses o
 ## Uninstallation
 Uninstalling SerpentRPG is as simple as deleting the directory you extracted it to, along with any shortcuts you created.
 
-If you need to uninstall Python 3 or, on Linux, PyQT5, consult their documentation.
+If you need to uninstall Python 3.8 or, on Linux, PyQT5, consult their documentation.
