@@ -15,7 +15,7 @@ def Build():
     CodeFiles = ["Core", "Interface", "SaveAndLoad", "Build.py", "SerpentRPG.py"]
     AssetFiles = ["Assets"]
     if OS == "Linux":
-        AssetFiles.append("CreateGnomeDesktopFile.py")
+        AssetFiles.append("CreateGNOMEDesktopFile.py")
 
     ExecutableZipName = AppName + ".pyzw"
     Interpreter = "python3"
@@ -70,7 +70,7 @@ def Build():
         return
 
     # Zip Build
-    shutil.make_archive(VersionedAppName, "zip", BuildFolder)
+    shutil.make_archive(VersionedAppName + " - " + OS, "zip", BuildFolder)
     print("Build zipped.")
 
     # Clean Up
