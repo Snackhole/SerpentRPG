@@ -13,14 +13,14 @@ from Interface.Windows.DiceRollerWindow import DiceRollerWindow
 from Interface.Windows.DieClockWindow import DieClockWindow
 from Interface.Windows.ModeSelectionWindow import ModeSelectionWindow
 from Interface.Windows.WildernessTravelManagerWindow import WildernessTravelManagerWindow
-from Build import VersionedAppName
+from Build import BuildVariables
 
 
 def StartApp():
     AppInst = QApplication(sys.argv)
 
     # Script Name
-    ScriptName = VersionedAppName
+    ScriptName = BuildVariables["VersionedAppName"]
 
     # Mode Selection Window
     ModeSelectionWindowInst = ModeSelectionWindow(ScriptName)
