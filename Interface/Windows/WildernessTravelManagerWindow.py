@@ -12,8 +12,12 @@ from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 
 class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
-    def __init__(self, ScriptName):
-        super().__init__(ScriptName)
+    def __init__(self, ScriptName, AbsoluteDirectoryPath):
+        # Store Absolute Directory Path for SaveAndOpenMixin
+        self.AbsoluteDirectoryPath = AbsoluteDirectoryPath
+
+        # Initialize
+        super().__init__(ScriptName, AbsoluteDirectoryPath)
 
         # Create Wilderness Travel Manager
         self.WildernessTravelManager = WildernessTravelManager()

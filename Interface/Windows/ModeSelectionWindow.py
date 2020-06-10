@@ -5,8 +5,8 @@ from Interface.Windows.Window import Window
 
 
 class ModeSelectionWindow(Window):
-    def __init__(self, ScriptName):
-        super().__init__(ScriptName)
+    def __init__(self, ScriptName, AbsoluteDirectoryPath):
+        super().__init__(ScriptName, AbsoluteDirectoryPath)
 
         # Create Mode Value
         self.Mode = None

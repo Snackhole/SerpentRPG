@@ -12,12 +12,15 @@ from SaveAndLoad.SaveAndOpenMixin import SaveAndOpenMixin
 
 
 class DiceRollerWindow(Window, SaveAndOpenMixin):
-    def __init__(self, ScriptName):
+    def __init__(self, ScriptName, AbsoluteDirectoryPath):
         # Create Dice Roller
         self.DiceRoller = DiceRollerWithPresetRolls()
 
+        # Store Absolute Directory Path for SaveAndOpenMixin
+        self.AbsoluteDirectoryPath = AbsoluteDirectoryPath
+
         # Initialize Window and SaveAndOpenMixin
-        super().__init__(ScriptName)
+        super().__init__(ScriptName, AbsoluteDirectoryPath)
 
         # Set up Save and Open
         self.SetUpSaveAndOpen(".dicerolls", "Dice Roller", (DiceRollerWithPresetRolls,))

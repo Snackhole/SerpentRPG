@@ -23,7 +23,7 @@ def StartApp():
     ScriptName = BuildVariables["VersionedAppName"]
 
     # Mode Selection Window
-    ModeSelectionWindowInst = ModeSelectionWindow(ScriptName)
+    ModeSelectionWindowInst = ModeSelectionWindow(ScriptName, AbsoluteDirectoryPath)
 
     # Enter Mode Selection Loop
     AppInst.exec_()
@@ -38,7 +38,7 @@ def StartApp():
         Modes["Wilderness Travel Manager"] = WildernessTravelManagerWindow
 
         # Create Mode Window
-        ModeWindowInst = Modes[Mode](ScriptName)
+        ModeWindowInst = Modes[Mode](ScriptName, AbsoluteDirectoryPath)
 
         # Enter Mode Loop
         sys.exit(AppInst.exec_())

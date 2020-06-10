@@ -4,14 +4,15 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFrame, QMessageBox
 
 
 class Window(QMainWindow):
-    def __init__(self, ScriptName):
+    def __init__(self, ScriptName, AbsoluteDirectoryPath):
         super().__init__()
 
         # Store Parameters
         self.ScriptName = ScriptName
+        self.AbsoluteDirectoryPath = AbsoluteDirectoryPath
 
         # Window Icon
-        self.WindowIcon = QIcon("Assets/SerpentRPG Icon.png")
+        self.WindowIcon = QIcon(self.GetResourcePath("Assets/SerpentRPG Icon.png"))
         self.setWindowIcon(self.WindowIcon)
 
         # Create Central Frame
@@ -49,6 +50,9 @@ class Window(QMainWindow):
     def FlashStatusBar(self, Status, Duration=2000):
         self.StatusBar.showMessage(Status)
         QTimer.singleShot(Duration, self.StatusBar.clearMessage)
+
+    def GetResourcePath(self, RelativeLocation):
+        return self.AbsoluteDirectoryPath + "/" + RelativeLocation
 
     # Window Management Methods
     def Center(self):
