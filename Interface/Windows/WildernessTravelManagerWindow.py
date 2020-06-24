@@ -51,6 +51,9 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.MoveButton = QPushButton("Move")
         self.MoveButton.clicked.connect(self.Move)
         self.MoveButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
+        self.ForageButton = QPushButton("Forage")
+        self.ForageButton.clicked.connect(self.Forage)
+        self.ForageButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SpendDaysButton = QPushButton("Spend Days")
         self.SpendDaysButton.clicked.connect(self.SpendDays)
         self.SpendDaysButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
@@ -141,8 +144,9 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.TravelActionsLayout = QGridLayout()
         self.TravelActionsLayout.addWidget(self.TravelActionsLabel, 0, 0)
         self.TravelActionsLayout.addWidget(self.MoveButton, 1, 0)
-        self.TravelActionsLayout.addWidget(self.SpendDaysButton, 2, 0)
-        for Row in range(1, 3):
+        self.TravelActionsLayout.addWidget(self.ForageButton, 2, 0)
+        self.TravelActionsLayout.addWidget(self.SpendDaysButton, 3, 0)
+        for Row in range(1, 4):
             self.TravelActionsLayout.setRowStretch(Row, 1)
         self.TravelActionsFrame.setLayout(self.TravelActionsLayout)
         self.Layout.addWidget(self.TravelActionsFrame, 0, 0)
@@ -252,6 +256,10 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         if OK:
             self.WildernessTravelManager.Move(TravelTime)
             self.UpdateUnsavedChangesFlag(True)
+
+    def Forage(self):
+        self.WildernessTravelManager.Forage()
+        self.UpdateUnsavedChangesFlag(True)
 
     def SpendDays(self):
         DaysSpent, OK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
