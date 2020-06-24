@@ -262,10 +262,14 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.UpdateUnsavedChangesFlag(True)
 
     def SpendDays(self):
-        DaysSpent, OK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
-        if OK:
-            self.WildernessTravelManager.SpendDays(DaysSpent, Log=True)
-            self.UpdateUnsavedChangesFlag(True)
+        DaysSpent, DaysSpentOK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
+        if DaysSpentOK:
+            Activity, ActivityOK = QInputDialog.getText(self, "Activity", "Spent " + str(DaysSpent) + " days...")
+            if ActivityOK:
+                if Activity == "":
+                    Activity = None
+                self.WildernessTravelManager.SpendDays(DaysSpent, Activity=Activity, Log=True)
+                self.UpdateUnsavedChangesFlag(True)
 
     # File Menu Action Methods
     def NewActionTriggered(self):

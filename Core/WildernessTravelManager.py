@@ -24,11 +24,17 @@ class WildernessTravelManager(SerializableMixin):
         self.WildernessLog.clear()
 
     # Logged Methods
-    def SpendDays(self, DaysSpent, Log=False):
+    def SpendDays(self, DaysSpent, Activity=None, Log=False):
         ProjectedClockValue = self.WildernessClock.Value + DaysSpent
         ClockGoesOff = self.WildernessClock.IncreaseClock(DaysSpent)
         if Log:
-            self.Log("Spent " + str(DaysSpent) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
+            if Activity is None:
+                Activity = "."
+            else:
+                Activity = " " + Activity
+                if not (Activity.endswith(".") or Activity.endswith("?") or Activity.endswith("!")):
+                    Activity += "."
+            self.Log("Spent " + str(DaysSpent) + " days" + Activity + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
         return ClockGoesOff
 
     def Move(self, TravelTime):
