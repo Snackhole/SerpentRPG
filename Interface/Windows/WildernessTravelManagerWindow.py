@@ -51,82 +51,9 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.MoveButton = QPushButton("Move")
         self.MoveButton.clicked.connect(self.Move)
         self.MoveButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.ForageButton = QPushButton("Forage")
-        self.ForageButton.clicked.connect(self.Forage)
-        self.ForageButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.ShortRestButton = QPushButton("Short Rest")
-        self.ShortRestButton.clicked.connect(self.ShortRest)
-        self.ShortRestButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.LongRestButton = QPushButton("Long Rest")
-        self.LongRestButton.clicked.connect(self.LongRest)
-        self.LongRestButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.PurchaseSuppliesButton = QPushButton("Purchase Supplies")
-        self.PurchaseSuppliesButton.clicked.connect(self.PurchaseSupplies)
-        self.PurchaseSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SeekShortTermLodgingButton = QPushButton("Seek Short-Term Lodging")
-        self.SeekShortTermLodgingButton.clicked.connect(self.SeekShortTermLodging)
-        self.SeekShortTermLodgingButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SeekLongTermLodgingButton = QPushButton("Seek Long-Term Lodging")
-        self.SeekLongTermLodgingButton.clicked.connect(self.SeekLongTermLodging)
-        self.SeekLongTermLodgingButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SpendSuppliesButton = QPushButton("Spend Supplies")
-        self.SpendSuppliesButton.clicked.connect(self.SpendSupplies)
-        self.SpendSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
         self.SpendDaysButton = QPushButton("Spend Days")
         self.SpendDaysButton.clicked.connect(self.SpendDays)
         self.SpendDaysButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SpendSuppliesAndDaysButton = QPushButton("Spend Supplies and Days")
-        self.SpendSuppliesAndDaysButton.clicked.connect(self.SpendSuppliesAndDays)
-        self.SpendSuppliesAndDaysButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.GainSuppliesButton = QPushButton("Gain Supplies")
-        self.GainSuppliesButton.clicked.connect(self.GainSupplies)
-        self.GainSuppliesButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-
-        # Supply Pool Label
-        self.SupplyPoolLabel = QLabel("Supply Pool")
-        self.SupplyPoolLabel.setStyleSheet(self.LabelStyle)
-        self.SupplyPoolLabel.setAlignment(QtCore.Qt.AlignCenter)
-
-        # Current Supply Points Line Edit
-        self.CurrentSupplyPointsLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifyCurrentSupplyPointsValue(1 if event.angleDelta().y() > 0 else -1))
-        self.CurrentSupplyPointsLineEdit.setReadOnly(True)
-        self.CurrentSupplyPointsLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyle)
-        self.CurrentSupplyPointsLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.CurrentSupplyPointsLineEdit.setFixedWidth(self.PoolAndClockWidth)
-
-        # Current Supply Points Buttons
-        self.CurrentSupplyPointsIncreaseButton = QPushButton("+")
-        self.CurrentSupplyPointsIncreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(1))
-        self.CurrentSupplyPointsIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.CurrentSupplyPointsIncreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
-        self.CurrentSupplyPointsDecreaseButton = QPushButton("-")
-        self.CurrentSupplyPointsDecreaseButton.clicked.connect(lambda: self.ModifyCurrentSupplyPointsValue(-1))
-        self.CurrentSupplyPointsDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.CurrentSupplyPointsDecreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
-
-        # Supply Pool Divider Label
-        self.SupplyPoolDividerLabel = QLabel("/")
-        self.SupplyPoolDividerLabel.setStyleSheet(self.LabelStyle)
-        self.SupplyPoolDividerLabel.setAlignment(QtCore.Qt.AlignCenter)
-
-        # Supply Pool Line Edit
-        self.SupplyPoolLineEdit = LineEditMouseWheelExtension(lambda event: self.ModifySupplyPoolValue(1 if event.angleDelta().y() > 0 else -1))
-        self.SupplyPoolLineEdit.setReadOnly(True)
-        self.SupplyPoolLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyle)
-        self.SupplyPoolLineEdit.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SupplyPoolLineEdit.setFixedWidth(self.PoolAndClockWidth)
-
-        # Supply Pool Buttons
-        self.SupplyPoolIncreaseButton = QPushButton("+")
-        self.SupplyPoolIncreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(1))
-        self.SupplyPoolIncreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SupplyPoolIncreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
-        self.SupplyPoolDecreaseButton = QPushButton("-")
-        self.SupplyPoolDecreaseButton.clicked.connect(lambda: self.ModifySupplyPoolValue(-1))
-        self.SupplyPoolDecreaseButton.setSizePolicy(self.ButtonAndLineEditSizePolicy)
-        self.SupplyPoolDecreaseButton.setStyleSheet(self.PoolAndClockButtonStyle)
 
         # Wilderness Clock Label
         self.WildernessClockLabel = QLabel("Wilderness Clock")
@@ -214,38 +141,11 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.TravelActionsLayout = QGridLayout()
         self.TravelActionsLayout.addWidget(self.TravelActionsLabel, 0, 0)
         self.TravelActionsLayout.addWidget(self.MoveButton, 1, 0)
-        self.TravelActionsLayout.addWidget(self.ForageButton, 2, 0)
-        self.TravelActionsLayout.addWidget(self.ShortRestButton, 3, 0)
-        self.TravelActionsLayout.addWidget(self.LongRestButton, 4, 0)
-        self.TravelActionsLayout.addWidget(self.PurchaseSuppliesButton, 5, 0)
-        self.TravelActionsLayout.addWidget(self.SeekShortTermLodgingButton, 6, 0)
-        self.TravelActionsLayout.addWidget(self.SeekLongTermLodgingButton, 7, 0)
-        self.TravelActionsLayout.addWidget(self.SpendSuppliesButton, 8, 0)
-        self.TravelActionsLayout.addWidget(self.SpendDaysButton, 9, 0)
-        self.TravelActionsLayout.addWidget(self.SpendSuppliesAndDaysButton, 10, 0)
-        self.TravelActionsLayout.addWidget(self.GainSuppliesButton, 11, 0)
-        for Row in range(1, 12):
+        self.TravelActionsLayout.addWidget(self.SpendDaysButton, 2, 0)
+        for Row in range(1, 3):
             self.TravelActionsLayout.setRowStretch(Row, 1)
         self.TravelActionsFrame.setLayout(self.TravelActionsLayout)
-        self.Layout.addWidget(self.TravelActionsFrame, 0, 0, 2, 1)
-
-        # Supply Pool Widgets in Layout
-        self.SupplyPoolFrame = QFrame()
-        self.SupplyPoolFrame.setFrameStyle(QFrame.Panel | QFrame.Plain)
-        self.SupplyPoolLayout = QGridLayout()
-        self.SupplyPoolLayout.addWidget(self.SupplyPoolLabel, 0, 0, 1, 3)
-        self.SupplyPoolLayout.addWidget(self.CurrentSupplyPointsIncreaseButton, 1, 0)
-        self.SupplyPoolLayout.addWidget(self.SupplyPoolIncreaseButton, 1, 2)
-        self.SupplyPoolLayout.addWidget(self.CurrentSupplyPointsLineEdit, 2, 0)
-        self.SupplyPoolLayout.addWidget(self.SupplyPoolDividerLabel, 2, 1)
-        self.SupplyPoolLayout.addWidget(self.SupplyPoolLineEdit, 2, 2)
-        self.SupplyPoolLayout.addWidget(self.CurrentSupplyPointsDecreaseButton, 3, 0)
-        self.SupplyPoolLayout.addWidget(self.SupplyPoolDecreaseButton, 3, 2)
-        self.SupplyPoolLayout.setRowStretch(1, 1)
-        self.SupplyPoolLayout.setRowStretch(2, 2)
-        self.SupplyPoolLayout.setRowStretch(3, 1)
-        self.SupplyPoolFrame.setLayout(self.SupplyPoolLayout)
-        self.Layout.addWidget(self.SupplyPoolFrame, 0, 1)
+        self.Layout.addWidget(self.TravelActionsFrame, 0, 0)
 
         # Add Wilderness Clock Widgets to Layout
         self.WildernessClockFrame = QFrame()
@@ -271,7 +171,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessClockLayout.setRowStretch(2, 2)
         self.WildernessClockLayout.setRowStretch(3, 1)
         self.WildernessClockFrame.setLayout(self.WildernessClockLayout)
-        self.Layout.addWidget(self.WildernessClockFrame, 1, 1)
+        self.Layout.addWidget(self.WildernessClockFrame, 0, 1)
 
         # Add Wilderness Log Widgets to Layout
         self.WildernessLogFrame = QFrame()
@@ -280,7 +180,7 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.WildernessLogLayout.addWidget(self.WildernessLogLabel, 0, 0)
         self.WildernessLogLayout.addWidget(self.WildernessLogTextEdit, 1, 0)
         self.WildernessLogFrame.setLayout(self.WildernessLogLayout)
-        self.Layout.addWidget(self.WildernessLogFrame, 0, 2, 2, 1)
+        self.Layout.addWidget(self.WildernessLogFrame, 0, 2)
 
         # Set and Configure Layout
         self.Layout.setColumnStretch(2, 1)
@@ -334,14 +234,6 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
         self.LogMenu.addAction(self.ClearLogAction)
 
     # Modify Values Methods
-    def ModifySupplyPoolValue(self, Delta):
-        self.WildernessTravelManager.ModifySupplyPoolValue(Delta)
-        self.UpdateUnsavedChangesFlag(True)
-
-    def ModifyCurrentSupplyPointsValue(self, Delta):
-        self.WildernessTravelManager.ModifyCurrentSupplyPointsValue(Delta)
-        self.UpdateUnsavedChangesFlag(True)
-
     def ModifyWildernessClockCurrentValue(self, Delta):
         self.WildernessTravelManager.ModifyWildernessClockCurrentValue(Delta)
         self.UpdateUnsavedChangesFlag(True)
@@ -361,69 +253,10 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
             self.WildernessTravelManager.Move(TravelCost)
             self.UpdateUnsavedChangesFlag(True)
 
-    def Forage(self):
-        NumberOfSuccesses, OK = QInputDialog.getItem(self, "Forage Success", "Number of party members who succeeded:", ["None", "Half or More", "All"], editable=False)
-        if OK:
-            if NumberOfSuccesses == "Half or More":
-                HalfSucceeded = True
-                AllSucceeded = False
-            elif NumberOfSuccesses == "All":
-                HalfSucceeded = False
-                AllSucceeded = True
-            else:
-                HalfSucceeded = False
-                AllSucceeded = False
-            self.WildernessTravelManager.Forage(HalfSucceeded, AllSucceeded)
-            self.UpdateUnsavedChangesFlag(True)
-
-    def ShortRest(self):
-        self.WildernessTravelManager.ShortRest()
-        self.UpdateUnsavedChangesFlag(True)
-
-    def LongRest(self):
-        self.WildernessTravelManager.LongRest()
-        self.UpdateUnsavedChangesFlag(True)
-
-    def PurchaseSupplies(self):
-        SupplyPointsGained, OK = QInputDialog.getInt(self, "Purchase Supplies", "Supply points purchased:", 1, 1)
-        if OK:
-            self.WildernessTravelManager.PurchaseSupplies(SupplyPointsGained)
-            self.UpdateUnsavedChangesFlag(True)
-
-    def SeekShortTermLodging(self):
-        PaidWithSupplyPoint, OK = QInputDialog.getItem(self, "Short-Term Lodging", "Paid with Supply point or other value:", ["Supply Point", "Other Value"], editable=False)
-        if OK:
-            self.WildernessTravelManager.SeekShortTermLodging(PaidWithSupplyPoint == "Supply Point")
-            self.UpdateUnsavedChangesFlag(True)
-
-    def SeekLongTermLodging(self):
-        PaidWithSupplyPoints, OK = QInputDialog.getItem(self, "Long-Term Lodging", "Paid with Supply points or other value:", ["Supply Points", "Other Value"], editable=False)
-        if OK:
-            self.WildernessTravelManager.SeekLongTermLodging(PaidWithSupplyPoints == "Supply Points")
-            self.UpdateUnsavedChangesFlag(True)
-
-    def SpendSupplies(self):
-        SupplyPointsSpent, OK = QInputDialog.getInt(self, "Spend Supplies", "Supply points spent:", 1, 1)
-        if OK:
-            self.WildernessTravelManager.SpendSupplies(SupplyPointsSpent, Log=True)
-            self.UpdateUnsavedChangesFlag(True)
-
     def SpendDays(self):
         DaysSpent, OK = QInputDialog.getInt(self, "Spend Days", "Days spent:", 1, 1)
         if OK:
             self.WildernessTravelManager.SpendDays(DaysSpent, Log=True)
-            self.UpdateUnsavedChangesFlag(True)
-
-    def SpendSuppliesAndDays(self):
-        SupplyPointsAndDaysSpent, OK = QInputDialog.getInt(self, "Spend Supplies and Days", "Supply points and days spent:", 1, 1)
-        if OK:
-            self.WildernessTravelManager.SpendSuppliesAndDays(SupplyPointsAndDaysSpent, Log=True)
-            self.UpdateUnsavedChangesFlag(True)
-
-    def GainSupplies(self):
-        SupplyPointsGained, OK = QInputDialog.getInt(self, "Gain Supplies", "Supply points gained:", 1, 1)
-        if OK:
-            self.WildernessTravelManager.GainSupplies(SupplyPointsGained, Log=True)
             self.UpdateUnsavedChangesFlag(True)
 
     # File Menu Action Methods
@@ -465,22 +298,6 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
 
     # Display Update Methods
     def UpdateDisplay(self):
-        # Supply Pool Display
-        self.CurrentSupplyPointsLineEdit.setText(str(self.WildernessTravelManager.CurrentSupplyPoints))
-        self.SupplyPoolLineEdit.setText(str(self.WildernessTravelManager.SupplyPool))
-
-        # Check Supply Pool Values Too Low
-        if self.WildernessTravelManager.CurrentSupplyPoints < 0:
-            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyleRed)
-        elif self.WildernessTravelManager.CurrentSupplyPoints <= math.floor(0.5 * self.WildernessTravelManager.SupplyPool) and self.WildernessTravelManager.SupplyPool > 0:
-            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyleYellow)
-        else:
-            self.CurrentSupplyPointsLineEdit.setStyleSheet(self.LineEditStyle)
-        if self.WildernessTravelManager.SupplyPool < self.WildernessTravelManager.CurrentSupplyPoints or self.WildernessTravelManager.SupplyPool < 0:
-            self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyleRed)
-        else:
-            self.SupplyPoolLineEdit.setStyleSheet(self.LineEditStyle)
-
         # Wilderness Clock Display
         self.WildernessClockCurrentValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.Value))
         self.WildernessClockMaximumValueLineEdit.setText(str(self.WildernessTravelManager.WildernessClock.MaximumValue))
