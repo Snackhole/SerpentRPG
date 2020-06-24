@@ -34,13 +34,13 @@ class WildernessTravelManager(SerializableMixin):
                 Activity = " " + Activity
                 if not (Activity.endswith(".") or Activity.endswith("?") or Activity.endswith("!")):
                     Activity += "."
-            self.Log("Spent " + str(DaysSpent) + " days" + Activity + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
+            self.Log("Spent " + str(DaysSpent) + " day" + ("s" if DaysSpent > 1 else "") + Activity + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
         return ClockGoesOff
 
     def Move(self, TravelTime):
         ProjectedClockValue = self.WildernessClock.Value + TravelTime
         ClockGoesOff = self.SpendDays(TravelTime)
-        self.Log("Moved with a travel time of " + str(TravelTime) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
+        self.Log("Moved over " + str(TravelTime) + " day" + ("s" if TravelTime > 1 else "") + "." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     def Forage(self):
         ProjectedClockValue = self.WildernessClock.Value + 1
