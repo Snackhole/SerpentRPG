@@ -34,7 +34,7 @@ class WildernessTravelManager(SerializableMixin):
     def Move(self, TravelCost):
         ProjectedClockValue = self.WildernessClock.Value + TravelCost
         ClockGoesOff = self.SpendDays(TravelCost)
-        self.Log("Moved with a travel cost of " + str(TravelCost) + ", spending that many days and Supply points." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
+        self.Log("Moved with a travel time of " + str(TravelCost) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     # Unlogged Methods
     def ModifyWildernessClockCurrentValue(self, Delta):
