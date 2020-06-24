@@ -31,10 +31,10 @@ class WildernessTravelManager(SerializableMixin):
             self.Log("Spent " + str(DaysSpent) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
         return ClockGoesOff
 
-    def Move(self, TravelCost):
-        ProjectedClockValue = self.WildernessClock.Value + TravelCost
-        ClockGoesOff = self.SpendDays(TravelCost)
-        self.Log("Moved with a travel time of " + str(TravelCost) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
+    def Move(self, TravelTime):
+        ProjectedClockValue = self.WildernessClock.Value + TravelTime
+        ClockGoesOff = self.SpendDays(TravelTime)
+        self.Log("Moved with a travel time of " + str(TravelTime) + " days." + self.WildernessClockLogString(ProjectedClockValue, ClockGoesOff))
 
     # Unlogged Methods
     def ModifyWildernessClockCurrentValue(self, Delta):

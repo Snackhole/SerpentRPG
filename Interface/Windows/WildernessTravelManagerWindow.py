@@ -248,9 +248,9 @@ class WildernessTravelManagerWindow(Window, SaveAndOpenMixin):
 
     # Travel Action Methods
     def Move(self):
-        TravelCost, OK = QInputDialog.getInt(self, "Travel Cost", "Travel cost to move:", 1, 1)
+        TravelTime, OK = QInputDialog.getInt(self, "Travel Time", "Travel time of movement:", 1, 1)
         if OK:
-            self.WildernessTravelManager.Move(TravelCost)
+            self.WildernessTravelManager.Move(TravelTime)
             self.UpdateUnsavedChangesFlag(True)
 
     def SpendDays(self):
