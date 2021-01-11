@@ -1,3 +1,4 @@
+from SaveAndLoad.JSONSerializer import JSONSerializer
 import os
 
 from PyQt5 import QtCore
@@ -25,6 +26,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         # Set up Save and Open
         self.SetUpSaveAndOpen(".dicerolls", "Dice Roller", (DiceRollerWithPresetRolls,))
 
+        # Handle Default Roll Config
+        self.HandleDefaultRollConfig()
+
         # Update Display
         self.UpdateDisplay()
 
@@ -48,7 +52,6 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DiceNumberSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.DiceNumberSpinBox.setButtonSymbols(self.DiceNumberSpinBox.NoButtons)
         self.DiceNumberSpinBox.setRange(1, 1000000000)
-        self.DiceNumberSpinBox.setValue(1)
 
         # Die Type Label
         self.DieTypeLabel = QLabel("d")
@@ -63,7 +66,6 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.DieTypeSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.DieTypeSpinBox.setButtonSymbols(self.DieTypeSpinBox.NoButtons)
         self.DieTypeSpinBox.setRange(1, 1000000000)
-        self.DieTypeSpinBox.setValue(20)
 
         # Modifier Label
         self.ModifierLabel = QLabel("+")
@@ -78,7 +80,6 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.ModifierSpinBox.setFixedWidth(self.DiceRollerWidth)
         self.ModifierSpinBox.setButtonSymbols(self.ModifierSpinBox.NoButtons)
         self.ModifierSpinBox.setRange(-1000000000, 1000000000)
-        self.ModifierSpinBox.setValue(0)
 
         # Roll Button
         self.RollButton = QPushButton("Roll")
@@ -216,6 +217,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.AverageRollAction.setShortcut("Ctrl+Alt+R")
         self.AverageRollAction.triggered.connect(self.AverageRoll)
 
+        self.SetCurrentRollAsDefaultAction = QAction("Set Current Roll as Default")
+        self.SetCurrentRollAsDefaultAction.triggered.connect(self.SetCurrentRollAsDefault)
+
         self.AddToLogAction = QAction("Add to Log")
         self.AddToLogAction.triggered.connect(self.AddToLog)
 
@@ -241,6 +245,7 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
         self.RollerMenu.addAction(self.RollAction)
         self.RollerMenu.addAction(self.RollPresetRollAction)
         self.RollerMenu.addAction(self.AverageRollAction)
+        self.RollerMenu.addAction(self.SetCurrentRollAsDefaultAction)
 
         self.LogMenu = self.MenuBar.addMenu("Log")
         self.LogMenu.addAction(self.AddToLogAction)
@@ -323,6 +328,26 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
             self.UpdateUnsavedChangesFlag(True)
             self.PresetRollsTreeWidget.SelectIndex(CurrentPresetIndex)
 
+    def SetCurrentRollAsDefault(self):
+        self.DefaultRollData["DiceNumber"] = self.DiceNumberSpinBox.value()
+        self.DefaultRollData["DieType"] = self.DieTypeSpinBox.value()
+        self.DefaultRollData["Modifier"] = self.ModifierSpinBox.value()
+    
+    def HandleDefaultRollConfig(self):
+        self.DefaultRollConfigPath = self.GetResourcePath("DefaultRoll.cfg")
+        if os.path.isfile(self.DefaultRollConfigPath):
+            with open(self.DefaultRollConfigPath, "r") as DefaultRollConfigFile:
+                self.DefaultRollData = self.JSONSerializer.DeserializeDataFromJSONString(DefaultRollConfigFile.read())
+        else:
+            self.DefaultRollData = {}
+            self.DefaultRollData["DiceNumber"] = 1
+            self.DefaultRollData["DieType"] = 20
+            self.DefaultRollData["Modifier"] = 0
+
+        self.DiceNumberSpinBox.setValue(self.DefaultRollData["DiceNumber"])
+        self.DieTypeSpinBox.setValue(self.DefaultRollData["DieType"])
+        self.ModifierSpinBox.setValue(self.DefaultRollData["Modifier"])
+
     # File Menu Action Methods
     def NewActionTriggered(self):
         if self.New(self.DiceRoller):
@@ -390,3 +415,9 @@ class DiceRollerWindow(Window, SaveAndOpenMixin):
     def UpdateUnsavedChangesFlag(self, UnsavedChanges):
         self.UnsavedChanges = UnsavedChanges
         self.UpdateDisplay()
+
+    # Close Event
+    def closeEvent(self, Event):
+        with open(self.DefaultRollConfigPath, "w") as DefaultRollConfigFile:
+            DefaultRollConfigFile.write(self.JSONSerializer.SerializeDataToJSONString(self.DefaultRollData))
+        return super().closeEvent(Event)
